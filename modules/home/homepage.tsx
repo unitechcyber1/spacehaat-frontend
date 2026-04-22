@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CityRail } from "@/modules/home/components/city-rail";
 import { HowItWorksCards } from "@/modules/home/components/how-it-works-cards";
+import { WhySpaceHaatFeatureGrid } from "@/modules/home/components/why-spacehaat-feature-grid";
 import { HostListingCtaBanner } from "@/modules/home/components/host-listing-cta-banner";
 import { PremiumVerticalShowcase } from "@/modules/home/components/premium-vertical-showcase";
 import { SpacehaatSelectShowcase } from "@/modules/home/components/spacehaat-select-showcase";
