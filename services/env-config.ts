@@ -15,6 +15,7 @@ const DEFAULT_APP_ORIGIN_DEV = "http://localhost:3000";
 const DEFAULT_API_ORIGIN_DEV = "http://localhost:8000";
 const DEFAULT_COWORKING_TIMEOUT_MS = 3500;
 const DEFAULT_LEADS_TIMEOUT_MS = 8000;
+const DEFAULT_LISTING_TIMEOUT_MS = 15000;
 
 /** Site origin for metadata and absolute URLs. */
 export function resolveAppUrl(): string {
@@ -105,4 +106,23 @@ export function resolveLeadsSubmitTimeoutMs(): number {
   const raw = process.env.LEADS_API_TIMEOUT_MS?.trim();
   const n = raw ? Number.parseInt(raw, 10) : DEFAULT_LEADS_TIMEOUT_MS;
   return Number.isFinite(n) && n > 0 ? n : DEFAULT_LEADS_TIMEOUT_MS;
+}
+
+/**
+ * Host / listing panel upstream base URL.
+ *
+ * Intentionally delegates to {@link resolveApiBaseUrl} — the whole project
+ * talks to a single backend origin at a time. Mixing origins is a footgun
+ * because vendor tokens issued by one backend get rejected by the other,
+ * so we removed the old `LISTING_API_BASE_URL` escape hatch on purpose.
+ */
+export function resolveListingApiBaseUrl(): string {
+  return resolveApiBaseUrl();
+}
+
+/** Listing upstream timeout with safe defaults. */
+export function resolveListingApiTimeoutMs(): number {
+  const raw = process.env.LISTING_API_TIMEOUT_MS?.trim();
+  const n = raw ? Number.parseInt(raw, 10) : DEFAULT_LISTING_TIMEOUT_MS;
+  return Number.isFinite(n) && n > 0 ? n : DEFAULT_LISTING_TIMEOUT_MS;
 }

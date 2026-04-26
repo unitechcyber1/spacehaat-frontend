@@ -123,6 +123,8 @@ export function VirtualOfficePlanChooser() {
         submitLabel="Request Details"
         title="Enquire Now"
         subtitle={`Get best deals for ${activeTitle}.`}
+        interestedInDefault={`Virtual office — ${activeTitle}`}
+        mxSpaceType="Virtual Office"
       />
     </>
   );

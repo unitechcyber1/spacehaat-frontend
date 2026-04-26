@@ -10,7 +10,13 @@ import { mapSeedSpaceToCoworkingWorkspace } from "@/services/coworking-workspace
 import type { CoworkingModel } from "@/types/coworking-workspace.model";
 import type { CityPageData } from "@/types";
 
-export function CoworkingCityListing({ data }: { data: CityPageData }) {
+export function CoworkingCityListing({
+  data,
+  showPopularLocalities = true,
+}: {
+  data: CityPageData;
+  showPopularLocalities?: boolean;
+}) {
   const [coworkingFromApi, setCoworkingFromApi] = useState<CoworkingModel.WorkSpace[] | null>(null);
   const needsRemote = Boolean(data.catalogCityId);
   const [loading, setLoading] = useState(needsRemote);
@@ -55,8 +61,8 @@ export function CoworkingCityListing({ data }: { data: CityPageData }) {
   );
 
   return (
-    <div className="space-y-6">
-      {data.catalogCityId ? (
+    <div className="space-y-4 sm:space-y-6">
+      {showPopularLocalities && data.catalogCityId ? (
         <PopularLocalitiesRail
           catalogCityId={data.catalogCityId}
           citySlug={data.city.slug}

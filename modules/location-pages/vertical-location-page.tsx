@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { Container } from "@/components/ui/container";
 import { LeadForm } from "@/modules/home/components/lead-form";
-import { MobileConsultationBar } from "@/modules/home/components/mobile-consultation-bar";
 import { LeadCTA } from "@/modules/city-pages/components/lead-cta";
 import { Breadcrumb } from "@/modules/location-pages/components/breadcrumb";
 import { FAQSection } from "@/modules/location-pages/components/faq-section";
@@ -13,6 +12,12 @@ import { formatCurrency } from "@/utils/format";
 type VerticalLocationPageProps = {
   data: LocationPageData;
 };
+
+const leadMxByVertical = {
+  coworking: "Web Coworking",
+  "virtual-office": "Virtual Office",
+  "office-space": "Web Office",
+} as const;
 
 const toneMap = {
   coworking: {
@@ -166,14 +171,17 @@ export function VerticalLocationPage({
                 </p>
               </div>
               <div className="rounded-[1.5rem] bg-white p-5 text-ink sm:p-6">
-                <LeadForm submitLabel={data.leadCta.ctaLabel} />
+                <LeadForm
+                  submitLabel={data.leadCta.ctaLabel}
+                  city={data.locationName}
+                  mxSpaceType={leadMxByVertical[data.vertical]}
+                />
               </div>
             </div>
           </div>
         </Container>
       </section>
 
-      <MobileConsultationBar label={data.leadCta.ctaLabel} />
     </>
   );
 }

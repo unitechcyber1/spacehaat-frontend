@@ -4,16 +4,26 @@ import { CityPageFaqSection } from "@/modules/city-pages/components/city-page-fa
 import { CityPageHero } from "@/modules/city-pages/components/city-page-hero";
 import { CityPageLeadCtaBand } from "@/modules/city-pages/components/city-page-lead-cta-band";
 import { CityPageSeoRail } from "@/modules/city-pages/components/city-page-seo-rail";
-import { MobileConsultationBar } from "@/modules/home/components/mobile-consultation-bar";
+import { PopularLocalitiesRail } from "@/modules/city-pages/components/popular-localities-rail";
 import { OfficeSpaceCityListing } from "@/modules/office-space/components/office-space-city-listing";
 import type { CityPageData } from "@/types";
-
-const EYEBROW = "Premium workspace advisory";
 
 export function OfficeSpaceCityPage({ data }: { data: CityPageData }) {
   return (
     <>
-      <CityPageHero eyebrow={EYEBROW} title={data.title} />
+      <CityPageHero title={data.title}>
+        {data.catalogCityId ? (
+          <PopularLocalitiesRail
+            catalogCityId={data.catalogCityId}
+            citySlug={data.city.slug}
+            hrefPrefix="/office-space"
+            fallbackLocations={data.popularLocations.map((loc) => ({
+              name: loc.name,
+              slug: loc.slug,
+            }))}
+          />
+        ) : null}
+      </CityPageHero>
       <section className="pb-14 sm:pb-20">
         <Container>
           <OfficeSpaceCityListing data={data} />
@@ -25,9 +35,12 @@ export function OfficeSpaceCityPage({ data }: { data: CityPageData }) {
         ctaLabel={data.leadCta.ctaLabel}
       />
       <CityPageSeoRail data={data} />
-      <CityPageExpertLead cityName={data.city.name} submitLabel={data.leadCta.ctaLabel} />
+      <CityPageExpertLead
+        cityName={data.city.name}
+        submitLabel={data.leadCta.ctaLabel}
+        mxSpaceType="Web Office"
+      />
       <CityPageFaqSection pageTitle={data.title} faqs={data.faqs} />
-      <MobileConsultationBar label={data.leadCta.ctaLabel} />
     </>
   );
 }

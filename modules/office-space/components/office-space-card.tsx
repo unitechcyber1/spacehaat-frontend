@@ -48,7 +48,7 @@ export function OfficeSpaceCard({
   return (
     <article className={cn("group", className)}>
       <Link href={`/office-space/${office.slug}`} className="block">
-        <div className="relative aspect-square overflow-hidden rounded-2xl bg-slate-100">
+        <div className="relative aspect-[16/11] overflow-hidden rounded-lg bg-slate-100 sm:aspect-square sm:rounded-2xl">
           <Image
             src={imageS3Link(office)}
             alt={title}
@@ -64,35 +64,35 @@ export function OfficeSpaceCard({
         </div>
       </Link>
 
-      <div className="mt-3 space-y-1">
+      <div className="mt-1.5 space-y-0.5 sm:mt-3 sm:space-y-1">
         <div className="flex items-start justify-between gap-3">
           <Link
             href={`/office-space/${office.slug}`}
-            className="min-w-0 text-[0.98rem] font-semibold leading-snug text-ink"
+            className="min-w-0 text-[0.9rem] font-semibold leading-snug text-ink sm:text-[0.98rem]"
           >
             <span className="line-clamp-2">{title}</span>
           </Link>
           {rating > 0 ? (
-            <div className="inline-flex shrink-0 items-center gap-1 text-[0.92rem] font-medium text-ink">
-              <Star className="h-4 w-4 fill-[#f4a621] text-[#f4a621]" />
+            <div className="inline-flex shrink-0 items-center gap-1 text-[0.85rem] font-medium text-ink sm:text-[0.92rem]">
+              <Star className="h-3.5 w-3.5 fill-[#f4a621] text-[#f4a621] sm:h-4 sm:w-4" />
               <span>{rating}</span>
             </div>
           ) : null}
         </div>
 
-        <div className="flex items-start gap-2 text-[0.92rem] text-muted">
-          <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
+        <div className="flex items-start gap-2 text-[0.85rem] text-muted sm:text-[0.92rem]">
+          <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
           <p className="line-clamp-2">{subtitle}</p>
         </div>
 
-        <div className="flex items-center justify-between gap-3 pt-1">
-          <div className="text-[0.95rem] text-ink">
+        <div className="flex items-center justify-between gap-3 pt-0.5 sm:pt-1">
+          <div className="text-[0.88rem] text-ink sm:text-[0.95rem]">
             <span className="font-semibold">{formatCurrency(price)}</span>
             <span className="text-muted"> / per month</span>
           </div>
           <Link
             href={`/office-space/${office.slug}`}
-            className="shrink-0 text-[0.88rem] font-semibold text-[color:var(--color-brand)] underline-offset-4 transition hover:underline"
+            className="shrink-0 text-[0.82rem] font-semibold text-[color:var(--color-brand)] underline-offset-4 transition hover:underline sm:text-[0.88rem]"
           >
             Get Quote
           </Link>

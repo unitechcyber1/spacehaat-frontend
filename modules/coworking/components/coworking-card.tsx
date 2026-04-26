@@ -41,7 +41,7 @@ export function CoworkingCard({
     <article className={cn("group", className)}>
       <div className="relative">
         <Link href={`/coworking/${workspace.slug}`} className="block">
-          <div className="relative aspect-square overflow-hidden rounded-2xl bg-slate-100">
+          <div className="relative aspect-[16/11] overflow-hidden rounded-lg bg-slate-100 sm:aspect-square sm:rounded-2xl">
             <Image
               src={cardImageSrc(workspace)}
               alt={workspace.name}
@@ -55,34 +55,34 @@ export function CoworkingCard({
         <button
           type="button"
           aria-label={`Save ${workspace.name}`}
-          className="absolute right-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/95 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.12)] backdrop-blur transition hover:scale-105"
+          className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.12)] backdrop-blur transition hover:scale-105 sm:right-3 sm:top-3 sm:h-10 sm:w-10"
         >
-          <Heart className="h-5 w-5" />
+          <Heart className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
       </div>
 
-      <div className="mt-3 space-y-1">
+      <div className="mt-1.5 space-y-0.5 sm:mt-3 sm:space-y-1">
         <div className="flex items-start justify-between gap-3">
           <Link
             href={`/coworking/${workspace.slug}`}
-            className="min-w-0 text-[0.98rem] font-semibold leading-snug text-ink"
+            className="min-w-0 text-[0.9rem] font-semibold leading-snug text-ink sm:text-[0.98rem]"
           >
             <span className="line-clamp-1">{workspace.name}</span>
           </Link>
           {rating > 0 ? (
-            <div className="inline-flex shrink-0 items-center gap-1 text-[0.92rem] font-medium text-ink">
-              <Star className="h-4 w-4 fill-[#f4a621] text-[#f4a621]" />
+            <div className="inline-flex shrink-0 items-center gap-1 text-[0.85rem] font-medium text-ink sm:text-[0.92rem]">
+              <Star className="h-3.5 w-3.5 fill-[#f4a621] text-[#f4a621] sm:h-4 sm:w-4" />
               <span>{rating}</span>
             </div>
           ) : null}
         </div>
 
-        <div className="flex items-start gap-2 text-[0.92rem] text-muted">
-          <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
+        <div className="flex items-start gap-2 text-[0.85rem] text-muted sm:text-[0.92rem]">
+          <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
           <p className="line-clamp-1">{cardLocationLine(workspace)}</p>
         </div>
 
-        <div className="pt-1 text-[0.95rem] text-ink">
+        <div className="pt-0.5 text-[0.88rem] text-ink sm:pt-1 sm:text-[0.95rem]">
           <span className="font-semibold">{formatCurrency(price)}</span>
           <span className="text-muted"> /month</span>
         </div>

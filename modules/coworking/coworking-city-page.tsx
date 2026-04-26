@@ -4,19 +4,28 @@ import { CityPageFaqSection } from "@/modules/city-pages/components/city-page-fa
 import { CityPageHero } from "@/modules/city-pages/components/city-page-hero";
 import { CityPageLeadCtaBand } from "@/modules/city-pages/components/city-page-lead-cta-band";
 import { CityPageSeoRail } from "@/modules/city-pages/components/city-page-seo-rail";
+import { PopularLocalitiesRail } from "@/modules/city-pages/components/popular-localities-rail";
 import { CoworkingCityListing } from "@/modules/coworking/components/coworking-city-listing";
-import { MobileConsultationBar } from "@/modules/home/components/mobile-consultation-bar";
 import type { CityPageData } from "@/types";
-
-const EYEBROW = "Flexible workspace discovery";
 
 export function CoworkingCityPage({ data }: { data: CityPageData }) {
   return (
     <>
-      <CityPageHero eyebrow={EYEBROW} title={data.title} />
+      <CityPageHero title={data.title}>
+        {data.catalogCityId ? (
+          <PopularLocalitiesRail
+            catalogCityId={data.catalogCityId}
+            citySlug={data.city.slug}
+            fallbackLocations={data.popularLocations.map((loc) => ({
+              name: loc.name,
+              slug: loc.slug,
+            }))}
+          />
+        ) : null}
+      </CityPageHero>
       <section className="pb-14 sm:pb-20">
         <Container>
-          <CoworkingCityListing data={data} />
+          <CoworkingCityListing data={data} showPopularLocalities={false} />
         </Container>
       </section>
       <CityPageLeadCtaBand
@@ -25,9 +34,12 @@ export function CoworkingCityPage({ data }: { data: CityPageData }) {
         ctaLabel={data.leadCta.ctaLabel}
       />
       <CityPageSeoRail data={data} />
-      <CityPageExpertLead cityName={data.city.name} submitLabel={data.leadCta.ctaLabel} />
+      <CityPageExpertLead
+        cityName={data.city.name}
+        submitLabel={data.leadCta.ctaLabel}
+        mxSpaceType="Web Coworking"
+      />
       <CityPageFaqSection pageTitle={data.title} faqs={data.faqs} />
-      <MobileConsultationBar label={data.leadCta.ctaLabel} />
     </>
   );
 }

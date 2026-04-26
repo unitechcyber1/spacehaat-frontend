@@ -1,5 +1,4 @@
 import { Container } from "@/components/ui/container";
-import { MobileConsultationBar } from "@/modules/home/components/mobile-consultation-bar";
 import {
   CoworkingDetailHeader,
   workspaceAddress,
@@ -189,7 +188,6 @@ export function CoworkingDetailPage({
 
       <DetailBottomCtaBand finalHeading={tone.finalHeading} finalCta={tone.finalCta} />
 
-      <MobileConsultationBar label={tone.primaryCta} href="#lead-form" />
     </>
   );
 }

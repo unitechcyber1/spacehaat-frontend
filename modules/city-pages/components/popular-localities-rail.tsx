@@ -15,6 +15,8 @@ type PopularLocalitiesRailProps = {
   citySlug: string;
   /** Shown when the API returns nothing or while loading (seed popular locations). */
   fallbackLocations: Array<{ name: string; slug: string }>;
+  /** Route prefix for locality pages (e.g. "/coworking" | "/office-space"). Defaults to "/coworking". */
+  hrefPrefix?: string;
 };
 
 function fallbackToHits(
@@ -32,16 +34,21 @@ function fallbackToHits(
   }));
 }
 
-function localityPath(citySlug: string, loc: MicroLocation): string | null {
+function localityPath(
+  hrefPrefix: string,
+  citySlug: string,
+  loc: MicroLocation,
+): string | null {
   const segment = (loc.key ?? loc.slug ?? loc.id).trim();
   if (!segment) return null;
-  return `/coworking/${citySlug}/${encodeURIComponent(segment)}`;
+  return `${hrefPrefix}/${citySlug}/${encodeURIComponent(segment)}`;
 }
 
 export function PopularLocalitiesRail({
   catalogCityId,
   citySlug,
   fallbackLocations,
+  hrefPrefix = "/coworking",
 }: PopularLocalitiesRailProps) {
   const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -117,7 +124,7 @@ export function PopularLocalitiesRail({
   if (items.length === 0) return null;
 
   return (
-    <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+    <div className="mb-5 flex flex-col gap-3 sm:mb-8 sm:flex-row sm:items-center">
       <h2 className="shrink-0 text-base font-semibold tracking-tight text-ink sm:pt-0.5 sm:text-lg">
         Popular localities
       </h2>
@@ -145,7 +152,7 @@ export function PopularLocalitiesRail({
           )}
         >
           {items
-            .map((loc) => ({ loc, href: localityPath(citySlug, loc) }))
+            .map((loc) => ({ loc, href: localityPath(hrefPrefix, citySlug, loc) }))
             .filter(
               (row): row is { loc: MicroLocation; href: string } =>
                 row.href !== null,

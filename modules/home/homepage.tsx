@@ -16,7 +16,6 @@ import { HostListingCtaBanner } from "@/modules/home/components/host-listing-cta
 import { PremiumVerticalShowcase } from "@/modules/home/components/premium-vertical-showcase";
 import { SpacehaatSelectShowcase } from "@/modules/home/components/spacehaat-select-showcase";
 import { LeadForm } from "@/modules/home/components/lead-form";
-import { MobileConsultationBar } from "@/modules/home/components/mobile-consultation-bar";
 import { TestimonialCard } from "@/modules/home/components/testimonial-card";
 import { AnimatedCounter } from "@/modules/home/components/animated-counter";
 import { HomeHero } from "@/modules/home/hero";
@@ -63,9 +62,12 @@ export function Homepage({ data }: HomepageProps) {
             </Button>
           }
         />
-        <div className={cn("no-scrollbar flex snap-x gap-5 overflow-x-auto pb-2", headingGap)}>
+        <div className={cn("no-scrollbar flex snap-x gap-4 overflow-x-auto pb-2", headingGap)}>
           {data.featuredSpaces.map((space) => (
-            <div key={space.id} className="w-[18.5rem] shrink-0 snap-start sm:w-[21rem]">
+            <div
+              key={space.id}
+              className="w-[16.75rem] shrink-0 snap-start sm:w-[19.5rem] lg:w-[21rem]"
+            >
               <VerticalSpaceCard space={space} />
             </div>
           ))}
@@ -94,21 +96,25 @@ export function Homepage({ data }: HomepageProps) {
       </SectionWrapper>
 
       <SectionWrapper id="lead-form">
-        <div className="overflow-hidden rounded-[2rem] border border-slate-200/80 bg-[linear-gradient(135deg,#08111f_0%,#10203c_58%,#1f3b76_100%)] p-6 text-white shadow-[0_40px_120px_rgba(15,23,42,0.22)] sm:p-10">
+        <div className="overflow-hidden rounded-[2rem] bg-black p-6 text-white shadow-[0_40px_120px_rgba(15,23,42,0.28)] sm:p-10">
           <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/68">
-                Free consultation
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/70">
+                Get expert advice
               </p>
               <h2 className="mt-4 font-display text-4xl leading-tight sm:text-5xl">
                 Let us find your perfect office
               </h2>
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-white/82">
+                Share your requirement and our team will shortlist verified operators, compare pricing,
+                and help you schedule tours or a virtual walkthrough.
+              </p>
               <div className="mt-6 grid gap-4 sm:grid-cols-3">
                 {["Fast shortlist", "Verified inventory", "Zero consultation fee"].map(
                   (point) => (
                     <div
                       key={point}
-                      className="rounded-[1.25rem] border border-white/12 bg-white/8 px-4 py-4 text-sm text-white/84 backdrop-blur"
+                      className="rounded-[1.25rem] border border-white/12 bg-white/5 px-4 py-4 text-sm text-white/84 backdrop-blur"
                     >
                       {point}
                     </div>
@@ -116,8 +122,8 @@ export function Homepage({ data }: HomepageProps) {
                 )}
               </div>
             </div>
-            <div className="rounded-[1.5rem] bg-white p-5 text-ink sm:p-6">
-              <LeadForm />
+            <div className="rounded-[1.75rem] border border-white/12 bg-white p-5 text-ink shadow-[0_18px_60px_rgba(0,0,0,0.35)] sm:p-7">
+              <LeadForm submitLabel="Submit" city="India" mxSpaceType="Homepage lead" />
             </div>
           </div>
         </div>
@@ -145,11 +151,22 @@ export function Homepage({ data }: HomepageProps) {
           eyebrow="Trusted Operators"
           title="Operators and brands teams already know."
         />
-        <div className={cn("grid gap-4 sm:grid-cols-2 xl:grid-cols-6", headingGap)}>
+        <div
+          className={cn(
+            "no-scrollbar flex snap-x gap-4 overflow-x-auto pb-2",
+            "sm:grid sm:overflow-visible sm:grid-cols-2 sm:pb-0",
+            "xl:grid-cols-6",
+            headingGap,
+          )}
+        >
           {data.brands.map((brand) => (
             <div
               key={brand.id}
-              className="rounded-[1.25rem] border border-slate-200/80 bg-white px-5 py-6 text-center shadow-soft"
+              className={cn(
+                "shrink-0 snap-start",
+                "w-[15rem] sm:w-auto",
+                "rounded-[1.25rem] border border-slate-200/80 bg-white px-5 py-6 text-center shadow-soft",
+              )}
             >
               <p className="text-lg font-semibold tracking-[-0.02em] text-ink">
                 {brand.name}
@@ -167,9 +184,17 @@ export function Homepage({ data }: HomepageProps) {
           eyebrow="Testimonials"
           title="Teams come for clarity and stay for the curation."
         />
-        <div className={cn("grid gap-5 lg:grid-cols-3", headingGap)}>
+        <div
+          className={cn(
+            "no-scrollbar flex snap-x gap-5 overflow-x-auto pb-2",
+            "lg:grid lg:overflow-visible lg:grid-cols-3 lg:pb-0",
+            headingGap,
+          )}
+        >
           {data.testimonials.map((testimonial) => (
-            <TestimonialCard key={testimonial.id} testimonial={testimonial} />
+            <div key={testimonial.id} className="w-[18.5rem] shrink-0 snap-start lg:w-auto">
+              <TestimonialCard testimonial={testimonial} />
+            </div>
           ))}
         </div>
       </SectionWrapper>
@@ -195,7 +220,6 @@ export function Homepage({ data }: HomepageProps) {
         </div>
       </SectionWrapper>
 
-      <MobileConsultationBar />
     </>
   );
 }

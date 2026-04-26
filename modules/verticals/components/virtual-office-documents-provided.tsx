@@ -102,6 +102,8 @@ export function VirtualOfficeDocumentsProvided({
         submitLabel="Request Callback"
         title="Request Callback"
         subtitle="Get a quick call back with documents, pricing, and timeline."
+        interestedInDefault="Virtual office documents & pricing"
+        mxSpaceType="Virtual Office"
       />
     </>
   );

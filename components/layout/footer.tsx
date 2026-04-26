@@ -24,7 +24,7 @@ export function Footer() {
           </p>
           <Link
             href="/#lead-form"
-            className="mt-5 inline-flex text-sm font-medium text-[color:var(--color-brand)]"
+            className="mt-5 hidden text-sm font-medium text-[color:var(--color-brand)] sm:inline-flex"
           >
             Get Free Consultation
           </Link>

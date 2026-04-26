@@ -3,6 +3,7 @@
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { ArrowRight, Building2, Landmark, Users } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -107,9 +108,52 @@ export function PremiumVerticalShowcase() {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
+      {/* Mobile: only show the vertical stacks (no image) */}
+      <div className="lg:hidden">
+        <div
+          className={cn(
+            "rounded-3xl border border-black/[0.06] p-3 shadow-[0_22px_56px_rgba(15,23,42,0.08)]",
+            "bg-[#f9f8f5d9] supports-[backdrop-filter]:backdrop-blur-[16px]",
+          )}
+          aria-label="Workspace verticals"
+        >
+          {VERTICALS.map((item, index) => (
+            <div
+              key={item.id}
+              className={cn("relative", index > 0 && "border-t border-black/[0.06]")}
+            >
+              <Link
+                href={item.href}
+                className={cn(
+                  "relative flex w-full gap-4 rounded-2xl px-5 py-5 text-left outline-none",
+                  "transition-colors duration-300 ease-out",
+                  "focus-visible:ring-2 focus-visible:ring-[color:var(--color-brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f9f8f5d9]",
+                  "hover:bg-white/35",
+                )}
+              >
+                <span
+                  className="mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-ink/80"
+                  aria-hidden
+                >
+                  <item.Icon className="h-6 w-6 stroke-[1.5]" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-lg font-semibold tracking-[-0.02em] text-ink">
+                    {item.title}
+                  </span>
+                  <span className="mt-1.5 block text-base leading-relaxed text-muted">
+                    {item.description}
+                  </span>
+                </span>
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="grid gap-8 overflow-visible lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:items-center lg:gap-8 xl:grid-cols-[minmax(0,28rem)_minmax(0,1fr)] xl:gap-10">
         {/* Right (mobile top): Image — wider track + slight bleed into section padding */}
-        <div className="order-1 min-w-0 lg:order-2 lg:-mr-4 lg:w-[calc(100%+1rem)] lg:max-w-none xl:-mr-10 xl:w-[calc(100%+2.5rem)]">
+        <div className="order-1 hidden min-w-0 lg:order-2 lg:block lg:-mr-4 lg:w-[calc(100%+1rem)] lg:max-w-none xl:-mr-10 xl:w-[calc(100%+2.5rem)]">
           <div className="relative min-h-[min(78vw,32rem)] w-full overflow-hidden rounded-3xl bg-[#eae7df] shadow-[0_24px_64px_rgba(15,23,42,0.14)] lg:min-h-[38rem] xl:min-h-[42rem]">
           <AnimatePresence mode="sync" initial={false}>
             <motion.div
@@ -161,8 +205,8 @@ export function PremiumVerticalShowcase() {
         </div>
 
         {/* Left: Picker (overlaps onto the image — ~30% of stack width shifted right on lg+) */}
-        <div className="order-2 min-w-0 lg:order-1 lg:overflow-visible">
-          <div className="relative w-full max-w-none lg:z-10 lg:translate-x-[30%] xl:translate-x-[32%]">
+        <div className="order-2 hidden min-w-0 lg:order-1 lg:block lg:overflow-visible">
+          <div className="relative w-full max-w-none lg:z-10 lg:w-[32rem] lg:translate-x-[15%] xl:w-[36rem] xl:translate-x-[15%]">
             <LayoutGroup id="premium-vertical-stack">
               <div
                 className={cn(
@@ -193,6 +237,8 @@ export function PremiumVerticalShowcase() {
                           "focus-visible:ring-2 focus-visible:ring-[color:var(--color-brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f9f8f5d9]",
                           !isActive && "hover:bg-white/35",
                         )}
+                        onMouseEnter={() => setActiveId(item.id)}
+                        onFocus={() => setActiveId(item.id)}
                         onClick={() => setActiveId(item.id)}
                       >
                         {isActive && (

@@ -1,5 +1,4 @@
 import { Container } from "@/components/ui/container";
-import { MobileConsultationBar } from "@/modules/home/components/mobile-consultation-bar";
 import { VirtualOfficeDetailGallery } from "@/modules/virtual-office/components/virtual-office-detail-gallery";
 import { VirtualOfficeDetailHeader } from "@/modules/virtual-office/components/virtual-office-detail-header";
 import { VirtualOfficePricingCards } from "@/modules/virtual-office/components/virtual-office-pricing-cards";
@@ -110,6 +109,7 @@ export function VirtualOfficeDetailPage({
               <StickyLeadForm
                 leadTarget={{ city: space.city, spaceId: space.id }}
                 submitLabel={tone.primaryCta}
+                mxSpaceType="Virtual Office"
               />
             </div>
           </div>
@@ -132,7 +132,6 @@ export function VirtualOfficeDetailPage({
 
       <DetailBottomCtaBand finalHeading={tone.finalHeading} finalCta={tone.finalCta} />
 
-      <MobileConsultationBar label={tone.primaryCta} href="#lead-form" />
     </>
   );
 }

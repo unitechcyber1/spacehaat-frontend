@@ -227,6 +227,12 @@ export function VirtualOfficePricingCards({ space }: { space: Space }) {
             ? `${space.name} — ${enquirePlanTitle}. We will get back to you with availability and pricing.`
             : `Tell us how we can help with ${space.name}.`
         }
+        interestedInDefault={
+          enquirePlanTitle
+            ? `Virtual office — ${enquirePlanTitle}`
+            : "Virtual office enquiry"
+        }
+        mxSpaceType="Virtual Office"
       />
     </>
   );

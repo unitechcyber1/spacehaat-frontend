@@ -211,6 +211,8 @@ export function VirtualOfficeCityListingCard({
       submitLabel="Get Quote"
       title="Get Quote"
       subtitle={`Share your details and we will follow up about ${workspace.name}.`}
+      interestedInDefault={`${workspace.name} — quote`}
+      mxSpaceType="Virtual Office"
     />
     </>
   );

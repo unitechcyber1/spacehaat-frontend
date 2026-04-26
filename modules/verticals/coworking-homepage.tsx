@@ -2,7 +2,6 @@ import { SectionWrapper } from "@/components/sections/section-wrapper";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CityRail } from "@/modules/home/components/city-rail";
 import { LeadForm } from "@/modules/home/components/lead-form";
-import { MobileConsultationBar } from "@/modules/home/components/mobile-consultation-bar";
 import { BenefitCards } from "@/modules/verticals/components/benefit-cards";
 import { SpaceRail } from "@/modules/verticals/components/space-rail";
 import { VerticalHero } from "@/modules/verticals/components/vertical-hero";
@@ -82,13 +81,16 @@ export function CoworkingHomepage({ data }: CoworkingHomepageProps) {
               </div>
             </div>
             <div className="rounded-[1.5rem] bg-white p-5 text-ink sm:p-6">
-              <LeadForm submitLabel={data.leadSection.ctaLabel} />
+              <LeadForm
+                submitLabel={data.leadSection.ctaLabel}
+                city="India"
+                mxSpaceType="Web Coworking"
+              />
             </div>
           </div>
         </div>
       </SectionWrapper>
 
-      <MobileConsultationBar label={data.leadSection.ctaLabel} />
     </>
   );
 }

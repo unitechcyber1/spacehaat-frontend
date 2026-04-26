@@ -1,7 +1,15 @@
 import { Container } from "@/components/ui/container";
 import { LeadForm } from "@/modules/home/components/lead-form";
 
-export function CityPageExpertLead({ cityName, submitLabel }: { cityName: string; submitLabel: string }) {
+export function CityPageExpertLead({
+  cityName,
+  submitLabel,
+  mxSpaceType = "City page lead",
+}: {
+  cityName: string;
+  submitLabel: string;
+  mxSpaceType?: string;
+}) {
   return (
     <section className="pb-28 sm:pb-24" id="lead-form">
       <Container>
@@ -18,7 +26,7 @@ export function CityPageExpertLead({ cityName, submitLabel }: { cityName: string
               </p>
             </div>
             <div className="rounded-[1.5rem] bg-white p-5 text-ink sm:p-6">
-              <LeadForm submitLabel={submitLabel} />
+              <LeadForm submitLabel={submitLabel} city={cityName} mxSpaceType={mxSpaceType} />
             </div>
           </div>
         </div>

@@ -169,6 +169,8 @@ export function OfficeSpaceDetailPage({
               <StickyLeadForm
                 leadTarget={{ city: officeCitySlugish(office), spaceId: office.id || office._id }}
                 submitLabel="Get Quote"
+                spaceListingKey="office_space"
+                mxSpaceType="Web Office"
               />
             </div>
           </div>

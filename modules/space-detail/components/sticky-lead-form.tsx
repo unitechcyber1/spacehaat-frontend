@@ -14,7 +14,8 @@ import {
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import { ContactFormModal } from "@/components/contact/contact-form-modal";
-import { submitLead } from "@/services/leads-api";
+import { buildUserEnquiryBody } from "@/lib/user-enquiry-payload";
+import { submitUserEnquiry, UserEnquiryError } from "@/services/user-enquiry-api";
 import { cn } from "@/utils/cn";
 type LeadTarget = {
   city: string;
@@ -24,6 +25,10 @@ type LeadTarget = {
 type StickyLeadFormProps = {
   leadTarget: LeadTarget;
   submitLabel: string;
+  interestedInDefault?: string;
+  mxSpaceType?: string;
+  spaceListingKey?: "work_space" | "office_space" | "living_space";
+  microlocation?: string;
 };
 
 function isValidEmail(v: string): boolean {
@@ -91,9 +96,17 @@ function CtaButton({
   );
 }
 
-export function StickyLeadForm({ leadTarget, submitLabel }: StickyLeadFormProps) {
+export function StickyLeadForm({
+  leadTarget,
+  submitLabel,
+  interestedInDefault = "Workspace enquiry",
+  mxSpaceType = "Web Coworking",
+  spaceListingKey = "work_space",
+  microlocation = "",
+}: StickyLeadFormProps) {
   const [isPending, setIsPending] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [enquiryError, setEnquiryError] = useState<string | null>(null);
   const [openMobile, setOpenMobile] = useState(false);
 
   const [name, setName] = useState("");
@@ -140,6 +153,7 @@ export function StickyLeadForm({ leadTarget, submitLabel }: StickyLeadFormProps)
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("idle");
+    setEnquiryError(null);
     setIsPending(true);
 
     try {
@@ -149,15 +163,22 @@ export function StickyLeadForm({ leadTarget, submitLabel }: StickyLeadFormProps)
         return;
       }
 
-      await submitLead({
+      const pageUrl =
+        typeof window !== "undefined" ? window.location.href : "https://www.spacehaat.com";
+      const body = buildUserEnquiryBody({
         name: name.trim(),
-        phone: `+91 ${phoneDigits}`,
         email: email.trim(),
-        requirement: "Workspace enquiry",
+        phone: `+91${phoneDigits}`,
+        interestedIn: interestedInDefault,
         city: leadTarget.city,
+        microlocation: microlocation || undefined,
+        pageUrl,
         spaceId: leadTarget.spaceId,
-        source: "listing",
+        spaceListingKey,
+        mxSpaceType,
       });
+
+      await submitUserEnquiry(body);
 
       setName("");
       setPhone("");
@@ -165,8 +186,17 @@ export function StickyLeadForm({ leadTarget, submitLabel }: StickyLeadFormProps)
       setTouched({ name: false, phone: false, email: false });
       setStatus("success");
       setOpenMobile(false);
-    } catch {
+    } catch (e) {
       setStatus("error");
+      if (e instanceof UserEnquiryError) {
+        setEnquiryError(
+          e.needLogin
+            ? "Please sign in with your phone to submit an enquiry, then try again."
+            : e.message,
+        );
+      } else {
+        setEnquiryError(e instanceof Error ? e.message : "Could not submit right now.");
+      }
     } finally {
       setIsPending(false);
     }
@@ -267,7 +297,7 @@ export function StickyLeadForm({ leadTarget, submitLabel }: StickyLeadFormProps)
         ) : null}
         {status === "error" ? (
           <div className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
-            Could not submit right now. Please try again.
+            {enquiryError || "Could not submit right now. Please try again."}
           </div>
         ) : null}
       </>
@@ -305,6 +335,10 @@ export function StickyLeadForm({ leadTarget, submitLabel }: StickyLeadFormProps)
           onOpenChange={setOpenMobile}
           leadTarget={leadTarget}
           submitLabel={submitLabel}
+          interestedInDefault={interestedInDefault}
+          mxSpaceType={mxSpaceType}
+          spaceListingKey={spaceListingKey}
+          microlocation={microlocation}
         />
       </div>
     </>

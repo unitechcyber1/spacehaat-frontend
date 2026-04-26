@@ -4,7 +4,6 @@ import { SectionWrapper } from "@/components/sections/section-wrapper";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CityCard } from "@/modules/home/components/city-card";
 import { LeadForm } from "@/modules/home/components/lead-form";
-import { MobileConsultationBar } from "@/modules/home/components/mobile-consultation-bar";
 import { BenefitCards } from "@/modules/verticals/components/benefit-cards";
 import { PricingPlanCard } from "@/modules/verticals/components/pricing-plan-card";
 import { VirtualOfficeFitSection } from "@/modules/verticals/components/virtual-office-fit-section";
@@ -119,13 +118,16 @@ export function VirtualOfficeHomepage({
               </div>
             </div>
             <div className="rounded-[1.5rem] bg-white p-5 text-ink sm:p-6">
-              <LeadForm submitLabel={data.leadSection.ctaLabel} />
+              <LeadForm
+                submitLabel={data.leadSection.ctaLabel}
+                city="India"
+                mxSpaceType="Virtual Office"
+              />
             </div>
           </div>
         </div>
       </SectionWrapper>
 
-      <MobileConsultationBar label={data.leadSection.ctaLabel} />
     </>
   );
 }

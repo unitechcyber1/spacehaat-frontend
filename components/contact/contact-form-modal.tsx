@@ -13,7 +13,8 @@ import {
 } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
-import { submitLead } from "@/services/leads-api";
+import { buildUserEnquiryBody } from "@/lib/user-enquiry-payload";
+import { submitUserEnquiry, UserEnquiryError } from "@/services/user-enquiry-api";
 import { cn } from "@/utils/cn";
 
 type LeadTarget = {
@@ -28,6 +29,18 @@ export type ContactFormModalProps = {
   submitLabel: string;
   title?: string;
   subtitle?: string;
+  /** Maps to `interested_in` (default: workspace enquiry). */
+  interestedInDefault?: string;
+  /** `mx_Space_Type` in the API payload. */
+  mxSpaceType?: string;
+  /**
+   * When `leadTarget.spaceId` is a 24-char hex id, set this listing field
+   * (`work_space` for coworking / virtual office, `office_space` for office).
+   * @default "work_space"
+   */
+  spaceListingKey?: "work_space" | "office_space" | "living_space";
+  /** Optional microlocation / neighbourhood string for `location[]`. */
+  microlocation?: string;
 };
 
 function isValidEmail(v: string): boolean {
@@ -99,9 +112,14 @@ export function ContactFormModal({
   submitLabel,
   title = "Enquire Now",
   subtitle = "Get best deals for this workspace.",
+  interestedInDefault = "Workspace enquiry",
+  mxSpaceType = "Web Coworking",
+  spaceListingKey = "work_space",
+  microlocation = "",
 }: ContactFormModalProps) {
   const [isPending, setIsPending] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [enquiryError, setEnquiryError] = useState<string | null>(null);
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -144,6 +162,7 @@ export function ContactFormModal({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("idle");
+    setEnquiryError(null);
     setIsPending(true);
 
     try {
@@ -153,15 +172,22 @@ export function ContactFormModal({
         return;
       }
 
-      await submitLead({
+      const pageUrl =
+        typeof window !== "undefined" ? window.location.href : "https://www.spacehaat.com";
+      const body = buildUserEnquiryBody({
         name: name.trim(),
-        phone: `+91 ${phoneDigits}`,
         email: email.trim(),
-        requirement: "Workspace enquiry",
+        phone: `+91${phoneDigits}`,
+        interestedIn: interestedInDefault,
         city: leadTarget.city,
+        microlocation: microlocation || undefined,
+        pageUrl,
         spaceId: leadTarget.spaceId,
-        source: "listing",
+        spaceListingKey,
+        mxSpaceType,
       });
+
+      await submitUserEnquiry(body);
 
       setName("");
       setPhone("");
@@ -169,8 +195,17 @@ export function ContactFormModal({
       setTouched({ name: false, phone: false, email: false });
       setStatus("success");
       onOpenChange(false);
-    } catch {
+    } catch (e) {
       setStatus("error");
+      if (e instanceof UserEnquiryError) {
+        setEnquiryError(
+          e.needLogin
+            ? "Please sign in with your phone to submit an enquiry, then try again."
+            : e.message,
+        );
+      } else {
+        setEnquiryError(e instanceof Error ? e.message : "Could not submit right now.");
+      }
     } finally {
       setIsPending(false);
     }
@@ -304,7 +339,7 @@ export function ContactFormModal({
 
               {status === "error" ? (
                 <div className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
-                  Could not submit right now. Please try again.
+                  {enquiryError || "Could not submit right now. Please try again."}
                 </div>
               ) : null}
             </form>

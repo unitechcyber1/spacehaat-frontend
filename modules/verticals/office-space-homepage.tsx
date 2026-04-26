@@ -2,7 +2,6 @@ import { SectionWrapper } from "@/components/sections/section-wrapper";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CityCard } from "@/modules/home/components/city-card";
 import { LeadForm } from "@/modules/home/components/lead-form";
-import { MobileConsultationBar } from "@/modules/home/components/mobile-consultation-bar";
 import { BenefitCards } from "@/modules/verticals/components/benefit-cards";
 import { CaseStudyCard } from "@/modules/verticals/components/case-study-card";
 import { SpaceRail } from "@/modules/verticals/components/space-rail";
@@ -109,13 +108,16 @@ export function OfficeSpaceHomepage({ data }: OfficeSpaceHomepageProps) {
               </div>
             </div>
             <div className="rounded-[1.5rem] bg-white p-5 text-ink sm:p-6">
-              <LeadForm submitLabel={data.leadSection.ctaLabel} />
+              <LeadForm
+                submitLabel={data.leadSection.ctaLabel}
+                city="India"
+                mxSpaceType="Web Office"
+              />
             </div>
           </div>
         </div>
       </SectionWrapper>
 
-      <MobileConsultationBar label={data.leadSection.ctaLabel} />
     </>
   );
 }

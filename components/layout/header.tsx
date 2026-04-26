@@ -201,8 +201,7 @@ export function Header() {
           </button>
 
           <Button
-            type="button"
-            onClick={() => setIsContactOpen(true)}
+            href="/list-your-space"
             variant={useSolidHeader ? "primary" : "secondary"}
             className={cn(
               "hidden px-4 lg:inline-flex lg:px-5",
@@ -210,7 +209,7 @@ export function Header() {
                 "border-[#f0e8d8]/40 bg-[rgba(22,18,14,0.32)] text-[#faf6ee] shadow-[0_10px_36px_rgba(8,6,5,0.35)] backdrop-blur-md hover:border-[#c9a962]/45 hover:bg-[rgba(32,26,20,0.48)] hover:text-[#fffcf5]",
             )}
           >
-            Enquire Now
+            List Your Space
           </Button>
         </div>
       </Container>
@@ -223,6 +222,8 @@ export function Header() {
           submitLabel="Enquire Now"
           title="Enquire Now"
           subtitle="Get best deals and availability in minutes."
+          interestedInDefault="Site header enquiry"
+          mxSpaceType="General enquiry"
         />
       </div>
 
@@ -261,12 +262,8 @@ export function Header() {
                 </Link>
               ))}
               <Link
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsMobileMenuOpen(false);
-                  setIsContactOpen(true);
-                }}
+                href="/list-your-space"
+                onClick={() => setIsMobileMenuOpen(false)}
                 className={cn(
                   "mt-2 rounded-xl px-4 py-3.5 text-center text-base font-semibold transition",
                   useSolidHeader
@@ -274,7 +271,7 @@ export function Header() {
                     : "border border-[#c9a962]/45 bg-[rgba(32,26,20,0.55)] text-[#faf6ee] hover:bg-[rgba(40,32,26,0.65)]",
                 )}
               >
-                Enquire Now
+                List Your Space
               </Link>
             </nav>
           </div>
@@ -289,6 +286,8 @@ export function Header() {
           submitLabel="Enquire Now"
           title="Enquire Now"
           subtitle="Get best deals and availability in minutes."
+          interestedInDefault="Site header enquiry"
+          mxSpaceType="General enquiry"
         />
       </div>
     </header>
