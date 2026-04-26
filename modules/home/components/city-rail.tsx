@@ -57,36 +57,48 @@ export function CityRail({ cities, basePath = "/coworking" }: CityRailProps) {
 
   return (
     <div className="relative">
-      <div
-        ref={viewportRef}
-        className="no-scrollbar mt-10 flex snap-x gap-4 overflow-x-auto pb-2 sm:gap-5 bg-transparent"
-      >
+      {/* Mobile & tablet: 2-column grid (see design) */}
+      <div className="mt-8 grid grid-cols-2 gap-2.5 min-[480px]:gap-3.5 lg:hidden">
         {visibleCities.map((city) => (
-          <div key={city.id} className="w-[15.5rem] shrink-0 snap-start sm:w-[17.25rem]">
-            <CityCard city={city} basePath={basePath} variant="rail" />
+          <div key={`grid-${city.id}`} className="min-w-0">
+            <CityCard city={city} basePath={basePath} variant="railGrid" />
           </div>
         ))}
       </div>
 
-      <button
-        type="button"
-        onClick={scrollPrev}
-        aria-label="Scroll cities left"
-        disabled={!canScrollLeft}
-        className="absolute left-2 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200/80 bg-transparent text-slate-900 shadow-[0_10px_30px_rgba(15,23,42,0.16)] backdrop-blur transition hover:bg-white/90 disabled:pointer-events-none disabled:opacity-0 lg:inline-flex"
-      >
-        <ChevronLeft className="h-5 w-5" />
-      </button>
+      {/* Large screens: horizontal scroll rail + arrows */}
+      <div className="relative hidden lg:block">
+        <div
+          ref={viewportRef}
+          className="no-scrollbar mt-8 flex snap-x gap-3 overflow-x-auto pb-2 sm:gap-4"
+        >
+          {visibleCities.map((city) => (
+            <div key={city.id} className="w-[14rem] shrink-0 snap-start sm:w-[15.5rem]">
+              <CityCard city={city} basePath={basePath} variant="rail" />
+            </div>
+          ))}
+        </div>
 
-      <button
-        type="button"
-        onClick={scrollNext}
-        aria-label="Scroll cities"
-        disabled={!canScrollRight}
-        className="absolute right-2 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200/80 bg-transparent text-slate-900 shadow-[0_10px_30px_rgba(15,23,42,0.16)] backdrop-blur transition hover:bg-white/90 disabled:pointer-events-none disabled:opacity-0 lg:inline-flex"
-      >
-        <ChevronRight className="h-5 w-5" />
-      </button>
+        <button
+          type="button"
+          onClick={scrollPrev}
+          aria-label="Scroll cities left"
+          disabled={!canScrollLeft}
+          className="absolute left-2 top-1/2 h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200/80 bg-transparent text-slate-900 shadow-[0_10px_30px_rgba(15,23,42,0.16)] backdrop-blur transition hover:bg-white/90 disabled:pointer-events-none disabled:opacity-0 inline-flex"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+
+        <button
+          type="button"
+          onClick={scrollNext}
+          aria-label="Scroll cities"
+          disabled={!canScrollRight}
+          className="absolute right-2 top-1/2 h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200/80 bg-transparent text-slate-900 shadow-[0_10px_30px_rgba(15,23,42,0.16)] backdrop-blur transition hover:bg-white/90 disabled:pointer-events-none disabled:opacity-0 inline-flex"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      </div>
     </div>
   );
 }

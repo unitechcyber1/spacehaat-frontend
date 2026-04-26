@@ -3,7 +3,6 @@ import { CityPageExpertLead } from "@/modules/city-pages/components/city-page-ex
 import { CityPageFaqSection } from "@/modules/city-pages/components/city-page-faq-section";
 import { CityPageHero } from "@/modules/city-pages/components/city-page-hero";
 import { CityPageLeadCtaBand } from "@/modules/city-pages/components/city-page-lead-cta-band";
-import { CityPageSeoRail } from "@/modules/city-pages/components/city-page-seo-rail";
 import { PopularLocalitiesRail } from "@/modules/city-pages/components/popular-localities-rail";
 import { OfficeSpaceCityListing } from "@/modules/office-space/components/office-space-city-listing";
 import type { CityPageData } from "@/types";
@@ -24,7 +23,7 @@ export function OfficeSpaceCityPage({ data }: { data: CityPageData }) {
           />
         ) : null}
       </CityPageHero>
-      <section className="pb-14 sm:pb-20">
+      <section className="pt-2 pb-14 sm:pt-3 sm:pb-20">
         <Container>
           <OfficeSpaceCityListing data={data} />
         </Container>
@@ -34,7 +33,6 @@ export function OfficeSpaceCityPage({ data }: { data: CityPageData }) {
         description={data.leadCta.description}
         ctaLabel={data.leadCta.ctaLabel}
       />
-      <CityPageSeoRail data={data} />
       <CityPageExpertLead
         cityName={data.city.name}
         submitLabel={data.leadCta.ctaLabel}

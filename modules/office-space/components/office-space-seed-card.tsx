@@ -19,9 +19,9 @@ export function OfficeSpaceSeedCard({
   className?: string;
 }) {
   return (
-    <article className={cn("group", className)}>
-      <Link href={`/${space.vertical}/${space.slug}`} className="block">
-        <div className="relative aspect-square overflow-hidden rounded-2xl bg-slate-100">
+    <article className={cn("group flex h-full min-h-0 flex-col", className)}>
+      <Link href={`/${space.vertical}/${space.slug}`} className="block shrink-0">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-slate-100">
           <Image
             src={space.images?.[0]?.trim() ? space.images[0] : LISTING_IMAGE_FALLBACK}
             alt={space.name}
@@ -37,25 +37,27 @@ export function OfficeSpaceSeedCard({
         </div>
       </Link>
 
-      <div className="mt-3 space-y-1">
-        <div className="flex items-start justify-between gap-3">
-          <Link
-            href={`/${space.vertical}/${space.slug}`}
-            className="min-w-0 text-[0.98rem] font-semibold leading-snug text-ink"
-          >
-            <span className="line-clamp-2">{space.name}</span>
-          </Link>
-          {space.rating > 0 ? (
-            <div className="inline-flex shrink-0 items-center gap-1 text-[0.92rem] font-medium text-ink">
-              <Star className="h-4 w-4 fill-[#f4a621] text-[#f4a621]" />
-              <span>{space.rating}</span>
-            </div>
-          ) : null}
-        </div>
+      <div className="mt-3 flex flex-1 flex-col justify-between gap-1">
+        <div className="space-y-1">
+          <div className="flex items-start justify-between gap-3">
+            <Link
+              href={`/${space.vertical}/${space.slug}`}
+              className="min-w-0 text-[0.98rem] font-semibold leading-snug text-ink"
+            >
+              <span className="line-clamp-1">{space.name}</span>
+            </Link>
+            {space.rating > 0 ? (
+              <div className="inline-flex shrink-0 items-center gap-1 text-[0.92rem] font-medium text-ink">
+                <Star className="h-4 w-4 fill-[#f4a621] text-[#f4a621]" />
+                <span>{space.rating}</span>
+              </div>
+            ) : null}
+          </div>
 
-        <div className="flex items-start gap-2 text-[0.92rem] text-muted">
-          <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
-          <p className="line-clamp-2">{space.address || space.location}</p>
+          <div className="flex items-start gap-2 text-[0.92rem] text-muted">
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
+            <p className="line-clamp-1">{space.address || space.location}</p>
+          </div>
         </div>
 
         <div className="flex items-center justify-between gap-3 pt-1">

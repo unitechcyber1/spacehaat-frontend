@@ -41,38 +41,40 @@ export function VerticalHero({ data }: VerticalHeroProps) {
               </FadeIn>
             </div>
             <FadeIn delay={0.18}>
-              <div className="relative overflow-hidden rounded-[2rem] border border-white/80 bg-white p-3 shadow-[0_40px_120px_rgba(15,23,42,0.14)]">
-                <div className="grid gap-3 lg:grid-cols-[1.06fr_0.94fr]">
-                  <div className="relative min-h-[26rem] overflow-hidden rounded-[1.6rem]">
-                    <Image
-                      src={data.hero.image}
-                      alt={data.hero.imageLabel}
-                      fill
-                      priority
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 42vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/62 via-transparent to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
-                        Productive environments
-                      </p>
-                      <p className="mt-2 text-2xl font-semibold leading-tight">
-                        Flexible inventory across India&apos;s most active startup and business districts.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="grid gap-3">
-                    {(data.hero.stats ?? []).map((item) => (
-                      <div
-                        key={item.label}
-                        className="rounded-[1.5rem] bg-[linear-gradient(135deg,#f7faff_0%,#eef4ff_100%)] p-5"
-                      >
-                        <Sparkles className="h-5 w-5 text-[color:var(--color-brand)]" />
-                        <p className="mt-5 text-lg font-semibold text-ink">{item.value}</p>
-                        <p className="mt-2 text-sm text-muted">{item.label}</p>
+              <div className="hidden lg:block">
+                <div className="relative overflow-hidden rounded-[2rem] border border-white/80 bg-white p-3 shadow-[0_40px_120px_rgba(15,23,42,0.14)]">
+                  <div className="grid gap-3 lg:grid-cols-[1.06fr_0.94fr]">
+                    <div className="relative min-h-[26rem] overflow-hidden rounded-[1.6rem]">
+                      <Image
+                        src={data.hero.image}
+                        alt={data.hero.imageLabel}
+                        fill
+                        priority
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 42vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/62 via-transparent to-transparent" />
+                      <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
+                          Productive environments
+                        </p>
+                        <p className="mt-2 text-2xl font-semibold leading-tight">
+                          Flexible inventory across India&apos;s most active startup and business districts.
+                        </p>
                       </div>
-                    ))}
+                    </div>
+                    <div className="grid gap-3">
+                      {(data.hero.stats ?? []).map((item) => (
+                        <div
+                          key={item.label}
+                          className="rounded-[1.5rem] bg-[linear-gradient(135deg,#f7faff_0%,#eef4ff_100%)] p-5"
+                        >
+                          <Sparkles className="h-5 w-5 text-[color:var(--color-brand)]" />
+                          <p className="mt-5 text-lg font-semibold text-ink">{item.value}</p>
+                          <p className="mt-2 text-sm text-muted">{item.label}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -125,43 +127,45 @@ export function VerticalHero({ data }: VerticalHeroProps) {
               </FadeIn>
             </div>
             <FadeIn delay={0.2}>
-              <div className="overflow-hidden rounded-[2rem] border border-white/80 bg-white p-3 shadow-[0_40px_120px_rgba(15,23,42,0.14)]">
-                <div className="grid gap-3 sm:grid-cols-[1.1fr_0.9fr]">
-                  <div className="relative min-h-[24rem] overflow-hidden rounded-[1.5rem]">
-                    <Image
-                      src={data.hero.image}
-                      alt={data.hero.imageLabel}
-                      fill
-                      priority
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 42vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/60 via-transparent to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/72">
-                        Compliance-led setup
-                      </p>
-                      <p className="mt-2 text-2xl font-semibold leading-tight">
-                        Professional addresses and documentation support that feel credible from day one.
-                      </p>
+              <div className="hidden lg:block">
+                <div className="overflow-hidden rounded-[2rem] border border-white/80 bg-white p-3 shadow-[0_40px_120px_rgba(15,23,42,0.14)]">
+                  <div className="grid gap-3 sm:grid-cols-[1.1fr_0.9fr]">
+                    <div className="relative min-h-[24rem] overflow-hidden rounded-[1.5rem]">
+                      <Image
+                        src={data.hero.image}
+                        alt={data.hero.imageLabel}
+                        fill
+                        priority
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 42vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/60 via-transparent to-transparent" />
+                      <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/72">
+                          Compliance-led setup
+                        </p>
+                        <p className="mt-2 text-2xl font-semibold leading-tight">
+                          Professional addresses and documentation support that feel credible from day one.
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="grid gap-3">
-                    <div className="rounded-[1.5rem] bg-white p-5 text-slate-900">
-                      <CheckCircle2 className="h-5 w-5 text-[color:var(--color-brand)]" />
-                      <p className="mt-4 text-lg font-semibold">Trusted provider network</p>
-                      <p className="mt-2 text-sm leading-6 text-slate-600">
-                        Start from providers with better documentation standards and service clarity.
-                      </p>
-                    </div>
-                    <div className="rounded-[1.5rem] bg-[linear-gradient(135deg,#0b1119_0%,#10203b_60%,#17324f_100%)] p-5 text-white shadow-[0_24px_60px_rgba(15,23,42,0.18)]">
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/66">
-                        Common use cases
-                      </p>
-                      <div className="mt-4 grid gap-3 text-sm text-white/82">
-                        <p>GST registration</p>
-                        <p>Company incorporation</p>
-                        <p>Business mail handling</p>
+                    <div className="grid gap-3">
+                      <div className="rounded-[1.5rem] bg-white p-5 text-slate-900">
+                        <CheckCircle2 className="h-5 w-5 text-[color:var(--color-brand)]" />
+                        <p className="mt-4 text-lg font-semibold">Trusted provider network</p>
+                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                          Start from providers with better documentation standards and service clarity.
+                        </p>
+                      </div>
+                      <div className="rounded-[1.5rem] bg-[linear-gradient(135deg,#0b1119_0%,#10203b_60%,#17324f_100%)] p-5 text-white shadow-[0_24px_60px_rgba(15,23,42,0.18)]">
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/66">
+                          Common use cases
+                        </p>
+                        <div className="mt-4 grid gap-3 text-sm text-white/82">
+                          <p>GST registration</p>
+                          <p>Company incorporation</p>
+                          <p>Business mail handling</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -205,37 +209,39 @@ export function VerticalHero({ data }: VerticalHeroProps) {
             </FadeIn>
           </div>
           <FadeIn delay={0.18}>
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/80 bg-white p-3 shadow-[0_40px_120px_rgba(15,23,42,0.16)]">
-              <div className="relative min-h-[30rem] overflow-hidden rounded-[1.6rem]">
-                <Image
-                  src={data.hero.image}
-                  alt={data.hero.imageLabel}
-                  fill
-                  priority
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 44vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/76 via-[#08111f]/18 to-transparent" />
-                <div className="absolute inset-0 flex items-end justify-between p-6 text-white">
-                  <div className="max-w-md">
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
-                      Enterprise-ready inventory
-                    </p>
-                    <p className="mt-2 text-3xl font-semibold leading-tight">
-                      Premium offices for teams that care about brand, service, and scale.
-                    </p>
-                  </div>
-                  <div className="hidden w-[16rem] gap-3 lg:grid">
-                    {(data.hero.stats ?? []).map((item) => (
-                      <div
-                        key={item.label}
-                        className="rounded-[1.3rem] border border-white/14 bg-white/10 p-4 backdrop-blur"
-                      >
-                        <Building2 className="h-5 w-5 text-white" />
-                        <p className="mt-4 text-base font-semibold">{item.value}</p>
-                        <p className="mt-1 text-sm text-white/68">{item.label}</p>
-                      </div>
-                    ))}
+            <div className="hidden lg:block">
+              <div className="relative overflow-hidden rounded-[2rem] border border-white/80 bg-white p-3 shadow-[0_40px_120px_rgba(15,23,42,0.16)]">
+                <div className="relative min-h-[30rem] overflow-hidden rounded-[1.6rem]">
+                  <Image
+                    src={data.hero.image}
+                    alt={data.hero.imageLabel}
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 44vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/76 via-[#08111f]/18 to-transparent" />
+                  <div className="absolute inset-0 flex items-end justify-between p-6 text-white">
+                    <div className="max-w-md">
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
+                        Enterprise-ready inventory
+                      </p>
+                      <p className="mt-2 text-3xl font-semibold leading-tight">
+                        Premium offices for teams that care about brand, service, and scale.
+                      </p>
+                    </div>
+                    <div className="hidden w-[16rem] gap-3 lg:grid">
+                      {(data.hero.stats ?? []).map((item) => (
+                        <div
+                          key={item.label}
+                          className="rounded-[1.3rem] border border-white/14 bg-white/10 p-4 backdrop-blur"
+                        >
+                          <Building2 className="h-5 w-5 text-white" />
+                          <p className="mt-4 text-base font-semibold">{item.value}</p>
+                          <p className="mt-1 text-sm text-white/68">{item.label}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>

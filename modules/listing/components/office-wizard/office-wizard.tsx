@@ -12,6 +12,7 @@ import { useOfficeAmenities, useOfficeWizard } from "./use-office-wizard";
 
 type Props = {
   userName?: string;
+  editId?: string | null;
 };
 
 /**
@@ -20,8 +21,8 @@ type Props = {
  * with the single save happening only on the final step via
  * `POST /api/admin/officeSpaces`.
  */
-export function OfficeWizard({ userName }: Props) {
-  const wizard = useOfficeWizard();
+export function OfficeWizard({ userName, editId = null }: Props) {
+  const wizard = useOfficeWizard({ editId });
   const {
     amenities,
     loading: amenitiesLoading,
@@ -82,6 +83,22 @@ export function OfficeWizard({ userName }: Props) {
     [wizard, amenities, amenitiesLoading, amenitiesError, userName],
   );
 
+  if (wizard.loadError) {
+    return (
+      <div className="rounded-[1.75rem] border border-red-200 bg-red-50/90 px-5 py-6 text-sm text-red-900">
+        {wizard.loadError}
+      </div>
+    );
+  }
+
+  if (wizard.initializing) {
+    return (
+      <div className="rounded-[1.75rem] border border-ink/10 bg-white px-5 py-12 text-center text-sm text-ink/70 shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
+        Loading your listing…
+      </div>
+    );
+  }
+
   return (
     <WizardShell
       steps={steps}
@@ -91,8 +108,8 @@ export function OfficeWizard({ userName }: Props) {
       busy={wizard.busy}
       error={wizard.submitError}
       success={wizard.success}
-      submitLabel="Save office space"
-      onResetDraft={wizard.resetDraft}
+      submitLabel={wizard.editId ? "Update office space" : "Save office space"}
+      onResetDraft={wizard.editId ? undefined : wizard.resetDraft}
     />
   );
 }

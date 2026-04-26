@@ -88,9 +88,9 @@ export function VirtualOfficeFitSection({ imageSrc, imageAlt }: VirtualOfficeFit
   }, [testimonials.length]);
 
   return (
-    <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
-      <div className="relative overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-soft">
-        <div className="relative aspect-[16/10] sm:aspect-[16/9]">
+    <div className="grid items-center gap-4 sm:gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-10">
+      <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-soft sm:rounded-3xl lg:rounded-[2rem]">
+        <div className="relative aspect-[5/2] sm:aspect-[16/10] md:aspect-[16/9]">
           <Image
             src={imageSrc}
             alt={imageAlt}
@@ -104,36 +104,38 @@ export function VirtualOfficeFitSection({ imageSrc, imageAlt }: VirtualOfficeFit
       </div>
 
       <div>
-        <h2 className="font-display text-3xl tracking-[-0.03em] text-ink sm:text-4xl">
+        <h2 className="font-display text-2xl leading-[1.15] tracking-[-0.03em] text-ink sm:text-3xl sm:leading-tight md:text-4xl">
           Is Virtual Office right for you?
         </h2>
         <a
           href="#faq"
-          className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--color-brand)]"
+          className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[color:var(--color-brand)] sm:mt-3 sm:gap-2 sm:text-sm"
         >
-          <Info className="h-4 w-4" />
+          <Info className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           New to Virtual Offices?
         </a>
 
-        <div className="mt-8 grid gap-5">
+        <div className="mt-4 grid gap-3 sm:mt-6 sm:gap-4 md:mt-8 md:gap-5">
           {rows.map((r) => {
             const Icon = r.icon;
             return (
-              <div key={r.title} className="flex gap-4">
-                <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[color:var(--color-brand-soft)] text-[color:var(--color-brand)]">
-                  <Icon className="h-5 w-5" />
+              <div key={r.title} className="flex gap-2.5 sm:gap-4">
+                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[color:var(--color-brand-soft)] text-[color:var(--color-brand)] sm:mt-1 sm:h-10 sm:w-10 sm:rounded-2xl">
+                  <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="text-sm font-semibold text-ink">{r.title}</p>
-                  <p className="mt-1 text-sm leading-6 text-muted">{r.body}</p>
+                  <p className="mt-0.5 text-xs leading-5 text-muted sm:mt-1 sm:text-sm sm:leading-6">
+                    {r.body}
+                  </p>
                 </div>
               </div>
             );
           })}
         </div>
 
-        <div className="mt-8 overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-white shadow-soft">
-          <div className="flex items-center justify-between gap-4 px-5 pt-5">
+        <div className="mt-5 overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-soft sm:mt-8 sm:rounded-[1.5rem]">
+          <div className="flex items-center justify-between gap-3 px-4 pt-4 sm:gap-4 sm:px-5 sm:pt-5">
             <div className="flex items-center gap-1 text-amber-500">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star key={i} className="h-4 w-4 fill-current" />
@@ -175,13 +177,13 @@ export function VirtualOfficeFitSection({ imageSrc, imageAlt }: VirtualOfficeFit
 
           <div
             ref={railRef}
-            className="no-scrollbar flex snap-x snap-mandatory overflow-x-scroll overscroll-x-contain pb-5 pt-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden touch-pan-x scroll-px-4"
+            className="no-scrollbar flex snap-x snap-mandatory overflow-x-scroll overscroll-x-contain pb-4 pt-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden touch-pan-x scroll-px-3 sm:pb-5 sm:pt-3 sm:scroll-px-4"
             aria-label="Testimonials"
           >
             {testimonials.map((t) => (
-              <div key={t.by} className="min-w-full shrink-0 snap-start px-4">
-                <p className="text-sm font-medium leading-7 text-slate-700">“{t.quote}”</p>
-                <p className="mt-2 text-xs text-slate-500">— {t.by}</p>
+              <div key={t.by} className="min-w-full shrink-0 snap-start px-3 sm:px-4">
+                <p className="text-sm font-medium leading-6 text-slate-700 sm:leading-7">“{t.quote}”</p>
+                <p className="mt-1.5 text-xs text-slate-500 sm:mt-2">— {t.by}</p>
               </div>
             ))}
             <div className="min-w-4 shrink-0" aria-hidden="true" />

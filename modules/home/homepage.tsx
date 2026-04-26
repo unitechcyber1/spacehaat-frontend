@@ -62,13 +62,18 @@ export function Homepage({ data }: HomepageProps) {
             </Button>
           }
         />
-        <div className={cn("no-scrollbar flex snap-x gap-4 overflow-x-auto pb-2", headingGap)}>
+        <div
+          className={cn(
+            "no-scrollbar flex snap-x items-stretch gap-4 overflow-x-auto pb-2",
+            headingGap,
+          )}
+        >
           {data.featuredSpaces.map((space) => (
             <div
               key={space.id}
-              className="w-[16.75rem] shrink-0 snap-start sm:w-[19.5rem] lg:w-[21rem]"
+              className="flex h-full w-[16.75rem] shrink-0 snap-start flex-col sm:w-[19.5rem] lg:w-[21rem]"
             >
-              <VerticalSpaceCard space={space} />
+              <VerticalSpaceCard space={space} className="min-h-0 flex-1" />
             </div>
           ))}
         </div>

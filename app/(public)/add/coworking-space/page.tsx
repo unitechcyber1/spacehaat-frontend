@@ -1,11 +1,20 @@
 import Link from "next/link";
 
 import { Container } from "@/components/ui/container";
+import { generateMetadataForPublicRoute } from "@/lib/generate-public-seo-metadata";
 import { CoworkingWizard } from "@/modules/listing/components/coworking-wizard";
 import { getListingSession } from "@/services/listing-session";
 
-export default async function AddCoworkingSpacePage() {
+type PageProps = {
+  searchParams: Promise<{ edit?: string }>;
+};
+
+export const generateMetadata = generateMetadataForPublicRoute;
+
+export default async function AddCoworkingSpacePage({ searchParams }: PageProps) {
   const session = await getListingSession();
+  const { edit } = await searchParams;
+  const isEdit = Boolean(edit?.trim());
 
   return (
     <div className="bg-cream">
@@ -17,10 +26,16 @@ export default async function AddCoworkingSpacePage() {
                 SpaceHaat Host Panel
               </p>
               <h1 className="mt-3 font-display text-4xl leading-tight text-ink sm:text-5xl">
-                Add Coworking Space
+                {isEdit ? "Edit Coworking Space" : "Add Coworking Space"}
               </h1>
             </div>
             <div className="flex items-center gap-3">
+              <Link
+                href="/add/dashboard"
+                className="rounded-xl border border-ink/15 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink/30"
+              >
+                My listings
+              </Link>
               <Link
                 href="/add"
                 className="rounded-xl border border-ink/15 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink/30"
@@ -42,7 +57,7 @@ export default async function AddCoworkingSpacePage() {
             </div>
           </div>
 
-          <CoworkingWizard userName={session?.name} />
+          <CoworkingWizard userName={session?.name} editId={edit?.trim() ?? null} />
         </div>
       </Container>
     </div>

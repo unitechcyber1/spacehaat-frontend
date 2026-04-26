@@ -12,6 +12,8 @@ import { useCatalog, useCoworkingWizard } from "./use-coworking-wizard";
 
 type Props = {
   userName?: string;
+  /** Existing listing id — load for editing */
+  editId?: string | null;
 };
 
 /**
@@ -28,8 +30,8 @@ type Props = {
  *   Review step's "Save" button ─► buildCoworkingPayload(state)
  *                                 ─► POST /api/admin/workSpace (single call)
  */
-export function CoworkingWizard({ userName }: Props) {
-  const wizard = useCoworkingWizard();
+export function CoworkingWizard({ userName, editId = null }: Props) {
+  const wizard = useCoworkingWizard({ editId });
   const { catalog, loading: catalogLoading, error: catalogError } = useCatalog();
 
   const steps = useMemo<WizardStep[]>(
@@ -86,6 +88,22 @@ export function CoworkingWizard({ userName }: Props) {
     [wizard, catalog, catalogLoading, catalogError, userName],
   );
 
+  if (wizard.loadError) {
+    return (
+      <div className="rounded-[1.75rem] border border-red-200 bg-red-50/90 px-5 py-6 text-sm text-red-900">
+        {wizard.loadError}
+      </div>
+    );
+  }
+
+  if (wizard.initializing) {
+    return (
+      <div className="rounded-[1.75rem] border border-ink/10 bg-white px-5 py-12 text-center text-sm text-ink/70 shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
+        Loading your listing…
+      </div>
+    );
+  }
+
   return (
     <WizardShell
       steps={steps}
@@ -95,8 +113,8 @@ export function CoworkingWizard({ userName }: Props) {
       busy={wizard.busy}
       error={wizard.submitError}
       success={wizard.success}
-      submitLabel="Save coworking space"
-      onResetDraft={wizard.resetDraft}
+      submitLabel={wizard.editId ? "Update coworking space" : "Save coworking space"}
+      onResetDraft={wizard.editId ? undefined : wizard.resetDraft}
     />
   );
 }

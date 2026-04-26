@@ -4,6 +4,9 @@ import { Container } from "@/components/ui/container";
 import { listCities } from "@/services/mock-db";
 import { verticals } from "@/utils/constants";
 
+const DEFAULT_FOOTER_LEAD =
+  "A premium discovery platform to compare coworking spaces, virtual offices, and office spaces across India.";
+
 export function Footer() {
   const cities = listCities().slice(0, 4);
 
@@ -19,8 +22,7 @@ export function Footer() {
             SpaceHaat
           </Link>
           <p className="mt-3 max-w-md text-sm leading-6 text-muted">
-            A premium discovery platform to compare coworking spaces, virtual
-            offices, and office spaces across India.
+            {DEFAULT_FOOTER_LEAD}
           </p>
           <Link
             href="/#lead-form"

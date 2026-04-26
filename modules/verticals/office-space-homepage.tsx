@@ -30,7 +30,7 @@ export function OfficeSpaceHomepage({ data }: OfficeSpaceHomepageProps) {
           title="Top cities across India"
           description="Browse private and managed office inventory in major business hubs — pick a city to see availability and pricing."
         />
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-8 grid grid-cols-2 gap-2.5 sm:gap-3.5 xl:grid-cols-4">
           {homepageCities.map((city) => (
             <CityCard
               key={city.id}

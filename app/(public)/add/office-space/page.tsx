@@ -1,11 +1,20 @@
 import Link from "next/link";
 
 import { Container } from "@/components/ui/container";
+import { generateMetadataForPublicRoute } from "@/lib/generate-public-seo-metadata";
 import { OfficeWizard } from "@/modules/listing/components/office-wizard";
 import { getListingSession } from "@/services/listing-session";
 
-export default async function AddOfficeSpacePage() {
+type PageProps = {
+  searchParams: Promise<{ edit?: string }>;
+};
+
+export const generateMetadata = generateMetadataForPublicRoute;
+
+export default async function AddOfficeSpacePage({ searchParams }: PageProps) {
   const session = await getListingSession();
+  const { edit } = await searchParams;
+  const isEdit = Boolean(edit?.trim());
 
   return (
     <div className="bg-cream">
@@ -17,10 +26,16 @@ export default async function AddOfficeSpacePage() {
                 SpaceHaat Host Panel
               </p>
               <h1 className="mt-3 font-display text-4xl leading-tight text-ink sm:text-5xl">
-                Add Office Space
+                {isEdit ? "Edit Office Space" : "Add Office Space"}
               </h1>
             </div>
             <div className="flex items-center gap-3">
+              <Link
+                href="/add/dashboard"
+                className="rounded-xl border border-ink/15 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink/30"
+              >
+                My listings
+              </Link>
               <Link
                 href="/add"
                 className="rounded-xl border border-ink/15 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink/30"
@@ -42,7 +57,7 @@ export default async function AddOfficeSpacePage() {
             </div>
           </div>
 
-          <OfficeWizard userName={session?.name} />
+          <OfficeWizard userName={session?.name} editId={edit?.trim() ?? null} />
         </div>
       </Container>
     </div>

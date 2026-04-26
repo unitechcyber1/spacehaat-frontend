@@ -78,6 +78,13 @@ export const listingApiPaths = {
     `/api/admin/userworkSpace/${encodeURIComponent(id)}`,
   userOfficeSpaces: (id: string) =>
     `/api/admin/userofficeSpaces/${encodeURIComponent(id)}`,
+
+  /** Angular `listing.service` — vendor's coworking rows */
+  vendorWorkSpaces: (userId: string, limit: number) =>
+    `/api/admin/workSpaces?userid=${encodeURIComponent(userId)}&limit=${limit}`,
+  /** Angular `listing.service` — vendor's office rows */
+  vendorOfficeSpacesList: (userId: string, limit: number) =>
+    `/api/admin/officeSpaces?userid=${encodeURIComponent(userId)}&limit=${limit}`,
 } as const;
 
 // --------- Axios instance ---------
@@ -591,6 +598,42 @@ export async function getUserOfficeSpaceById(
   try {
     const res = await getListingAxios().get(
       listingApiPaths.userOfficeSpaces(id),
+      withToken(token),
+    );
+    return toSuccess(res);
+  } catch (err) {
+    return toFailure(err);
+  }
+}
+
+// =========================================================================
+// Vendor listing lists (Angular `listing.service` getCoworking/Office listing)
+// =========================================================================
+
+export async function getVendorCoworkingListings(
+  userId: string,
+  limit: number,
+  token?: string | null,
+): Promise<ListingApiResult<ListingModel.ApiEnvelope<CoworkingModel.WorkSpace[]>>> {
+  try {
+    const res = await getListingAxios().get(
+      listingApiPaths.vendorWorkSpaces(userId, limit),
+      withToken(token),
+    );
+    return toSuccess(res);
+  } catch (err) {
+    return toFailure(err);
+  }
+}
+
+export async function getVendorOfficeListings(
+  userId: string,
+  limit: number,
+  token?: string | null,
+): Promise<ListingApiResult<ListingModel.ApiEnvelope<OfficeSpaceModel.OfficeSpace[]>>> {
+  try {
+    const res = await getListingAxios().get(
+      listingApiPaths.vendorOfficeSpacesList(userId, limit),
       withToken(token),
     );
     return toSuccess(res);

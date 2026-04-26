@@ -2,7 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import type { CoworkingModel } from "@/types/coworking-workspace.model";
 import type { ListingModel } from "@/types/listing.model";
+
+import { mapWorkSpaceToCoworkingWizardState } from "../../lib/map-workspace-to-wizard";
 
 import {
   DEFAULT_COUNTRY_ID,
@@ -229,12 +232,22 @@ export function buildCoworkingPayload(
 
 const COWORKING_DRAFT_KEY = "spacehaat:listing:coworking:draft/v2";
 
-export function useCoworkingWizard() {
+export type UseCoworkingWizardOptions = {
+  /** When set, load that listing for editing (GET `/api/admin/userworkSpace/:id`). */
+  editId?: string | null;
+};
+
+export function useCoworkingWizard(options: UseCoworkingWizardOptions = {}) {
+  const editId = options.editId?.trim() || null;
+  const draftEnabled = !editId;
+
   const [state, setState] = useState<CoworkingWizardState>(initialState);
   const [stepIndex, setStepIndex] = useState(0);
   const [busy, setBusy] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [initializing, setInitializing] = useState(Boolean(editId));
 
   const { hydrated, clearDraft } = usePersistedDraft<CoworkingWizardState>({
     storageKey: COWORKING_DRAFT_KEY,
@@ -242,7 +255,56 @@ export function useCoworkingWizard() {
     setState,
     stepIndex,
     setStepIndex,
+    enabled: draftEnabled,
   });
+
+  useEffect(() => {
+    if (!editId) {
+      setInitializing(false);
+      setLoadError(null);
+      return;
+    }
+    let cancelled = false;
+    setInitializing(true);
+    setLoadError(null);
+    (async () => {
+      try {
+        const res = await fetch(
+          `/api/admin/userworkSpace/${encodeURIComponent(editId)}`,
+          { cache: "no-store" },
+        );
+        const json = (await res.json().catch(() => null)) as
+          | { data?: CoworkingModel.WorkSpace; message?: string }
+          | null;
+        if (!res.ok) {
+          const msg =
+            json?.message ||
+            (res.status === 401
+              ? "Please sign in again to edit this listing."
+              : `Could not load listing (HTTP ${res.status}).`);
+          if (!cancelled) setLoadError(msg);
+          return;
+        }
+        const data = json?.data;
+        if (data && !cancelled) {
+          setState(mapWorkSpaceToCoworkingWizardState(data));
+          setStepIndex(0);
+          clearDraft();
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setLoadError(e instanceof Error ? e.message : "Could not load listing.");
+        }
+      } finally {
+        if (!cancelled) setInitializing(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // clearDraft is stable for our purposes; we only re-fetch when `editId` changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editId]);
 
   const set = useCallback(<K extends keyof CoworkingWizardState>(
     key: K,
@@ -332,9 +394,10 @@ export function useCoworkingWizard() {
     }
     setBusy(true);
     try {
-      const payload = buildCoworkingPayload(state);
+      const basePayload = buildCoworkingPayload(state);
+      const payload = editId ? { ...basePayload, id: editId } : basePayload;
       const res = await fetch("/api/admin/workSpace", {
-        method: "POST",
+        method: editId ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -350,10 +413,16 @@ export function useCoworkingWizard() {
             : `Failed to save (HTTP ${res.status}).`);
         throw new Error(msg);
       }
-      setSuccess("Coworking space saved successfully. You can manage it from your dashboard.");
-      clearDraft();
-      setState(initialState);
-      setStepIndex(0);
+      setSuccess(
+        editId
+          ? "Your coworking space was updated successfully."
+          : "Coworking space saved successfully. You can manage it from your dashboard.",
+      );
+      if (!editId) {
+        clearDraft();
+        setState(initialState);
+        setStepIndex(0);
+      }
     } catch (e) {
       setSubmitError(e instanceof Error ? e.message : "Something went wrong.");
     } finally {
@@ -388,6 +457,9 @@ export function useCoworkingWizard() {
     submit,
     hydrated,
     resetDraft,
+    editId,
+    loadError,
+    initializing,
   };
 }
 

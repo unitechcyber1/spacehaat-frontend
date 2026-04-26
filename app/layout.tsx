@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 
 import "./globals.css";
 
+import { resolveAppUrl } from "@/services/env-config";
 import { APP_NAME } from "@/utils/constants";
 
 const inter = Inter({
@@ -14,6 +15,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(resolveAppUrl()),
   title: {
     default: `${APP_NAME} | Premium Workspace Discovery`,
     template: `%s | ${APP_NAME}`,

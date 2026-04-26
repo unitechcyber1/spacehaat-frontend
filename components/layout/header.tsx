@@ -32,10 +32,28 @@ export function Header() {
   const [isHeaderSearchExpanded, setIsHeaderSearchExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  /** Hosts with a valid listing cookie go to the dashboard; others to sign up. */
+  const [listYourSpaceHref, setListYourSpaceHref] = useState("/list-your-space");
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/listing/host-session", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { isHost?: boolean } | null) => {
+        if (cancelled || !data?.isHost) return;
+        setListYourSpaceHref("/add/dashboard");
+      })
+      .catch(() => {
+        // Keep default /list-your-space
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (!isMobileMenuOpen) return undefined;
@@ -201,7 +219,7 @@ export function Header() {
           </button>
 
           <Button
-            href="/list-your-space"
+            href={listYourSpaceHref}
             variant={useSolidHeader ? "primary" : "secondary"}
             className={cn(
               "hidden px-4 lg:inline-flex lg:px-5",
@@ -262,7 +280,7 @@ export function Header() {
                 </Link>
               ))}
               <Link
-                href="/list-your-space"
+                href={listYourSpaceHref}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={cn(
                   "mt-2 rounded-xl px-4 py-3.5 text-center text-base font-semibold transition",

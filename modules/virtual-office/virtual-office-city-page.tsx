@@ -3,7 +3,6 @@ import { CityPageExpertLead } from "@/modules/city-pages/components/city-page-ex
 import { CityPageFaqSection } from "@/modules/city-pages/components/city-page-faq-section";
 import { CityPageHero } from "@/modules/city-pages/components/city-page-hero";
 import { CityPageLeadCtaBand } from "@/modules/city-pages/components/city-page-lead-cta-band";
-import { CityPageSeoRail } from "@/modules/city-pages/components/city-page-seo-rail";
 import { VirtualOfficeCityListing } from "@/modules/virtual-office/components/virtual-office-city-listing";
 import type { CityPageData } from "@/types";
 
@@ -23,7 +22,6 @@ export function VirtualOfficeCityPage({ data }: { data: CityPageData }) {
         description={data.leadCta.description}
         ctaLabel={data.leadCta.ctaLabel}
       />
-      <CityPageSeoRail data={data} />
       <CityPageExpertLead
         cityName={data.city.name}
         submitLabel={data.leadCta.ctaLabel}

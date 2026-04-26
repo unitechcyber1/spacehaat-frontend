@@ -2,7 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import type { OfficeSpaceModel } from "@/types/office-space.model";
 import type { ListingModel } from "@/types/listing.model";
+
+import { mapOfficeSpaceToOfficeWizardState } from "../../lib/map-office-to-wizard";
 
 import { DEFAULT_COUNTRY_ID, MIN_DESCRIPTION_WORDS } from "../wizard/constants";
 import {
@@ -106,12 +109,21 @@ export function buildOfficePayload(state: OfficeWizardState): ListingModel.Offic
 
 const OFFICE_DRAFT_KEY = "spacehaat:listing:office:draft/v2";
 
-export function useOfficeWizard() {
+export type UseOfficeWizardOptions = {
+  editId?: string | null;
+};
+
+export function useOfficeWizard(options: UseOfficeWizardOptions = {}) {
+  const editId = options.editId?.trim() || null;
+  const draftEnabled = !editId;
+
   const [state, setState] = useState<OfficeWizardState>(initialState);
   const [stepIndex, setStepIndex] = useState(0);
   const [busy, setBusy] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [initializing, setInitializing] = useState(Boolean(editId));
 
   const { hydrated, clearDraft } = usePersistedDraft<OfficeWizardState>({
     storageKey: OFFICE_DRAFT_KEY,
@@ -119,7 +131,55 @@ export function useOfficeWizard() {
     setState,
     stepIndex,
     setStepIndex,
+    enabled: draftEnabled,
   });
+
+  useEffect(() => {
+    if (!editId) {
+      setInitializing(false);
+      setLoadError(null);
+      return;
+    }
+    let cancelled = false;
+    setInitializing(true);
+    setLoadError(null);
+    (async () => {
+      try {
+        const res = await fetch(
+          `/api/admin/userofficeSpaces/${encodeURIComponent(editId)}`,
+          { cache: "no-store" },
+        );
+        const json = (await res.json().catch(() => null)) as
+          | { data?: OfficeSpaceModel.OfficeSpace; message?: string }
+          | null;
+        if (!res.ok) {
+          const msg =
+            json?.message ||
+            (res.status === 401
+              ? "Please sign in again to edit this listing."
+              : `Could not load listing (HTTP ${res.status}).`);
+          if (!cancelled) setLoadError(msg);
+          return;
+        }
+        const data = json?.data;
+        if (data && !cancelled) {
+          setState(mapOfficeSpaceToOfficeWizardState(data));
+          setStepIndex(0);
+          clearDraft();
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setLoadError(e instanceof Error ? e.message : "Could not load listing.");
+        }
+      } finally {
+        if (!cancelled) setInitializing(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editId]);
 
   const set = useCallback(<K extends keyof OfficeWizardState>(key: K, value: OfficeWizardState[K]) => {
     setState((prev) => ({ ...prev, [key]: value }));
@@ -168,9 +228,10 @@ export function useOfficeWizard() {
     }
     setBusy(true);
     try {
-      const payload = buildOfficePayload(state);
+      const basePayload = buildOfficePayload(state);
+      const payload = editId ? { ...basePayload, id: editId } : basePayload;
       const res = await fetch("/api/admin/officeSpaces", {
-        method: "POST",
+        method: editId ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -186,10 +247,16 @@ export function useOfficeWizard() {
             : `Failed to save (HTTP ${res.status}).`);
         throw new Error(msg);
       }
-      setSuccess("Office space saved successfully. You can manage it from your dashboard.");
-      clearDraft();
-      setState(initialState);
-      setStepIndex(0);
+      setSuccess(
+        editId
+          ? "Your office space was updated successfully."
+          : "Office space saved successfully. You can manage it from your dashboard.",
+      );
+      if (!editId) {
+        clearDraft();
+        setState(initialState);
+        setStepIndex(0);
+      }
     } catch (e) {
       setSubmitError(e instanceof Error ? e.message : "Something went wrong.");
     } finally {
@@ -222,6 +289,9 @@ export function useOfficeWizard() {
     countWords,
     hydrated,
     resetDraft,
+    editId,
+    loadError,
+    initializing,
   };
 }
 

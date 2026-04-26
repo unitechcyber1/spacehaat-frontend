@@ -22,11 +22,23 @@ export function usePersistedDraft<T>(args: {
   serialize?: (state: T) => unknown;
   /** Called with the hydrated state before it is pushed to setState. */
   onHydrate?: (hydrated: T) => void;
+  /**
+   * When `false` (e.g. editing an existing listing), skip `localStorage` read/write.
+   */
+  enabled?: boolean;
 }): { hydrated: boolean; clearDraft: () => void } {
-  const { storageKey, state, setState, stepIndex, setStepIndex, serialize, onHydrate } =
-    args;
+  const {
+    storageKey,
+    state,
+    setState,
+    stepIndex,
+    setStepIndex,
+    serialize,
+    onHydrate,
+    enabled = true,
+  } = args;
 
-  const [hydrated, setHydrated] = useState(false);
+  const [hydrated, setHydrated] = useState(!enabled);
   // Keep the latest setters in refs so the mount-only effect stays stable.
   const setStateRef = useRef(setState);
   const setStepIndexRef = useRef(setStepIndex);
@@ -39,6 +51,10 @@ export function usePersistedDraft<T>(args: {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (!enabled) {
+      setHydrated(true);
+      return;
+    }
     try {
       const raw = window.localStorage.getItem(storageKey);
       if (raw) {
@@ -59,11 +75,12 @@ export function usePersistedDraft<T>(args: {
     } finally {
       setHydrated(true);
     }
-    // intentionally only run on mount
+    // intentionally only run on mount / when persistence is toggled
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storageKey]);
+  }, [storageKey, enabled]);
 
   useEffect(() => {
+    if (!enabled) return;
     if (!hydrated) return;
     if (typeof window === "undefined") return;
     try {
@@ -75,7 +92,7 @@ export function usePersistedDraft<T>(args: {
     } catch {
       // Storage may be full or disabled; silently ignore.
     }
-  }, [hydrated, state, stepIndex, storageKey, serialize]);
+  }, [enabled, hydrated, state, stepIndex, storageKey, serialize]);
 
   function clearDraft() {
     if (typeof window === "undefined") return;

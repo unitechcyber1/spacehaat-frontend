@@ -5,7 +5,6 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { CityCard } from "@/modules/home/components/city-card";
 import { LeadForm } from "@/modules/home/components/lead-form";
 import { BenefitCards } from "@/modules/verticals/components/benefit-cards";
-import { PricingPlanCard } from "@/modules/verticals/components/pricing-plan-card";
 import { VirtualOfficeFitSection } from "@/modules/verticals/components/virtual-office-fit-section";
 import { VirtualOfficeDocumentsProvided } from "@/modules/verticals/components/virtual-office-documents-provided";
 import { VirtualOfficePlanChooser } from "@/modules/verticals/components/virtual-office-plan-chooser";
@@ -29,8 +28,20 @@ export function VirtualOfficeHomepage({
   return (
     <>
       <VerticalHero data={data} />
+      <SectionWrapper id="cities">
+        <SectionHeading
+          eyebrow="Top cities"
+          title="Top cities across India"
+          description="Choose a city to explore verified providers, documentation support, and pricing options."
+        />
+        <div className="mt-8 grid grid-cols-2 gap-2.5 sm:gap-3.5 xl:grid-cols-4">
+          {homepageCities.map((city) => (
+            <CityCard key={city.id} city={city} basePath="/virtual-office" variant="compact" />
+          ))}
+        </div>
+      </SectionWrapper>
 
-      <SectionWrapper className="pt-6 sm:pt-10">
+      <SectionWrapper className="pt-4 sm:pt-10">
         <VirtualOfficeFitSection imageSrc={data.hero.image} imageAlt="Virtual office workspace scene" />
       </SectionWrapper>
 
@@ -52,25 +63,6 @@ export function VirtualOfficeHomepage({
         />
       </SectionWrapper>
 
-      {data.pricingPlans ? (
-        <SectionWrapper className="pt-4 sm:pt-6">
-          <SectionHeading
-            eyebrow="Pricing Preview"
-            title="Choose the service level that matches your compliance needs."
-            description="Simple plan previews for teams that want address quality, faster documentation, and predictable support."
-          />
-          <div className="mt-10 grid gap-5 lg:grid-cols-3">
-            {data.pricingPlans.map((plan, index) => (
-              <PricingPlanCard
-                key={plan.id}
-                plan={plan}
-                featured={index === 1}
-              />
-            ))}
-          </div>
-        </SectionWrapper>
-      ) : null}
-
       <SectionWrapper>
         <SectionHeading
           eyebrow="Benefits"
@@ -79,19 +71,6 @@ export function VirtualOfficeHomepage({
         />
         <div className="mt-10">
           <BenefitCards items={data.benefits} />
-        </div>
-      </SectionWrapper>
-
-      <SectionWrapper id="cities">
-        <SectionHeading
-          eyebrow="Top cities"
-          title="Top cities across India"
-          description="Choose a city to explore verified providers, documentation support, and pricing options."
-        />
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {homepageCities.map((city) => (
-            <CityCard key={city.id} city={city} basePath="/virtual-office" variant="compact" />
-          ))}
         </div>
       </SectionWrapper>
 

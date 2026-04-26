@@ -124,7 +124,7 @@ export function PopularLocalitiesRail({
   if (items.length === 0) return null;
 
   return (
-    <div className="mb-5 flex flex-col gap-3 sm:mb-8 sm:flex-row sm:items-center">
+    <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center">
       <h2 className="shrink-0 text-base font-semibold tracking-tight text-ink sm:pt-0.5 sm:text-lg">
         Popular localities
       </h2>

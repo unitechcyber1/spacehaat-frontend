@@ -32,6 +32,20 @@ export function resolveAppUrl(): string {
   return DEFAULT_APP_ORIGIN_DEV;
 }
 
+/**
+ * Base URL to reach this Next app from server code (e.g. SEO fetch → same-origin proxy).
+ * Mirrors {@link resolveAppUrl} for Vercel / APP_URL; needed when falling back to `/api/user/seo/*` proxy.
+ */
+export function resolveInternalAppBaseUrl(): string {
+  const vercel = process.env.VERCEL_URL?.trim();
+  if (vercel) return trimUrl(`https://${vercel.replace(/^https?:\/\//, "")}`);
+
+  const explicit = process.env.APP_URL?.trim() ?? process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (explicit) return trimUrl(explicit);
+
+  return DEFAULT_APP_ORIGIN_DEV;
+}
+
 function resolveServerApiBase(): string {
   for (const raw of [
     process.env.API_BASE_URL,

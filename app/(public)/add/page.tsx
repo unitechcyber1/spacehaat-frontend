@@ -1,6 +1,10 @@
 import Link from "next/link";
+import { LayoutGrid } from "lucide-react";
 
 import { Container } from "@/components/ui/container";
+import { generateMetadataForPublicRoute } from "@/lib/generate-public-seo-metadata";
+import { getVendorCoworkingListings, getVendorOfficeListings } from "@/services/listing-api";
+import { getListingSession } from "@/services/listing-session";
 
 const VERTICALS = [
   {
@@ -17,7 +21,24 @@ const VERTICALS = [
   },
 ] as const;
 
-export default function AddVerticalChooserPage() {
+export const generateMetadata = generateMetadataForPublicRoute;
+
+export default async function AddVerticalChooserPage() {
+  const session = await getListingSession();
+  let hasListings = false;
+  if (session?.userId && session?.token) {
+    const [c, o] = await Promise.all([
+      getVendorCoworkingListings(session.userId, 1, session.token),
+      getVendorOfficeListings(session.userId, 1, session.token),
+    ]);
+    if (c.ok && Array.isArray(c.data?.data) && c.data.data.length > 0) {
+      hasListings = true;
+    }
+    if (o.ok && Array.isArray(o.data?.data) && o.data.data.length > 0) {
+      hasListings = true;
+    }
+  }
+
   return (
     <div className="bg-cream">
       <Container className="py-10 sm:py-14">
@@ -34,12 +55,23 @@ export default function AddVerticalChooserPage() {
                 Pick a vertical to continue. You can always come back and add more listings later.
               </p>
             </div>
-            <Link
-              href="/"
-              className="rounded-xl border border-ink/15 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink/30"
-            >
-              Home
-            </Link>
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              {hasListings ? (
+                <Link
+                  href="/add/dashboard"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--color-brand)] bg-white px-4 py-2 text-sm font-semibold text-[color:var(--color-brand)] transition hover:bg-[color:var(--color-brand-soft)]"
+                >
+                  <LayoutGrid className="h-4 w-4" aria-hidden />
+                  Dashboard
+                </Link>
+              ) : null}
+              <Link
+                href="/"
+                className="rounded-xl border border-ink/15 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink/30"
+              >
+                Home
+              </Link>
+            </div>
           </div>
 
           <div className="mt-8 grid gap-5 sm:grid-cols-2">
