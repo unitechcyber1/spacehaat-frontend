@@ -37,3 +37,6 @@ coverage/
 
 # Misc
 *.pem
+
+# Legacy Angular reference tree (local only — never commit; may contain env secrets)
+Listing-Project-master/
