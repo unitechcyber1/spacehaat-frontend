@@ -48,12 +48,6 @@ export default async function AddCoworkingSpacePage({ searchParams }: PageProps)
               >
                 Add Office Space
               </Link>
-              <Link
-                href="/"
-                className="rounded-xl border border-ink/15 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink/30"
-              >
-                Home
-              </Link>
             </div>
           </div>
 

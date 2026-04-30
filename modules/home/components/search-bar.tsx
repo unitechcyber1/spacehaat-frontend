@@ -11,6 +11,7 @@ import {
   loadCoworkingWorkspaceSearchHits,
   type CoworkingSearchHit,
 } from "@/services/coworking-api";
+import { loadOfficeSpaceSearchHits, type OfficeSpaceSearchHit } from "@/services/office-space-api";
 import { getCatalogCityIdBySlug } from "@/services/catalog-city-id";
 import { SearchOption } from "@/types";
 import { cn } from "@/utils/cn";
@@ -82,6 +83,8 @@ export function SearchBar({
   const [selectedSpaceSlug, setSelectedSpaceSlug] = useState("");
   const [coworkingHits, setCoworkingHits] = useState<CoworkingSearchHit[]>([]);
   const [coworkingHitsLoading, setCoworkingHitsLoading] = useState(false);
+  const [officeHits, setOfficeHits] = useState<OfficeSpaceSearchHit[]>([]);
+  const [officeHitsLoading, setOfficeHitsLoading] = useState(false);
   const [hasHydrated, setHasHydrated] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -198,6 +201,43 @@ export function SearchBar({
       window.clearTimeout(timer);
     };
   }, [activeField, selectedSpaceType, catalogCityId, spaceNameInput]);
+
+  useEffect(() => {
+    if (activeField !== "spaceName" || selectedSpaceType !== "office-space") {
+      return;
+    }
+    if (!resolvedLocationSlug.trim()) {
+      setOfficeHits([]);
+      setOfficeHitsLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    const name = spaceNameInput.trim();
+    const delay = name.length > 0 ? 320 : 0;
+
+    setOfficeHitsLoading(true);
+    const timer = window.setTimeout(() => {
+      loadOfficeSpaceSearchHits(catalogCityId, resolvedLocationSlug, {
+        name: name || undefined,
+        limit: 50,
+      })
+        .then((hits) => {
+          if (!cancelled) setOfficeHits(hits);
+        })
+        .catch(() => {
+          if (!cancelled) setOfficeHits([]);
+        })
+        .finally(() => {
+          if (!cancelled) setOfficeHitsLoading(false);
+        });
+    }, delay);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [activeField, selectedSpaceType, catalogCityId, resolvedLocationSlug, spaceNameInput]);
 
   useEffect(() => {
     setHasHydrated(true);
@@ -388,6 +428,15 @@ export function SearchBar({
     if (variant === "homepage" || variant === "header") {
       if (selectedSpaceType === "coworking" && selectedSpaceSlug.trim()) {
         router.push(`/coworking/${selectedSpaceSlug.trim()}`);
+        if (variant === "homepage") {
+          setIsMobileSearchOpen(false);
+          setActiveField(null);
+        }
+        return;
+      }
+
+      if (selectedSpaceType === "office-space" && selectedSpaceSlug.trim()) {
+        router.push(`/office-space/${selectedSpaceSlug.trim()}`);
         if (variant === "homepage") {
           setIsMobileSearchOpen(false);
           setActiveField(null);
@@ -765,6 +814,48 @@ export function SearchBar({
                             </div>
                           ) : null}
                           {!coworkingHitsLoading && catalogCityId && coworkingHits.length === 0 ? (
+                            <div className="rounded-xl border border-dashed border-slate-300 px-3 py-5 text-sm text-slate-500">
+                              No matching spaces found.
+                            </div>
+                          ) : null}
+                        </>
+                      ) : selectedSpaceType === "office-space" ? (
+                        <>
+                          {officeHitsLoading ? (
+                            <div className="rounded-xl px-3 py-5 text-sm text-slate-500">
+                              Loading spaces…
+                            </div>
+                          ) : null}
+                          {!officeHitsLoading && !resolvedLocationSlug.trim() ? (
+                            <div className="rounded-xl border border-dashed border-slate-300 px-3 py-5 text-sm text-slate-500">
+                              Choose a city first to load office spaces.
+                            </div>
+                          ) : null}
+                          {!officeHitsLoading && resolvedLocationSlug.trim() && officeHits.length > 0 ? (
+                            <div className="grid max-h-[20rem] gap-2 overflow-y-auto overscroll-y-contain pr-1 [scrollbar-gutter:stable]">
+                              {officeHits.map((hit) => (
+                                <button
+                                  key={hit.id}
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedSpaceName(hit.name);
+                                    setSpaceNameInput(hit.name);
+                                    setSelectedSpaceSlug(hit.slug);
+                                    setActiveField(null);
+                                  }}
+                                  className="flex shrink-0 items-center gap-3 rounded-xl px-3 py-3 text-left transition hover:bg-slate-100"
+                                >
+                                  <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100">
+                                    <Building2 className="h-5 w-5 text-slate-600" />
+                                  </span>
+                                  <span className="text-lg text-slate-800">{hit.name}</span>
+                                </button>
+                              ))}
+                            </div>
+                          ) : null}
+                          {!officeHitsLoading &&
+                          resolvedLocationSlug.trim() &&
+                          officeHits.length === 0 ? (
                             <div className="rounded-xl border border-dashed border-slate-300 px-3 py-5 text-sm text-slate-500">
                               No matching spaces found.
                             </div>

@@ -1,30 +1,40 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useId, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { toPhone10 } from "@/lib/phone-norm";
 import { buildUserEnquiryBody } from "@/lib/user-enquiry-payload";
 import { submitUserEnquiry, UserEnquiryError } from "@/services/user-enquiry-api";
+import { cn } from "@/utils/cn";
 
 type LeadFormProps = {
   compact?: boolean;
+  /** `premium` — compact, labeled fields for hero / lead panels. */
+  variant?: "default" | "premium";
   submitLabel?: string;
-  /** Shown in `city` and `location[]` (e.g. city page name or "India"). */
   city?: string;
-  /** `mx_Space_Type` for the user enquiry API. */
   mxSpaceType?: string;
 };
 
+const fieldPremium =
+  "w-full rounded-lg border border-slate-200/90 bg-white px-3 py-2.5 text-sm text-ink shadow-[inset_0_1px_1px_rgba(15,23,42,0.04)] outline-none transition placeholder:text-slate-400/90 focus:border-[color:var(--color-brand)] focus:ring-2 focus:ring-[color:var(--color-brand)]/20";
+
+const fieldDefault =
+  "h-14 w-full rounded-[1rem] border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-[color:var(--color-brand)]";
+
 export function LeadForm({
   compact = false,
-  submitLabel = "Get Free Consultation",
+  variant = "default",
+  submitLabel = "Get Expert Advice",
   city = "India",
   mxSpaceType = "Homepage lead",
 }: LeadFormProps) {
+  const formId = useId();
   const [isPending, setIsPending] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const isPremium = variant === "premium";
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -84,13 +94,113 @@ export function LeadForm({
     }
   }
 
+  const labelClass =
+    "block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-slate-500 sm:text-[0.7rem]";
+
+  if (isPremium) {
+    return (
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="space-y-1.5">
+            <input
+              id={`${formId}-name`}
+              name="name"
+              required
+              autoComplete="name"
+              placeholder="e.g. Priya Sharma"
+              className={cn(
+                fieldPremium,
+                "h-10",
+                isPending && "pointer-events-none opacity-60",
+              )}
+              disabled={isPending}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <input
+              id={`${formId}-email`}
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              placeholder="name@company.com"
+              className={cn(
+                fieldPremium,
+                "h-10",
+                isPending && "pointer-events-none opacity-60",
+              )}
+              disabled={isPending}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <input
+            id={`${formId}-phone`}
+            name="phone"
+            required
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder="10-digit number"
+            className={cn(
+              fieldPremium,
+              "h-10",
+              isPending && "pointer-events-none opacity-60",
+            )}
+            disabled={isPending}
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <textarea
+            id={`${formId}-requirement`}
+            name="requirement"
+            required
+            rows={3}
+            placeholder="Seats, area, area / city, move-in date…"
+            className={cn(
+              fieldPremium,
+              "min-h-[4.5rem] resize-y py-2.5",
+              isPending && "pointer-events-none opacity-60",
+            )}
+            disabled={isPending}
+          />
+        </div>
+
+        <Button
+          type="submit"
+          variant="primary"
+          className={cn(
+            "h-10 w-full rounded-xl px-5 py-0 text-sm font-semibold tracking-tight",
+            "shadow-[0_10px_28px_-6px_rgba(48,88,215,0.55)] hover:shadow-[0_12px_32px_-6px_rgba(48,88,215,0.45)]",
+            isPending && "pointer-events-none opacity-70",
+          )}
+          disabled={isPending}
+        >
+          {isPending ? "Sending…" : submitLabel}
+        </Button>
+
+        {status === "success" ? (
+          <p className="rounded-lg border border-emerald-200/80 bg-emerald-50/90 px-3 py-2 text-center text-xs font-medium text-emerald-800">
+            Thank you — we&apos;ll reach out shortly.
+          </p>
+        ) : null}
+        {status === "error" ? (
+          <p className="rounded-lg border border-rose-200/90 bg-rose-50/90 px-3 py-2 text-center text-xs text-rose-800">
+            {errorMessage || "Something went wrong. Please try again."}
+          </p>
+        ) : null}
+      </form>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="grid gap-3">
       <input
         name="name"
         required
         placeholder="Your name"
-        className="h-14 rounded-[1rem] border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-[color:var(--color-brand)]"
+        className={fieldDefault}
         disabled={isPending}
       />
       <input
@@ -98,7 +208,7 @@ export function LeadForm({
         type="email"
         required
         placeholder="Your email"
-        className="h-14 rounded-[1rem] border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-[color:var(--color-brand)]"
+        className={fieldDefault}
         disabled={isPending}
       />
       <input
@@ -107,7 +217,7 @@ export function LeadForm({
         inputMode="tel"
         autoComplete="tel"
         placeholder="10-digit mobile number"
-        className="h-14 rounded-[1rem] border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-[color:var(--color-brand)]"
+        className={fieldDefault}
         disabled={isPending}
       />
       <textarea

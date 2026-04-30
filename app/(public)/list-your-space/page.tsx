@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, EyeOff, Headset, KeyRound, Mail, Phone, User } from "lucide-react";
+import { Headset, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
@@ -9,7 +9,6 @@ import { Container } from "@/components/ui/container";
 import { cn } from "@/utils/cn";
 
 type Mode = "signup" | "login";
-type ListAuthStep = "form" | "otp";
 
 type CompactFieldProps = {
   label: string;
@@ -60,11 +59,6 @@ export default function ListYourSpacePage() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  const [authStep, setAuthStep] = useState<ListAuthStep>("form");
-  const [otp, setOtp] = useState("");
-  const [pendingPhone, setPendingPhone] = useState("");
-  const [showOtp, setShowOtp] = useState(false);
-
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -90,148 +84,22 @@ export default function ListYourSpacePage() {
   const switchMode = useCallback((next: Mode) => {
     setMode(next);
     setError(null);
-    setAuthStep("form");
-    setOtp("");
-    setPendingPhone("");
-    setShowOtp(false);
   }, []);
-
-  const goBackToForm = useCallback(() => {
-    setAuthStep("form");
-    setOtp("");
-    setError(null);
-    setShowOtp(false);
-  }, []);
-
-  async function requestSignupOtp() {
-    if (!canSubmitSignup || busy) return;
-    setBusy(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/user/vendorSignUp", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          first_name: firstName.trim(),
-          last_name: lastName.trim(),
-          email: email.trim(),
-          phone_number: phone10,
-          dial_code: "+91",
-        }),
-      });
-      const data = (await res.json().catch(() => ({}))) as { message?: string };
-      if (!res.ok) {
-        setError(data.message || "Could not start sign up. Try again.");
-        return;
-      }
-      setPendingPhone(phone10);
-      setOtp("");
-      setShowOtp(false);
-      setAuthStep("otp");
-    } catch {
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function requestLoginOtp() {
-    if (!canSubmitLogin || busy) return;
-    setBusy(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/user/vendorLogin", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone_number: phone10 }),
-      });
-      const data = (await res.json().catch(() => ({}))) as { message?: string };
-      if (!res.ok) {
-        setError(data.message || "Could not send OTP. Check your number or create an account.");
-        return;
-      }
-      setPendingPhone(phone10);
-      setOtp("");
-      setShowOtp(false);
-      setAuthStep("otp");
-    } catch {
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function verifyOtp() {
-    const code = otp.replace(/\D/g, "");
-    if (code.length < 4 || !pendingPhone || busy) {
-      if (code.length < 4) {
-        setError("Enter the full OTP sent to your phone.");
-      }
-      return;
-    }
-    setBusy(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/user/validateVendor", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone_number: pendingPhone, otp: code }),
-      });
-      const data = (await res.json().catch(() => ({}))) as { message?: string; ok?: boolean };
-      if (!res.ok) {
-        setError(data.message || "Invalid or expired OTP. Try again.");
-        return;
-      }
-      router.push("/add");
-    } catch {
-      setError("Verification failed. Please try again.");
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function resendOtp() {
-    if (!pendingPhone || busy) return;
-    setBusy(true);
-    setError(null);
-    try {
-      if (mode === "login") {
-        const res = await fetch("/api/user/vendorLogin", {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ phone_number: pendingPhone }),
-        });
-        const data = (await res.json().catch(() => ({}))) as { message?: string };
-        if (!res.ok) {
-          setError(data.message || "Could not resend OTP.");
-        }
-      } else {
-        const res = await fetch("/api/user/resendOTP", {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ phone_number: pendingPhone, dial_code: "+91" }),
-        });
-        const data = (await res.json().catch(() => ({}))) as { message?: string };
-        if (!res.ok) {
-          setError(data.message || "Could not resend OTP.");
-        }
-      }
-    } catch {
-      setError("Could not resend OTP. Please try again.");
-    } finally {
-      setBusy(false);
-    }
-  }
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (mode === "signup") return void requestSignupOtp();
-    return void requestLoginOtp();
+    if (busy) return;
+    setError(null);
+
+    const ok = mode === "signup" ? canSubmitSignup : canSubmitLogin;
+    if (!ok) {
+      setError(mode === "signup" ? "Please fill all details to continue." : "Enter a valid 10-digit mobile number.");
+      return;
+    }
+
+    // OTP verification is intentionally disabled for now.
+    setBusy(true);
+    router.push("/add");
   }
 
   return (
@@ -271,19 +139,17 @@ export default function ListYourSpacePage() {
             >
               <div className="text-center">
                 <h2 className="font-display text-2xl font-semibold tracking-tight text-ink sm:text-[1.65rem]">
-                  {authStep === "otp"
-                    ? "Verify OTP"
-                    : mode === "signup"
-                      ? "Create account"
-                      : "Log in"}
+                  {mode === "signup" ? "Create account" : "Log in"}
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-ink/60">
-                  {authStep === "otp"
-                    ? "Enter the code we sent to your phone."
-                    : mode === "signup"
-                      ? "Takes a minute — we’ll text you a code."
-                      : "We’ll text you a one-time code."}
+                  {mode === "signup"
+                    ? "Enter your details to continue to the host panel."
+                    : "Enter your mobile number to continue to the host panel."}
                 </p>
+              </div>
+
+              <div className="mt-4 rounded-lg border border-amber-200/90 bg-amber-50/90 px-4 py-2.5 text-sm leading-snug text-amber-950">
+                OTP verification is temporarily disabled. You can continue without a code.
               </div>
 
               {sessionExpired ? (
@@ -298,194 +164,104 @@ export default function ListYourSpacePage() {
                 </div>
               ) : null}
 
-              {authStep === "form" ? (
-                <form className="mt-5 grid gap-4" onSubmit={onSubmit}>
-                  {mode === "signup" ? (
-                    <>
-                      <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                        <CompactField label="First name" icon={<User className="h-4 w-4" />}>
-                          <input
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            placeholder="First"
-                            className="min-h-0 w-full min-w-0 border-0 bg-transparent py-0.5 text-base outline-none placeholder:text-ink/35"
-                            disabled={busy}
-                            autoFocus
-                          />
-                        </CompactField>
-                        <CompactField label="Last name" icon={<User className="h-4 w-4" />}>
-                          <input
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            placeholder="Last"
-                            className="min-h-0 w-full min-w-0 border-0 bg-transparent py-0.5 text-base outline-none placeholder:text-ink/35"
-                            disabled={busy}
-                          />
-                        </CompactField>
-                      </div>
-
-                      <CompactField label="Email" icon={<Mail className="h-4 w-4" />}>
+              <form className="mt-5 grid gap-4" onSubmit={onSubmit}>
+                {mode === "signup" ? (
+                  <>
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                      <CompactField label="First name" icon={<User className="h-4 w-4" />}>
                         <input
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          type="email"
-                          inputMode="email"
-                          autoComplete="email"
-                          placeholder="you@email.com"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          placeholder="First"
+                          className="min-h-0 w-full min-w-0 border-0 bg-transparent py-0.5 text-base outline-none placeholder:text-ink/35"
+                          disabled={busy}
+                          autoFocus
+                        />
+                      </CompactField>
+                      <CompactField label="Last name" icon={<User className="h-4 w-4" />}>
+                        <input
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          placeholder="Last"
                           className="min-h-0 w-full min-w-0 border-0 bg-transparent py-0.5 text-base outline-none placeholder:text-ink/35"
                           disabled={busy}
                         />
                       </CompactField>
-                    </>
-                  ) : null}
-
-                  <CompactField
-                    label="Mobile"
-                    icon={<Phone className="h-4 w-4" />}
-                    hasPrefix
-                  >
-                    <input
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      inputMode="numeric"
-                      autoComplete="tel"
-                      placeholder="10-digit number"
-                      className="min-h-0 w-full min-w-0 border-0 bg-transparent py-0.5 text-base outline-none placeholder:text-ink/35"
-                      disabled={busy}
-                      autoFocus={mode === "login"}
-                    />
-                  </CompactField>
-
-                  {error ? (
-                    <div className="rounded-lg border border-red-200/90 bg-red-50/90 px-4 py-2.5 text-sm text-red-800">
-                      {error}
                     </div>
-                  ) : null}
 
-                  <button
-                    type="submit"
-                    disabled={
-                      busy || (mode === "signup" ? !canSubmitSignup : !canSubmitLogin)
-                    }
-                    className={cn(
-                      "mt-1 flex h-12 w-full items-center justify-center rounded-full text-base font-semibold transition",
-                      "border border-[color:var(--color-brand)] bg-[color:var(--color-brand)] text-white",
-                      "hover:brightness-105 active:scale-[0.99]",
-                      "disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100",
-                    )}
-                  >
-                    {busy ? "Please wait…" : "Send OTP"}
-                  </button>
-
-                  <p className="pt-1 text-center text-sm text-ink/65">
-                    {mode === "signup" ? (
-                      <>
-                        Already have an Account?{" "}
-                        <button
-                          type="button"
-                          onClick={() => switchMode("login")}
-                          className="font-semibold text-[color:var(--color-brand)] hover:text-[color:var(--color-accent)]"
-                        >
-                          Sign in
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        Create an Account?{" "}
-                        <button
-                          type="button"
-                          onClick={() => switchMode("signup")}
-                          className="font-semibold text-[color:var(--color-brand)] hover:text-[color:var(--color-accent)]"
-                        >
-                          Sign up
-                        </button>
-                      </>
-                    )}
-                  </p>
-                </form>
-              ) : (
-                <div className="mt-5 grid gap-4">
-                  <p className="text-center text-sm text-ink/70">
-                    Code sent to <span className="font-semibold text-ink">+91 {pendingPhone}</span>
-                  </p>
-                  <div className="grid gap-1.5">
-                    <span className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-ink/45">
-                      One-time code
-                    </span>
-                    <div
-                      className={cn(
-                        "flex h-11 items-stretch gap-1 rounded-xl border border-ink/10 bg-white px-2 text-base",
-                        "shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)] transition",
-                        "focus-within:border-[color:var(--color-brand)] focus-within:ring-2 focus-within:ring-[rgba(76,175,80,0.18)]",
-                      )}
-                    >
-                      <span className="flex w-6 shrink-0 items-center justify-center self-center text-[color:var(--color-brand)]/85">
-                        <KeyRound className="h-4 w-4" />
-                      </span>
+                    <CompactField label="Email" icon={<Mail className="h-4 w-4" />}>
                       <input
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 8))}
-                        type={showOtp ? "text" : "password"}
-                        inputMode="numeric"
-                        autoComplete="one-time-code"
-                        placeholder="••••••"
-                        className="min-w-0 flex-1 border-0 bg-transparent py-0.5 text-base font-medium tracking-widest outline-none placeholder:text-ink/35"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        type="email"
+                        inputMode="email"
+                        autoComplete="email"
+                        placeholder="you@email.com"
+                        className="min-h-0 w-full min-w-0 border-0 bg-transparent py-0.5 text-base outline-none placeholder:text-ink/35"
                         disabled={busy}
-                        autoFocus
-                        name="listing-vendor-otp"
                       />
+                    </CompactField>
+                  </>
+                ) : null}
+
+                <CompactField label="Mobile" icon={<Phone className="h-4 w-4" />} hasPrefix>
+                  <input
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    inputMode="numeric"
+                    autoComplete="tel"
+                    placeholder="10-digit number"
+                    className="min-h-0 w-full min-w-0 border-0 bg-transparent py-0.5 text-base outline-none placeholder:text-ink/35"
+                    disabled={busy}
+                    autoFocus={mode === "login"}
+                  />
+                </CompactField>
+
+                {error ? (
+                  <div className="rounded-lg border border-red-200/90 bg-red-50/90 px-4 py-2.5 text-sm text-red-800">
+                    {error}
+                  </div>
+                ) : null}
+
+                <button
+                  type="submit"
+                  disabled={busy || (mode === "signup" ? !canSubmitSignup : !canSubmitLogin)}
+                  className={cn(
+                    "mt-1 flex h-12 w-full items-center justify-center rounded-full text-base font-semibold transition",
+                    "border border-[color:var(--color-brand)] bg-[color:var(--color-brand)] text-white",
+                    "hover:brightness-105 active:scale-[0.99]",
+                    "disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100",
+                  )}
+                >
+                  {busy ? "Opening panel…" : "Continue"}
+                </button>
+
+                <p className="pt-1 text-center text-sm text-ink/65">
+                  {mode === "signup" ? (
+                    <>
+                      Already have an Account?{" "}
                       <button
                         type="button"
-                        onClick={() => setShowOtp((s) => !s)}
-                        className="flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-lg text-ink/55 transition hover:bg-ink/5 hover:text-ink"
-                        aria-pressed={showOtp}
-                        aria-label={showOtp ? "Hide OTP" : "Show OTP"}
+                        onClick={() => switchMode("login")}
+                        className="font-semibold text-[color:var(--color-brand)] hover:text-[color:var(--color-accent)]"
                       >
-                        {showOtp ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        Sign in
                       </button>
-                    </div>
-                  </div>
-
-                  {error ? (
-                    <div className="rounded-lg border border-red-200/90 bg-red-50/90 px-4 py-2.5 text-sm text-red-800">
-                      {error}
-                    </div>
-                  ) : null}
-
-                  <button
-                    type="button"
-                    onClick={() => void verifyOtp()}
-                    disabled={busy || otp.replace(/\D/g, "").length < 4}
-                    className={cn(
-                      "mt-1 flex h-12 w-full items-center justify-center rounded-full text-base font-semibold transition",
-                      "border border-[color:var(--color-brand)] bg-[color:var(--color-brand)] text-white",
-                      "hover:brightness-105 active:scale-[0.99]",
-                      "disabled:cursor-not-allowed disabled:opacity-50",
-                    )}
-                  >
-                    {busy ? "Please wait…" : "Verify & continue"}
-                  </button>
-
-                  <div className="flex items-center justify-between gap-2 pt-1 text-sm">
-                    <button
-                      type="button"
-                      onClick={() => void resendOtp()}
-                      disabled={busy}
-                      className="font-semibold text-[color:var(--color-brand)] hover:underline disabled:opacity-50"
-                    >
-                      Resend code
-                    </button>
-                    <button
-                      type="button"
-                      onClick={goBackToForm}
-                      disabled={busy}
-                      className="font-medium text-ink/55 hover:text-ink disabled:opacity-50"
-                    >
-                      Change number
-                    </button>
-                  </div>
-                </div>
-              )}
+                    </>
+                  ) : (
+                    <>
+                      Create an Account?{" "}
+                      <button
+                        type="button"
+                        onClick={() => switchMode("signup")}
+                        className="font-semibold text-[color:var(--color-brand)] hover:text-[color:var(--color-accent)]"
+                      >
+                        Sign up
+                      </button>
+                    </>
+                  )}
+                </p>
+              </form>
             </div>
 
             <div className="mx-auto mt-4 flex w-full max-w-md items-start gap-4 rounded-2xl border border-ink/8 bg-white/95 p-5 shadow-[0_8px_28px_rgba(0,0,0,0.05)] sm:p-6">

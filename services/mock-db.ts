@@ -556,13 +556,64 @@ const trustMetrics: TrustMetric[] = [
   { id: "metric_003", value: 250, suffix: "+", label: "startup and enterprise clients served" },
 ];
 
+/** Coworking operators for homepage + vertical pages; order is intentionally shuffled for display variety. */
 const brands: Brand[] = [
-  { id: "brand_001", name: "WeWork", category: "Operator" },
-  { id: "brand_002", name: "Awfis", category: "Operator" },
-  { id: "brand_003", name: "91Springboard", category: "Operator" },
-  { id: "brand_004", name: "IndiQube", category: "Operator" },
-  { id: "brand_005", name: "Smartworks", category: "Operator" },
-  { id: "brand_006", name: "Table Space", category: "Operator" },
+  {
+    id: "brand_001",
+    name: "Bhive",
+    category: "Operator",
+    image:
+      "https://img.spacehaat.com/images/latest_images_2024/71d43e23a7ae6ebb391a15e699d40b480f477768.webp",
+    url: "/brand/bhive-workspace",
+  },
+  {
+    id: "brand_002",
+    name: "Innov8",
+    category: "Operator",
+    image:
+      "https://img.spacehaat.com/images/latest_images_2024/c4c17f01171e0494e577509eb6463d46e98cba5a.webp",
+    url: "/brand/innov8",
+  },
+  {
+    id: "brand_003",
+    name: "WeWork",
+    category: "Operator",
+    image:
+      "https://img.spacehaat.com/images/latest_images_2024/3a4f25ddb65a1444dc67dc4b0a2b60d6e7648ad0.webp",
+    url: "/brand/wework",
+  },
+  {
+    id: "brand_004",
+    name: "Awfis",
+    category: "Operator",
+    image:
+      "https://img.spacehaat.com/images/latest_images_2024/418876d12cfd6d663a344bed1ef0b62d36bb38f1.webp",
+    url: "/brand/awfis",
+  },
+  {
+    id: "brand_005",
+    name: "Indiqube",
+    category: "Operator",
+    image:
+      "https://img.spacehaat.com/images/latest_images_2024/96d6ad27f63a3fe44e58b3988faf6aa3d35ec7ce.webp",
+    url: "/brand/indiqube",
+  },
+  {
+    id: "brand_006",
+    name: "91Springboard",
+    category: "Operator",
+    image:
+      "https://img.spacehaat.com/images/latest_images_2024/85bede6f564b721526057118f32551c01c4da373.webp",
+    url: "/brand/91springboard",
+  },
+  {
+    id: "brand_007",
+    name: "InstaOffice",
+    category: "Operator",
+    image:
+      "https://img.spacehaat.com/images/latest_images_2024/3e9de30708805d8e117d8b0914f479ca583a9595.webp",
+    url: "/brand/instaoffice",
+  },
 ];
 
 const testimonials: Testimonial[] = [
