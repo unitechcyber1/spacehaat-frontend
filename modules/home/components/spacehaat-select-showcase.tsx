@@ -49,12 +49,18 @@ const MESSAGES: ChatLine[] = [
     side: "left",
     name: "Aditi",
     time: "2:23 PM",
-    body: "Here are two premium options that match your filters — both are operator‑verified and recently toured.",
+    body:
+      "Here are two premium options that match your filters — both are operator‑verified and recently toured.",
     images: [
       {
-        src: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
-        alt: "Modern office interior with windows",
-        layout: "single",
+        src: "https://img.spacehaat.com/images/latest_images_2024/4800c2456ed218d7deafafb9cfd175be81653008.webp",
+        alt: "Premium workspace — bright interiors and natural light",
+        layout: "pair",
+      },
+      {
+        src: "https://img.spacehaat.com/images/latest_images_2024/0660c99f666f081ad12f9d56bb1f2c2c6809e36b.webp",
+        alt: "Premium workspace — lounge and collaboration area",
+        layout: "pair",
       },
     ],
   },
@@ -74,13 +80,13 @@ const MESSAGES: ChatLine[] = [
       "Yes — I’ll send a side‑by‑side with rent, CAM, and fit‑out assumptions. We can also line up a virtual walkthrough this week.",
     images: [
       {
-        src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
-        alt: "Bright workspace lounge",
+        src: "https://img.spacehaat.com/images/latest_images_2024/7ede6a8950fc2e17e34bb48db5fd5d64ff424c99.webp",
+        alt: "Option A — open desk and meeting zone",
         layout: "pair",
       },
       {
-        src: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80",
-        alt: "Coworking area",
+        src: "https://img.spacehaat.com/images/latest_images_2024/b86e6db8044e30873b4004da6728207cfcc556a5.webp",
+        alt: "Option B — private office floor",
         layout: "pair",
       },
     ],

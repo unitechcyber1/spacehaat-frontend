@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const BANNER_IMAGE =
-  "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=2200&q=85";
+  "https://img.spacehaat.com/images/f227d40da784346e41e08805ae8b5cfb5507e195.webp";
 
 /**
  * Giggster-style host CTA: crisp 50/50 split (black | photo).
@@ -47,7 +47,7 @@ function BannerCopy() {
       </p>
       <div className="mt-8 md:mt-9">
         <Link
-          href="#lead-form"
+          href="/list-your-space"
           className="inline-flex items-center justify-center rounded-xl bg-[color:var(--color-brand)] px-8 py-3.5 text-sm font-semibold text-white shadow-[0_12px_36px_rgba(76,175,80,0.45)] transition duration-200 hover:bg-[color:var(--color-accent)] hover:shadow-[0_16px_44px_rgba(46,125,50,0.5)] md:px-9 md:py-4 md:text-base"
         >
           List your Space

@@ -10,6 +10,7 @@ import {
   resolveCoworkingApiBaseUrl,
   resolveCoworkingApiTimeoutMs,
 } from "@/services/env-config";
+import { listSpaces } from "@/services/mock-db";
 import type { OfficeSpaceModel } from "@/types/office-space.model";
 
 const DEFAULT_LIMIT = 36;
@@ -82,4 +83,62 @@ export async function officeSpacesAsSpaces(
   } catch {
     return null;
   }
+}
+
+/** Minimal row for homepage / header search dropdowns (office vertical). */
+export type OfficeSpaceSearchHit = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+/**
+ * Offices in a city for search autocomplete; uses live API when enabled, otherwise seed `mock-db`.
+ */
+export async function loadOfficeSpaceSearchHits(
+  catalogCityId: string | null | undefined,
+  appCitySlug: string,
+  options: { name?: string; limit?: number } = {},
+): Promise<OfficeSpaceSearchHit[]> {
+  const limit = options.limit ?? 48;
+  const nameQ = options.name?.trim().toLowerCase() ?? "";
+  const citySlug = appCitySlug.trim().toLowerCase();
+
+  let hits: OfficeSpaceSearchHit[] = [];
+
+  const catalog = catalogCityId?.trim();
+  if (catalog) {
+    const rows = await officeSpacesAsSpaces(catalog, Math.max(limit, 60));
+    if (rows?.length) {
+      hits = rows
+        .map((o) => ({
+          id: String(o.id ?? o._id ?? ""),
+          name: String(o.name ?? "").trim(),
+          slug: String(o.slug ?? "").trim(),
+        }))
+        .filter((h) => h.id && h.slug && h.name);
+    }
+  }
+
+  if (nameQ) {
+    hits = hits.filter((h) => h.name.toLowerCase().includes(nameQ));
+  }
+  hits = hits.slice(0, limit);
+
+  if (hits.length > 0) {
+    return hits;
+  }
+
+  if (!citySlug) return [];
+
+  const seed = listSpaces({ vertical: "office-space", city: citySlug });
+  let mapped = seed.map((s) => ({
+    id: s.id,
+    name: s.name,
+    slug: s.slug,
+  }));
+  if (nameQ) {
+    mapped = mapped.filter((h) => h.name.toLowerCase().includes(nameQ));
+  }
+  return mapped.slice(0, limit);
 }

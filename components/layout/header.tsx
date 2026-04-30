@@ -146,27 +146,33 @@ export function Header() {
 
           <div
             className={cn(
-              "absolute inset-0 flex items-center justify-center transition-all duration-300",
+              "pointer-events-none absolute inset-0 flex items-center justify-center transition-all duration-300",
               isHomepage
                 ? isScrolled
-                  ? "pointer-events-auto opacity-100"
+                  ? "opacity-100"
                   : "pointer-events-none -translate-y-2 opacity-0"
                 : "hidden",
               shouldExpandHeader && "pt-4",
             )}
           >
-            <SearchBar
-              locations={headerSearchLocations}
-              teamSizes={[]}
-              budgets={[]}
-              variant="header"
-              submitLabel="Search"
-              className={cn(
-                "mx-auto",
-                shouldExpandHeader ? "max-w-[48rem]" : "max-w-[48rem]",
-              )}
-              onExpandedChange={setIsHeaderSearchExpanded}
-            />
+            {/*
+              Important: a child with pointer-events:auto overrides an ancestor's pointer-events:none.
+              When the header search is visually hidden (hero / not scrolled), keep the SearchBar
+              non-interactive so center vertical nav links receive clicks.
+            */}
+            <div
+              className={cn(isHomepage && isScrolled ? "pointer-events-auto" : "pointer-events-none")}
+            >
+              <SearchBar
+                locations={headerSearchLocations}
+                teamSizes={[]}
+                budgets={[]}
+                variant="header"
+                submitLabel="Search"
+                className={cn("mx-auto", shouldExpandHeader ? "max-w-[48rem]" : "max-w-[48rem]")}
+                onExpandedChange={setIsHeaderSearchExpanded}
+              />
+            </div>
           </div>
         </div>
       </div>

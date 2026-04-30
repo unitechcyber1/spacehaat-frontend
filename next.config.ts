@@ -9,10 +9,6 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "img.cofynd.com",
-      },
-      {
-        protocol: "https",
         hostname: "img.spacehaat.com",
       },
     ],

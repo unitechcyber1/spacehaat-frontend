@@ -71,6 +71,10 @@ export type Brand = {
   id: string;
   name: string;
   category: string;
+  /** Logo for homepage “Trusted Operators” rail. */
+  image?: string;
+  /** Brand detail route (e.g. `/brand/wework`). */
+  url?: string;
 };
 
 export type Testimonial = {

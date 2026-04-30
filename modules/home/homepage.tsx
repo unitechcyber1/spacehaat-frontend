@@ -1,25 +1,31 @@
 import {
   BadgePercent,
   Building2,
+  CheckCircle2,
   Handshake,
   Search,
   ShieldCheck,
   Sparkles,
+  Users,
+  Zap,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 import { SectionWrapper } from "@/components/sections/section-wrapper";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CityRail } from "@/modules/home/components/city-rail";
 import { HowItWorksCards } from "@/modules/home/components/how-it-works-cards";
+import { ExpertLeadSection } from "@/modules/home/components/expert-lead-section";
 import { HostListingCtaBanner } from "@/modules/home/components/host-listing-cta-banner";
 import { PremiumVerticalShowcase } from "@/modules/home/components/premium-vertical-showcase";
 import { SpacehaatSelectShowcase } from "@/modules/home/components/spacehaat-select-showcase";
-import { LeadForm } from "@/modules/home/components/lead-form";
 import { TestimonialCard } from "@/modules/home/components/testimonial-card";
 import { AnimatedCounter } from "@/modules/home/components/animated-counter";
 import { HomeHero } from "@/modules/home/hero";
 import { VerticalSpaceCard } from "@/modules/spaces/components/vertical-space-card";
+import { FEATURED_CITY_SLUG } from "@/services/home";
 import { HomepageData } from "@/types";
 import { cn } from "@/utils/cn";
 
@@ -57,7 +63,7 @@ export function Homepage({ data }: HomepageProps) {
           eyebrow="Featured Spaces"
           title="Shortlist spaces that already feel like a fit."
           action={
-            <Button href="/coworking" variant="secondary">
+            <Button href={`/coworking/${FEATURED_CITY_SLUG}`} variant="secondary">
               Browse all listings
             </Button>
           }
@@ -101,37 +107,7 @@ export function Homepage({ data }: HomepageProps) {
       </SectionWrapper>
 
       <SectionWrapper id="lead-form">
-        <div className="overflow-hidden rounded-[2rem] bg-black p-6 text-white shadow-[0_40px_120px_rgba(15,23,42,0.28)] sm:p-10">
-          <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/70">
-                Get expert advice
-              </p>
-              <h2 className="mt-4 font-display text-4xl leading-tight sm:text-5xl">
-                Let us find your perfect office
-              </h2>
-              <p className="mt-4 max-w-xl text-base leading-relaxed text-white/82">
-                Share your requirement and our team will shortlist verified operators, compare pricing,
-                and help you schedule tours or a virtual walkthrough.
-              </p>
-              <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                {["Fast shortlist", "Verified inventory", "Zero consultation fee"].map(
-                  (point) => (
-                    <div
-                      key={point}
-                      className="rounded-[1.25rem] border border-white/12 bg-white/5 px-4 py-4 text-sm text-white/84 backdrop-blur"
-                    >
-                      {point}
-                    </div>
-                  ),
-                )}
-              </div>
-            </div>
-            <div className="rounded-[1.75rem] border border-white/12 bg-white p-5 text-ink shadow-[0_18px_60px_rgba(0,0,0,0.35)] sm:p-7">
-              <LeadForm submitLabel="Submit" city="India" mxSpaceType="Homepage lead" />
-            </div>
-          </div>
-        </div>
+        <ExpertLeadSection />
       </SectionWrapper>
       <SectionWrapper>
         <div className="grid gap-4 md:grid-cols-3">
@@ -158,29 +134,51 @@ export function Homepage({ data }: HomepageProps) {
         />
         <div
           className={cn(
-            "no-scrollbar flex snap-x gap-4 overflow-x-auto pb-2",
+            "no-scrollbar flex snap-x gap-3 overflow-x-auto pb-2",
             "sm:grid sm:overflow-visible sm:grid-cols-2 sm:pb-0",
-            "xl:grid-cols-6",
+            "lg:grid-cols-4 xl:grid-cols-7",
             headingGap,
           )}
         >
-          {data.brands.map((brand) => (
-            <div
-              key={brand.id}
-              className={cn(
-                "shrink-0 snap-start",
-                "w-[15rem] sm:w-auto",
-                "rounded-[1.25rem] border border-slate-200/80 bg-white px-5 py-6 text-center shadow-soft",
-              )}
-            >
-              <p className="text-lg font-semibold tracking-[-0.02em] text-ink">
-                {brand.name}
-              </p>
-              <p className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">
-                {brand.category}
-              </p>
-            </div>
-          ))}
+          {data.brands.map((brand) => {
+            const CardInner = (
+              <div className="relative h-[4.85rem] w-full sm:h-[5.5rem]">
+                {brand.image ? (
+                  <Image
+                    src={brand.image}
+                    alt=""
+                    fill
+                    className="object-contain object-center p-0.5"
+                    sizes="(max-width: 640px) 208px, (max-width: 1280px) 22vw, 220px"
+                  />
+                ) : (
+                  <span className="sr-only">{brand.name}</span>
+                )}
+              </div>
+            );
+
+            const cardClass =
+              "flex w-[12.75rem] shrink-0 snap-start items-center justify-center rounded-xl border border-slate-200/85 bg-white px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.06)] transition duration-200 hover:border-slate-300/95 hover:shadow-[0_8px_24px_-8px_rgba(15,23,42,0.12)] sm:w-full sm:px-4 sm:py-3";
+
+            if (brand.url) {
+              return (
+                <Link
+                  key={brand.id}
+                  href={brand.url}
+                  className={cn(cardClass, "group")}
+                  aria-label={`${brand.name} — ${brand.category}`}
+                >
+                  {CardInner}
+                </Link>
+              );
+            }
+
+            return (
+              <div key={brand.id} className={cardClass}>
+                {CardInner}
+              </div>
+            );
+          })}
         </div>
       </SectionWrapper>
 
@@ -205,21 +203,97 @@ export function Homepage({ data }: HomepageProps) {
       </SectionWrapper>
 
       <SectionWrapper className="pb-24 sm:pb-28">
-        <div className="rounded-[2rem] border border-slate-200/80 bg-white p-8 shadow-soft sm:p-10">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-slate-50 via-white to-white p-7 shadow-xl sm:p-10">
+          {/* subtle pattern + glow */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.06]"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 1px 1px, rgba(15,23,42,1) 1px, transparent 0)",
+              backgroundSize: "22px 22px",
+            }}
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute -right-24 -top-20 h-72 w-72 rounded-full blur-3xl"
+            style={{ background: "radial-gradient(circle, rgba(76,175,80,0.22), rgba(76,175,80,0))" }}
+            aria-hidden
+          />
+
+          <div className="relative grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+            {/* Left copy */}
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--color-brand)]">
+              <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--color-brand)]">
+                <Sparkles className="h-4 w-4" aria-hidden />
                 Final CTA
               </p>
-              <h2 className="mt-4 font-display text-4xl leading-tight text-ink sm:text-5xl">
-                Start your workspace journey today
+              <h2 className="mt-4 max-w-[22ch] font-display text-4xl font-semibold leading-[1.05] tracking-[-0.035em] text-ink sm:text-5xl">
+                Find your ideal workspace &amp; start growing
               </h2>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
+                Get expert guidance, best deals, and verified spaces — all in one place.
+              </p>
+
+              <div className="mt-5 flex flex-wrap gap-2.5">
+                <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700">
+                  <Zap className="h-4 w-4 text-[color:var(--color-brand)]" aria-hidden />
+                  Limited-time deals available
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700">
+                  <BadgePercent className="h-4 w-4 text-[color:var(--color-brand)]" aria-hidden />
+                  Spaces filling fast in your city
+                </span>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Button href="#lead-form">Get Free Consultation</Button>
-              <Button href="/coworking" variant="secondary">
-                Explore Spaces
-              </Button>
+
+            {/* Right CTA block */}
+            <div className="relative rounded-2xl border border-slate-200/80 bg-white/90 p-4 shadow-[0_12px_40px_-18px_rgba(15,23,42,0.22)] backdrop-blur sm:p-5">
+              <div
+                className="pointer-events-none absolute -inset-3 rounded-3xl blur-2xl"
+                style={{
+                  background:
+                    "radial-gradient(55% 55% at 50% 30%, rgba(76,175,80,0.22), rgba(76,175,80,0))",
+                }}
+                aria-hidden
+              />
+
+              <div className="relative grid gap-3">
+                <Button
+                  href="#lead-form"
+                  className={cn(
+                    "h-14 w-full rounded-xl px-6 text-base font-semibold",
+                    "bg-gradient-to-b from-[color:var(--color-brand)] to-[color:var(--color-accent)]",
+                    "shadow-[0_14px_34px_-12px_rgba(76,175,80,0.65)]",
+                    "transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-12px_rgba(46,125,50,0.6)]",
+                  )}
+                >
+                  Get Expert Advice
+                </Button>
+
+                <Button
+                  href="/coworking"
+                  variant="secondary"
+                  className="h-12 w-full rounded-xl border-2 bg-white text-ink transition duration-300 hover:-translate-y-0.5 hover:bg-slate-50"
+                >
+                  Explore Spaces
+                </Button>
+
+                {/* Trust signals */}
+                <div className="mt-1 grid gap-2 rounded-xl border border-slate-200/70 bg-slate-50/70 px-3 py-3 text-xs text-slate-700 sm:px-4">
+                  <p className="flex items-center gap-2">
+                    <Users className="h-4 w-4 text-[color:var(--color-brand)]" aria-hidden />
+                    Trusted by 10,000+ users
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <ShieldCheck className="h-4 w-4 text-[color:var(--color-brand)]" aria-hidden />
+                    100% verified spaces
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-[color:var(--color-brand)]" aria-hidden />
+                    No spam guarantee
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

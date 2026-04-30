@@ -8,6 +8,7 @@ import { getVendorCoworkingListings, getVendorOfficeListings } from "@/services/
 import { getListingSession } from "@/services/listing-session";
 import type { CoworkingModel } from "@/types/coworking-workspace.model";
 import type { OfficeSpaceModel } from "@/types/office-space.model";
+import { HostLogoutButton } from "./logout-button";
 
 type Merged = {
   kind: "coworking" | "office";
@@ -99,12 +100,7 @@ export default async function HostListingsDashboardPage() {
               >
                 Add listing
               </Link>
-              <Link
-                href="/"
-                className="rounded-xl border border-ink/15 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink/30"
-              >
-                Home
-              </Link>
+              <HostLogoutButton />
             </div>
           </div>
 
