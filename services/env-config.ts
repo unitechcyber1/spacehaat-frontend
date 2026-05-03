@@ -23,11 +23,14 @@ export function resolveAppUrl(): string {
     return trimUrl(window.location.origin);
   }
 
-  const vercel = process.env.VERCEL_URL?.trim();
-  if (vercel) return trimUrl(`https://${vercel}`);
-
-  const explicit = process.env.APP_URL?.trim();
+  /** Prefer explicit production domain (canonical, OG URLs, JSON-LD). */
+  const explicit =
+    process.env.APP_URL?.trim() ||
+    process.env.NEXT_PUBLIC_APP_URL?.trim();
   if (explicit) return trimUrl(explicit);
+
+  const vercel = process.env.VERCEL_URL?.trim();
+  if (vercel) return trimUrl(`https://${vercel.replace(/^https?:\/\//, "")}`);
 
   return DEFAULT_APP_ORIGIN_DEV;
 }

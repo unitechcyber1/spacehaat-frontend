@@ -48,8 +48,7 @@ export function Homepage({ data }: HomepageProps) {
       />
       <SectionWrapper id="cities">
         <SectionHeading
-          eyebrow="Top Cities"
-          title="Explore premium workspace inventory across India."
+          title="Coworking Spaces Across India"
         />
         <CityRail cities={data.cities} />
       </SectionWrapper>
@@ -60,8 +59,7 @@ export function Homepage({ data }: HomepageProps) {
 
       <SectionWrapper className="bg-[linear-gradient(180deg,rgba(244,248,255,0)_0%,rgba(244,248,255,0.92)_100%)]">
         <SectionHeading
-          eyebrow="Featured Spaces"
-          title="Shortlist spaces that already feel like a fit."
+          title="Explore Premium Coworking Spaces"
           action={
             <Button href={`/coworking/${FEATURED_CITY_SLUG}`} variant="secondary">
               Browse all listings
@@ -96,8 +94,7 @@ export function Homepage({ data }: HomepageProps) {
       </SectionWrapper>
       <SectionWrapper className="bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)]">
         <SectionHeading
-          eyebrow="How It Works"
-          title="A clearer path from search to shortlist."
+          title="How It Works"
         />
         <HowItWorksCards
           steps={data.howItWorks}
@@ -129,8 +126,7 @@ export function Homepage({ data }: HomepageProps) {
 
       <SectionWrapper>
         <SectionHeading
-          eyebrow="Trusted Operators"
-          title="Operators and brands teams already know."
+          title="Trusted Operators & Brands"
         />
         <div
           className={cn(
@@ -184,8 +180,7 @@ export function Homepage({ data }: HomepageProps) {
 
       <SectionWrapper>
         <SectionHeading
-          eyebrow="Testimonials"
-          title="Teams come for clarity and stay for the curation."
+          title="Customer Testimonials"
         />
         <div
           className={cn(

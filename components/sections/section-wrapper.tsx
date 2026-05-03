@@ -23,6 +23,7 @@ export function SectionWrapper({
     <section id={id} className={cn("py-14 sm:py-20", className)}>
       <Container className={contentClassName}>
         <motion.div
+          className="min-w-0"
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.18 }}

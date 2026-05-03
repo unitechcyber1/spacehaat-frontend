@@ -1659,7 +1659,7 @@ export function getVerticalLandingData(vertical: SpaceVertical): VerticalLanding
           "Flexible desks, private cabins and managed offices across top cities.",
         ctaLabel: "Explore Spaces",
         image:
-          "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1600&q=80",
+          "https://img.spacehaat.com/images/latest_images_2024/7fed3a04f52c777052ecb019c42ddaba6c5fb34e.webp",
         imageLabel: "Bright coworking lounge",
         stats: [
           { label: "Flexible plans", value: "Hot desks to private cabins" },
@@ -1672,10 +1672,10 @@ export function getVerticalLandingData(vertical: SpaceVertical): VerticalLanding
       benefits: coworkingBenefits,
       howItWorks: coworkingHowItWorks,
       leadSection: {
-        title: "Get Free Office Consultation",
+        title: "Get Expert Advice",
         description:
           "Tell us your preferred city, seat count, and budget. We'll help you shortlist coworking options that actually match your team.",
-        ctaLabel: "Get Free Office Consultation",
+        ctaLabel: "Get Expert Advice",
         bullets: ["Curated operators", "Fast shortlist", "No brokerage confusion"],
       },
       searchOptions: getSearchOptions(),
@@ -1687,15 +1687,20 @@ export function getVerticalLandingData(vertical: SpaceVertical): VerticalLanding
     return {
       vertical,
       hero: {
-        eyebrow: "Virtual Offices",
-        title: "Get a Professional Business Address Instantly",
+        eyebrow: "India's Trusted Virtual Office Provider",
+        title: "Your Business Deserves a Credible Address — Without the Rent",
         subtitle:
-          "GST registration, company registration and mailing services made easy.",
+          "Get a GST-ready, compliance-grade virtual office in India's top cities. Verified providers, full documentation support, and setup in 24-48 hours.",
         ctaLabel: "Get Virtual Office",
         image:
-          "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80",
-        imageLabel: "Professional reception desk",
-        badges: ["GST compliant", "Legal documentation", "Trusted providers"],
+          "https://img.spacehaat.com/images/latest_images_2024/1be87877ad43a0a7666804cd6c1052a99b22488d.webp",
+        imageLabel: "Modern open-plan workspace",
+        badges: [
+          "10,000+ businesses served",
+          "50+ cities across India",
+          "500+ verified providers",
+          "100% GST-approved addresses",
+        ],
       },
       cities,
       featuredSpaces: verticalSpaces.slice(0, 4),

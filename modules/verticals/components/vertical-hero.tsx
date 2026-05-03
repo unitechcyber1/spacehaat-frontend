@@ -1,10 +1,12 @@
 import Image from "next/image";
-import { Building2, CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { FadeIn } from "@/components/ui/fade-in";
+import { LeadForm } from "@/modules/home/components/lead-form";
+import { VirtualOfficeHeroEnquiryCta } from "@/modules/verticals/components/virtual-office-hero-enquiry-cta";
 import { VerticalLandingData } from "@/types";
 
 type VerticalHeroProps = {
@@ -53,15 +55,6 @@ export function VerticalHero({ data }: VerticalHeroProps) {
                         className="object-cover"
                         sizes="(max-width: 1024px) 100vw, 42vw"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/62 via-transparent to-transparent" />
-                      <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
-                          Productive environments
-                        </p>
-                        <p className="mt-2 text-2xl font-semibold leading-tight">
-                          Flexible inventory across India&apos;s most active startup and business districts.
-                        </p>
-                      </div>
                     </div>
                     <div className="grid gap-3">
                       {(data.hero.stats ?? []).map((item) => (
@@ -86,89 +79,86 @@ export function VerticalHero({ data }: VerticalHeroProps) {
   }
 
   if (data.vertical === "virtual-office") {
+    const trustLines = data.hero.badges ?? [];
+    const titleParts = data.hero.title.split("Credible");
+
     return (
       <section className="relative overflow-hidden pb-14 pt-10 sm:pb-20 sm:pt-14">
-        <div className="absolute inset-x-0 top-0 -z-10 h-[38rem] bg-[radial-gradient(circle_at_top_left,rgba(76,175,80,0.18),transparent_32%),radial-gradient(circle_at_70%_12%,rgba(34,197,94,0.12),transparent_24%),linear-gradient(180deg,#f7fbff_0%,#ffffff_90%)]" />
-        <Container>
-          <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_0.98fr]">
-            <div className="max-w-3xl">
+        <div className="absolute inset-x-0 top-0 -z-10 h-[38rem] bg-[radial-gradient(circle_at_top_left,rgba(75,154,255,0.16),transparent_32%),radial-gradient(circle_at_70%_12%,rgba(123,97,255,0.12),transparent_24%),linear-gradient(180deg,#f7fbff_0%,#ffffff_90%)]" />
+
+        <Container className="relative">
+          <div className="grid min-w-0 items-stretch gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,31rem)] lg:gap-12 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,33rem)] xl:gap-14">
+            <div className="min-w-0 max-w-full space-y-6 lg:space-y-8 lg:py-1">
               <FadeIn>
-                <Badge className="bg-[color:var(--color-brand-soft)] text-[color:var(--color-brand)]">
+                <p className="inline-flex items-center gap-2.5 rounded-full border border-slate-200/90 bg-white/90 px-3.5 py-2 text-[0.8125rem] font-medium leading-snug text-ink shadow-sm backdrop-blur-sm sm:px-4 sm:py-2.5 sm:text-sm">
+                  <span
+                    className="h-2 w-2 shrink-0 rounded-full bg-[color:var(--color-brand)] shadow-[0_0_10px_rgba(76,175,80,0.45)]"
+                    aria-hidden
+                  />
                   {data.hero.eyebrow}
-                </Badge>
+                </p>
               </FadeIn>
+
               <FadeIn delay={0.08}>
-                <h1 className="mt-6 font-display text-5xl leading-[1.05] tracking-[-0.045em] text-ink sm:text-6xl lg:text-7xl">
-                  {data.hero.title}
+                <h1 className="max-w-[22ch] font-display text-[1.85rem] font-semibold leading-[1.1] tracking-[-0.035em] text-ink sm:max-w-none sm:text-4xl sm:leading-[1.08] lg:text-[2.65rem] lg:leading-[1.06]">
+                  {titleParts.length === 2 ? (
+                    <>
+                      {titleParts[0]}
+                      <span className="text-[color:var(--color-brand)] italic">Credible</span>
+                      {titleParts[1]}
+                    </>
+                  ) : (
+                    data.hero.title
+                  )}
                 </h1>
               </FadeIn>
+
               <FadeIn delay={0.14}>
-                <p className="mt-6 max-w-2xl text-lg leading-8 text-muted sm:text-xl">
+                <p className="max-w-xl text-base leading-relaxed text-muted sm:text-lg sm:leading-relaxed">
                   {data.hero.subtitle}
                 </p>
               </FadeIn>
+
               <FadeIn delay={0.18}>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  {(data.hero.badges ?? []).map((badge) => (
-                    <span
-                      key={badge}
-                      className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white px-4 py-2 text-sm text-slate-700 shadow-soft"
+                <ul className="mt-2 grid gap-3 sm:mt-4 sm:gap-3.5">
+                  {trustLines.map((line) => (
+                    <li
+                      key={line}
+                      className="flex gap-3 text-sm leading-snug text-slate-700 sm:text-[0.9375rem] sm:leading-relaxed"
                     >
-                      <ShieldCheck className="h-4 w-4 text-[color:var(--color-brand)]" />
-                      {badge}
-                    </span>
-                  ))}
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.24}>
-                <div className="mt-8">
-                  <Button href="#lead-form">{data.hero.ctaLabel}</Button>
-                </div>
-              </FadeIn>
-            </div>
-            <FadeIn delay={0.2}>
-              <div className="hidden lg:block">
-                <div className="overflow-hidden rounded-[2rem] border border-white/80 bg-white p-3 shadow-[0_40px_120px_rgba(15,23,42,0.14)]">
-                  <div className="grid gap-3 sm:grid-cols-[1.1fr_0.9fr]">
-                    <div className="relative min-h-[24rem] overflow-hidden rounded-[1.5rem]">
-                      <Image
-                        src={data.hero.image}
-                        alt={data.hero.imageLabel}
-                        fill
-                        priority
-                        className="object-cover"
-                        sizes="(max-width: 1024px) 100vw, 42vw"
+                      <Check
+                        className="mt-0.5 h-5 w-5 shrink-0 text-[color:var(--color-brand)]"
+                        strokeWidth={2.5}
+                        aria-hidden
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/60 via-transparent to-transparent" />
-                      <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/72">
-                          Compliance-led setup
-                        </p>
-                        <p className="mt-2 text-2xl font-semibold leading-tight">
-                          Professional addresses and documentation support that feel credible from day one.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="grid gap-3">
-                      <div className="rounded-[1.5rem] bg-white p-5 text-slate-900">
-                        <CheckCircle2 className="h-5 w-5 text-[color:var(--color-brand)]" />
-                        <p className="mt-4 text-lg font-semibold">Trusted provider network</p>
-                        <p className="mt-2 text-sm leading-6 text-slate-600">
-                          Start from providers with better documentation standards and service clarity.
-                        </p>
-                      </div>
-                      <div className="rounded-[1.5rem] bg-[linear-gradient(135deg,#0b1119_0%,#10203b_60%,#17324f_100%)] p-5 text-white shadow-[0_24px_60px_rgba(15,23,42,0.18)]">
-                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/66">
-                          Common use cases
-                        </p>
-                        <div className="mt-4 grid gap-3 text-sm text-white/82">
-                          <p>GST registration</p>
-                          <p>Company incorporation</p>
-                          <p>Business mail handling</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                      <span>{line}</span>
+                    </li>
+                  ))}
+                </ul>
+              </FadeIn>
+
+              <VirtualOfficeHeroEnquiryCta />
+            </div>
+
+            <FadeIn delay={0.1} className="hidden min-w-0 w-full lg:block lg:sticky lg:top-24">
+              <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_28px_70px_rgba(0,0,0,0.22)] sm:p-6 lg:rounded-[1.35rem] lg:p-8 xl:p-9">
+                <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-500 lg:text-[0.7rem]">
+                  Virtual office enquiry
+                </p>
+                <h2 className="mt-2 font-display text-xl font-semibold tracking-[-0.02em] text-ink sm:text-2xl lg:mt-2.5 lg:text-[1.65rem] xl:text-3xl">
+                  Get a free callback
+                </h2>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted lg:mt-2 lg:text-[0.9375rem]">
+                  Share your details — our team will reach out with verified options for your city.
+                </p>
+                <div className="mt-5 lg:mt-6">
+                  <LeadForm
+                    variant="premium"
+                    premiumSize="comfortable"
+                    submitLabel="Request consultation"
+                    city="India"
+                    mxSpaceType="Virtual Office hero"
+                  />
                 </div>
               </div>
             </FadeIn>
@@ -220,29 +210,6 @@ export function VerticalHero({ data }: VerticalHeroProps) {
                     className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 44vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/76 via-[#08111f]/18 to-transparent" />
-                  <div className="absolute inset-0 flex items-end justify-between p-6 text-white">
-                    <div className="max-w-md">
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
-                        Enterprise-ready inventory
-                      </p>
-                      <p className="mt-2 text-3xl font-semibold leading-tight">
-                        Premium offices for teams that care about brand, service, and scale.
-                      </p>
-                    </div>
-                    <div className="hidden w-[16rem] gap-3 lg:grid">
-                      {(data.hero.stats ?? []).map((item) => (
-                        <div
-                          key={item.label}
-                          className="rounded-[1.3rem] border border-white/14 bg-white/10 p-4 backdrop-blur"
-                        >
-                          <Building2 className="h-5 w-5 text-white" />
-                          <p className="mt-4 text-base font-semibold">{item.value}</p>
-                          <p className="mt-1 text-sm text-white/68">{item.label}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "img.spacehaat.com",
       },
+      {
+        protocol: "https",
+        hostname: "spacehaat-bucket.s3.ap-south-1.amazonaws.com",
+      },
     ],
   },
 };

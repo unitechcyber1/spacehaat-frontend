@@ -253,7 +253,7 @@ export const AVAILABLE_CITY = [
     name: 'indore',
     id: '5f60926926e9e64d7b61b41b',
     icon: 'assets/images/city-icons/Indore.svg',
-    image: 'https://img.spacehaat.com/small/images/original/dc5ce0f99f9d9f60dbd918cb8fcbbbf55c751802.webp',
+    image: 'https://img.spacehaat.com/images/latest_images_2024/60d3efd24750334eff7ef781576633b50d7551bc.webp',
     for_coWorking: true,
     for_office: false,
     for_coLiving: false,
@@ -271,7 +271,7 @@ export const AVAILABLE_CITY = [
     name: 'ahmedabad',
     id: '5f7af1c48c4e6961990e620e',
     icon: 'assets/images/city-icons/Ahemdabad.svg',
-    image: 'https://img.spacehaat.com/small/images/original/dc5ce0f99f9d9f60dbd918cb8fcbbbf55c751802.webp',
+    image: 'https://img.spacehaat.com/images/original/09b1c12e3264e7641b1411bb0c564a689769c065.jpg',
     for_coWorking: true,
     for_office: false,
     for_coLiving: true,
@@ -1073,7 +1073,7 @@ export const AVAILABLE_CITY_CO_LIVING = [
 
 ];
 
-export const AVAILABLE_CITY_VIRTUAL_OFFICE = [
+const AVAILABLE_CITY_VIRTUAL_OFFICE_RAW = [
   {
     name: 'gurugram',
     id: '5e3eb83c18c88277e81427d9',
@@ -2894,7 +2894,25 @@ export const AVAILABLE_CITY_VIRTUAL_OFFICE = [
   }
 ];
 
-export const AVAILABLE_CITY_OFFICE_SPACE = [
+const AVAILABLE_CITY_IMAGE_BY_NAME = new Map(
+  AVAILABLE_CITY.map((c) => [String(c.name), String(c.image)] as const),
+);
+
+/**
+ * Virtual office city cards should use the same hero images as coworking cities
+ * (from `AVAILABLE_CITY`) to keep a consistent visual system across verticals.
+ */
+export const AVAILABLE_CITY_VIRTUAL_OFFICE = AVAILABLE_CITY_VIRTUAL_OFFICE_RAW.map((c) => {
+  const imageFromBase = AVAILABLE_CITY_IMAGE_BY_NAME.get(String(c.name));
+  if (!imageFromBase) return c;
+  return {
+    ...c,
+    image: imageFromBase,
+    featureImage: imageFromBase,
+  };
+});
+
+const AVAILABLE_CITY_OFFICE_SPACE_RAW = [
   {
     name: 'gurugram',
     id: '5e3eb83c18c88277e81427d9',
@@ -4450,4 +4468,18 @@ export const AVAILABLE_CITY_OFFICE_SPACE = [
     ],
   },
 ];
+
+/**
+ * Office space city cards should use the same city images as coworking cities
+ * (from `AVAILABLE_CITY`) to keep a consistent visual system across verticals.
+ */
+export const AVAILABLE_CITY_OFFICE_SPACE = AVAILABLE_CITY_OFFICE_SPACE_RAW.map((c) => {
+  const imageFromBase = AVAILABLE_CITY_IMAGE_BY_NAME.get(String(c.name));
+  if (!imageFromBase) return c;
+  return {
+    ...c,
+    image: imageFromBase,
+    featureImage: imageFromBase,
+  };
+});
 

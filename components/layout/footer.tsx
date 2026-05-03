@@ -132,12 +132,6 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="mt-14 flex flex-col gap-4 border-t border-slate-900/[0.07] pt-10 sm:mt-16 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-slate-500 sm:text-sm">
-            © {new Date().getFullYear()} SpaceHaat. All rights reserved.
-          </p>
-          <p className="text-xs text-slate-400 sm:text-sm">Premium workspace discovery across India.</p>
-        </div>
       </Container>
     </footer>
   );
