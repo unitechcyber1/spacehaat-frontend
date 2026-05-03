@@ -1,7 +1,7 @@
 import { SectionWrapper } from "@/components/sections/section-wrapper";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CityRail } from "@/modules/home/components/city-rail";
-import { LeadForm } from "@/modules/home/components/lead-form";
+import { ExpertLeadSection } from "@/modules/home/components/expert-lead-section";
 import { BenefitCards } from "@/modules/verticals/components/benefit-cards";
 import { SpaceRail } from "@/modules/verticals/components/space-rail";
 import { VerticalHero } from "@/modules/verticals/components/vertical-hero";
@@ -59,36 +59,12 @@ export function CoworkingHomepage({ data }: CoworkingHomepageProps) {
         </div>
       </SectionWrapper>
 
-      <SectionWrapper id="lead-form" className="pb-28 sm:pb-24">
-        <div className="overflow-hidden rounded-[2rem] border border-slate-200/80 bg-[linear-gradient(135deg,#08111f_0%,#112447_60%,#2556c6_100%)] p-6 text-white shadow-[0_40px_120px_rgba(15,23,42,0.22)] sm:p-10">
-          <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/66">
-                Consultation
-              </p>
-              <h2 className="mt-4 font-display text-4xl leading-tight sm:text-5xl">
-                {data.leadSection.title}
-              </h2>
-              <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                {data.leadSection.bullets.map((bullet) => (
-                  <div
-                    key={bullet}
-                    className="rounded-[1.25rem] border border-white/12 bg-white/8 px-4 py-4 text-sm text-white/82 backdrop-blur"
-                  >
-                    {bullet}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="rounded-[1.5rem] bg-white p-5 text-ink sm:p-6">
-              <LeadForm
-                submitLabel={data.leadSection.ctaLabel}
-                city="India"
-                mxSpaceType="Web Coworking"
-              />
-            </div>
-          </div>
-        </div>
+      <SectionWrapper id="lead-form">
+        <ExpertLeadSection
+          variant="coworking"
+          leadSection={data.leadSection}
+          mxSpaceType="Web Coworking"
+        />
       </SectionWrapper>
 
     </>

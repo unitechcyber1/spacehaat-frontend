@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { resolveAppUrl } from "@/services/env-config";
+import { resolveCanonicalUrl } from "@/lib/canonical-url";
 import type { SeoContent, SeoImageRef } from "@/types/seo.model";
 import { APP_NAME } from "@/utils/constants";
 
@@ -39,9 +39,7 @@ function parseRobots(robots: string | undefined): Metadata["robots"] {
 }
 
 export function buildPageMetadataFromSeo(pathname: string, seo: SeoContent): Metadata {
-  const appUrl = resolveAppUrl();
-  const cleanPath = pathname || "/";
-  const canonical = seo.url?.trim() || `${appUrl}${cleanPath === "/" ? "" : cleanPath}`;
+  const canonical = resolveCanonicalUrl(pathname || "/", seo.url);
 
   const baseTitle = (seo.page_title?.trim() || seo.title?.trim() || APP_NAME) as string;
   const documentTitle = `${baseTitle} | ${APP_NAME}`;

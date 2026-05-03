@@ -1,8 +1,27 @@
-import { AVAILABLE_CITY } from "@/services/cities-data";
+import {
+  AVAILABLE_CITY,
+  AVAILABLE_CITY_OFFICE_SPACE,
+  AVAILABLE_CITY_VIRTUAL_OFFICE,
+} from "@/services/cities-data";
 import type { City } from "@/types";
 
-/** Max cities on the homepage rail and hero search (first matches in catalog order). */
-const HOMEPAGE_CITY_LIMIT = 8;
+/** Preferred order for all "Top cities" rails/grids across verticals. */
+const CITY_SEQUENCE = [
+  "gurgaon",
+  "noida",
+  "delhi",
+  "mumbai",
+  "pune",
+  "bangalore",
+  "hyderabad",
+  "ahmedabad",
+  "chennai",
+  "lucknow",
+  "indore",
+] as const;
+
+/** Max cities on the homepage rail and hero search. */
+const HOMEPAGE_CITY_LIMIT = CITY_SEQUENCE.length;
 
 /** Route slug used in this app (seed data, URLs). */
 const ROUTE_SLUG_OVERRIDES: Record<string, string> = {
@@ -17,33 +36,45 @@ function toDisplayName(rawName: string): string {
 
 type LooseEntry = Record<string, unknown>;
 
-function isCoworkingCatalogEntry(entry: unknown): entry is LooseEntry {
+function isCatalogEntry(entry: unknown): entry is LooseEntry {
   if (!entry || typeof entry !== "object") return false;
   const o = entry as LooseEntry;
   if (typeof o.name !== "string" || !o.name.trim()) return false;
   if (typeof o.image !== "string" || !o.image.startsWith("http")) return false;
-  return o.for_coWorking === true;
+  return true;
 }
 
 /**
- * First {@link HOMEPAGE_CITY_LIMIT} cities from AVAILABLE_CITY with coworking coverage, in catalog order.
+ * "Top cities" list (homepage rails + vertical pages) in preferred sequence order.
+ * Falls back gracefully if a city is missing for the vertical.
  */
-export function listHomepageCitiesFromAvailable(): City[] {
-  const seen = new Set<string>();
-  const result: City[] = [];
+export function listHomepageCitiesFromAvailable(
+  vertical: "coworking" | "office-space" | "virtual-office" = "coworking",
+): City[] {
+  const bySlug = new Map<string, LooseEntry>();
 
-  for (const entry of AVAILABLE_CITY) {
-    if (!isCoworkingCatalogEntry(entry)) continue;
+  const source =
+    vertical === "office-space"
+      ? AVAILABLE_CITY_OFFICE_SPACE
+      : vertical === "virtual-office"
+        ? AVAILABLE_CITY_VIRTUAL_OFFICE
+        : AVAILABLE_CITY;
+
+  for (const entry of source) {
+    if (!isCatalogEntry(entry)) continue;
+    const rawName = (entry as LooseEntry).name as string;
+    const slug = ROUTE_SLUG_OVERRIDES[rawName] ?? rawName;
+    if (!bySlug.has(slug)) bySlug.set(slug, entry as LooseEntry);
+  }
+
+  const result: City[] = [];
+  for (const slug of CITY_SEQUENCE) {
+    const entry = bySlug.get(slug);
+    if (!entry) continue;
 
     const rawName = entry.name as string;
-    const slug = ROUTE_SLUG_OVERRIDES[rawName] ?? rawName;
-    if (seen.has(slug)) continue;
-    seen.add(slug);
-
     const id =
-      typeof entry.id === "string" && entry.id.length > 0
-        ? entry.id
-        : `available_${slug}`;
+      typeof entry.id === "string" && entry.id.length > 0 ? entry.id : `available_${slug}`;
 
     result.push({
       id,

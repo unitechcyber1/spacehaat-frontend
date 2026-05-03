@@ -88,9 +88,9 @@ export function VirtualOfficeFitSection({ imageSrc, imageAlt }: VirtualOfficeFit
   }, [testimonials.length]);
 
   return (
-    <div className="grid items-center gap-4 sm:gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-10">
-      <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-soft sm:rounded-3xl lg:rounded-[2rem]">
-        <div className="relative aspect-[5/2] sm:aspect-[16/10] md:aspect-[16/9]">
+    <div className="grid w-full min-w-0 max-w-full items-center gap-4 sm:gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-10">
+      <div className="relative min-w-0 max-w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-soft sm:rounded-3xl lg:rounded-[2rem]">
+        <div className="relative aspect-[5/2] max-w-full sm:aspect-[16/10] md:aspect-[16/9]">
           <Image
             src={imageSrc}
             alt={imageAlt}
@@ -103,13 +103,13 @@ export function VirtualOfficeFitSection({ imageSrc, imageAlt }: VirtualOfficeFit
         </div>
       </div>
 
-      <div>
-        <h2 className="font-display text-2xl leading-[1.15] tracking-[-0.03em] text-ink sm:text-3xl sm:leading-tight md:text-4xl">
+      <div className="min-w-0 max-w-full">
+        <h2 className="break-words font-display text-2xl leading-[1.15] tracking-[-0.03em] text-ink sm:text-3xl sm:leading-tight md:text-4xl">
           Is Virtual Office right for you?
         </h2>
         <a
           href="#faq"
-          className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[color:var(--color-brand)] sm:mt-3 sm:gap-2 sm:text-sm"
+          className="mt-2 inline-flex max-w-full items-center gap-1.5 break-words text-xs font-semibold text-[color:var(--color-brand)] sm:mt-3 sm:gap-2 sm:text-sm"
         >
           <Info className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           New to Virtual Offices?
@@ -123,9 +123,9 @@ export function VirtualOfficeFitSection({ imageSrc, imageAlt }: VirtualOfficeFit
                 <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[color:var(--color-brand-soft)] text-[color:var(--color-brand)] sm:mt-1 sm:h-10 sm:w-10 sm:rounded-2xl">
                   <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-ink">{r.title}</p>
-                  <p className="mt-0.5 text-xs leading-5 text-muted sm:mt-1 sm:text-sm sm:leading-6">
+                <div className="min-w-0 max-w-full">
+                  <p className="break-words text-sm font-semibold text-ink">{r.title}</p>
+                  <p className="mt-0.5 break-words text-xs leading-5 text-muted sm:mt-1 sm:text-sm sm:leading-6">
                     {r.body}
                   </p>
                 </div>
@@ -134,14 +134,14 @@ export function VirtualOfficeFitSection({ imageSrc, imageAlt }: VirtualOfficeFit
           })}
         </div>
 
-        <div className="mt-5 overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-soft sm:mt-8 sm:rounded-[1.5rem]">
-          <div className="flex items-center justify-between gap-3 px-4 pt-4 sm:gap-4 sm:px-5 sm:pt-5">
-            <div className="flex items-center gap-1 text-amber-500">
+        <div className="mt-5 max-w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-soft sm:mt-8 sm:rounded-[1.5rem]">
+          <div className="flex min-w-0 flex-col gap-3 px-3 pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5 sm:pt-5">
+            <div className="flex shrink-0 items-center gap-1 text-amber-500">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star key={i} className="h-4 w-4 fill-current" />
               ))}
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 flex-wrap items-center justify-end gap-2 sm:flex-nowrap sm:justify-end">
               <button
                 type="button"
                 onClick={() => scrollToIndex(Math.max(0, activeTestimonial - 1))}
@@ -150,14 +150,14 @@ export function VirtualOfficeFitSection({ imageSrc, imageAlt }: VirtualOfficeFit
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              <div className="flex items-center gap-1.5">
+              <div className="flex min-w-0 max-w-full flex-wrap items-center justify-end gap-1.5 sm:flex-nowrap">
                 {testimonials.map((_, i) => (
                   <button
                     key={`dot-${i}`}
                     type="button"
                     onClick={() => scrollToIndex(i)}
                     className={cn(
-                      "h-1.5 rounded-full transition-all",
+                      "h-1.5 shrink-0 rounded-full transition-all",
                       i === activeTestimonial ? "w-7 bg-slate-900/70" : "w-1.5 bg-slate-300 hover:bg-slate-400",
                     )}
                     aria-label={`Go to testimonial ${i + 1}`}
@@ -177,16 +177,20 @@ export function VirtualOfficeFitSection({ imageSrc, imageAlt }: VirtualOfficeFit
 
           <div
             ref={railRef}
-            className="no-scrollbar flex snap-x snap-mandatory overflow-x-scroll overscroll-x-contain pb-4 pt-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden touch-pan-x scroll-px-3 sm:pb-5 sm:pt-3 sm:scroll-px-4"
+            className="no-scrollbar flex w-full max-w-full min-w-0 snap-x snap-mandatory overflow-x-auto overscroll-x-contain pb-4 pt-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden touch-pan-x scroll-px-3 sm:pb-5 sm:pt-3 sm:scroll-px-4"
             aria-label="Testimonials"
           >
             {testimonials.map((t) => (
-              <div key={t.by} className="min-w-full shrink-0 snap-start px-3 sm:px-4">
-                <p className="text-sm font-medium leading-6 text-slate-700 sm:leading-7">“{t.quote}”</p>
-                <p className="mt-1.5 text-xs text-slate-500 sm:mt-2">— {t.by}</p>
+              <div
+                key={t.by}
+                className="w-full min-w-0 max-w-full shrink-0 grow-0 basis-full snap-start px-3 sm:px-4"
+              >
+                <p className="break-words text-sm font-medium leading-6 text-slate-700 sm:leading-7">
+                  “{t.quote}”
+                </p>
+                <p className="mt-1.5 break-words text-xs text-slate-500 sm:mt-2">— {t.by}</p>
               </div>
             ))}
-            <div className="min-w-4 shrink-0" aria-hidden="true" />
           </div>
         </div>
       </div>
