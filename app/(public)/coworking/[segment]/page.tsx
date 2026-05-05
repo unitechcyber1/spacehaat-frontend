@@ -7,8 +7,8 @@ import { CoworkingDetailPage } from "@/modules/coworking/coworking-detail-page";
 import { getVerticalCityPageContent } from "@/services/cities";
 import { loadCoworkingWorkspaceDetail, loadCoworkingWorkspacesList } from "@/services/coworking-api";
 import { resolveVerticalSegment } from "@/services/spaces";
+import { buildMetadataWithCmsSeoFallback } from "@/lib/metadata-with-cms-seo";
 import { formatCurrency, toTitleCase } from "@/utils/format";
-import { buildMetadata } from "@/utils/metadata";
 
 export async function generateMetadata({
   params,
@@ -19,25 +19,26 @@ export async function generateMetadata({
 
   const cityPage = await getVerticalCityPageContent("coworking", segment);
   if (cityPage) {
-    return buildMetadata(cityPage.title, cityPage.subtitle, `/coworking/${cityPage.city.slug}`);
+    return buildMetadataWithCmsSeoFallback(`/coworking/${cityPage.city.slug}`, {
+      title: cityPage.title,
+      description: cityPage.subtitle,
+    });
   }
 
   const workspace = await loadCoworkingWorkspaceDetail(segment);
   if (workspace) {
-    return buildMetadata(
-      `${workspace.name} | Coworking Space`,
-      `${workspace.description} Starting from ${formatCurrency(workspace.starting_price ?? 0)} in ${toTitleCase(
+    return buildMetadataWithCmsSeoFallback(`/coworking/${workspace.slug}`, {
+      title: `${workspace.name} | Coworking Space`,
+      description: `${workspace.description} Starting from ${formatCurrency(workspace.starting_price ?? 0)} in ${toTitleCase(
         workspace.location?.city?.name || "India",
       )}.`,
-      `/coworking/${workspace.slug}`,
-    );
+    });
   }
 
-  return buildMetadata(
-    `${toTitleCase(segment)} | Coworking`,
-    "Discover premium coworking spaces across top cities in India.",
-    `/coworking/${segment}`,
-  );
+  return buildMetadataWithCmsSeoFallback(`/coworking/${segment}`, {
+    title: `${toTitleCase(segment)} | Coworking`,
+    description: "Discover premium coworking spaces across top cities in India.",
+  });
 }
 
 export default async function CoworkingSegmentPage({

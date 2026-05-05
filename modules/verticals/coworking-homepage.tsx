@@ -25,24 +25,21 @@ export function CoworkingHomepage({ data }: CoworkingHomepageProps) {
 
       <SectionWrapper id="cities">
         <SectionHeading
-          eyebrow="Top Cities"
-          title="Discover coworking hubs where teams actually want to work."
+          title="Top Coworking Cities Across India."
         />
         <CityRail cities={homepageCities} basePath="/coworking" />
       </SectionWrapper>
 
       <SectionWrapper className="bg-[linear-gradient(180deg,rgba(244,248,255,0)_0%,rgba(244,248,255,0.92)_100%)]">
         <SectionHeading
-          eyebrow="Featured Coworking Spaces"
-          title="Premium coworking inventory with a cleaner shortlist experience."
+          title="Explore Premium Coworking Spaces"
         />
         <SpaceRail spaces={data.featuredSpaces} />
       </SectionWrapper>
 
       <SectionWrapper>
         <SectionHeading
-          eyebrow="Why Coworking"
-          title="Made for productive, flexible teams."
+          title="Coworking Spaces for Productive, Flexible Teams."
         />
         <div className="mt-10">
           <BenefitCards items={data.benefits} showDescription={false} />
@@ -51,7 +48,6 @@ export function CoworkingHomepage({ data }: CoworkingHomepageProps) {
 
       <SectionWrapper className="bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)]">
         <SectionHeading
-          eyebrow="How It Works"
           title="Search, compare, and move faster."
         />
         <div className="mt-10">

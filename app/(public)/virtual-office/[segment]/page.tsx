@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { notFound } from "next/navigation";
 
+import { buildMetadataWithCmsSeoFallback } from "@/lib/metadata-with-cms-seo";
 import { VerticalCityPage } from "@/modules/city-pages/vertical-city-page";
 import { VirtualOfficeDetailPage } from "@/modules/virtual-office/virtual-office-detail-page";
 import { getVerticalCityPageContent } from "@/services/cities";
@@ -12,7 +13,6 @@ import {
 } from "@/services/spaces";
 import { getVirtualOfficeStartingMonthlyPrice } from "@/services/virtual-office-pricing";
 import { formatCurrency, toTitleCase } from "@/utils/format";
-import { buildMetadata } from "@/utils/metadata";
 
 
 export async function generateMetadata({
@@ -24,29 +24,26 @@ export async function generateMetadata({
   const cityPage = await getVerticalCityPageContent("virtual-office", segment);
 
   if (cityPage) {
-    return buildMetadata(
-      cityPage.title,
-      cityPage.subtitle,
-      `/virtual-office/${cityPage.city.slug}`,
-    );
+    return buildMetadataWithCmsSeoFallback(`/virtual-office/${cityPage.city.slug}`, {
+      title: cityPage.title,
+      description: cityPage.subtitle,
+    });
   }
 
   const space = await getVerticalSpaceBySlug("virtual-office", segment);
 
   if (space) {
     const voStart = getVirtualOfficeStartingMonthlyPrice(space);
-    return buildMetadata(
-      `${space.name} | Virtual Office`,
-      `${space.description} Business Address from ${formatCurrency(voStart)}/month in ${toTitleCase(space.city)}.`,
-      `/virtual-office/${space.slug}`,
-    );
+    return buildMetadataWithCmsSeoFallback(`/virtual-office/${space.slug}`, {
+      title: `${space.name} | Virtual Office`,
+      description: `${space.description} Business Address from ${formatCurrency(voStart)}/month in ${toTitleCase(space.city)}.`,
+    });
   }
 
-  return buildMetadata(
-    `${toTitleCase(segment)} | Virtual Office`,
-    "Compare virtual office providers and compliance-ready plans across India.",
-    `/virtual-office/${segment}`,
-  );
+  return buildMetadataWithCmsSeoFallback(`/virtual-office/${segment}`, {
+    title: `${toTitleCase(segment)} | Virtual Office`,
+    description: "Compare virtual office providers and compliance-ready plans across India.",
+  });
 }
 
 export default async function VirtualOfficeSegmentPage({
