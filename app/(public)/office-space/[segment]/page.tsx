@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 
 import { notFound } from "next/navigation";
 
+import { buildMetadataWithCmsSeoFallback } from "@/lib/metadata-with-cms-seo";
 import { VerticalCityPage } from "@/modules/city-pages/vertical-city-page";
 import { OfficeSpaceDetailPage } from "@/modules/office-space/office-space-detail-page";
 import { getVerticalCityPageContent } from "@/services/cities";
 import { loadOfficeSpaceDetail } from "@/services/office-space-detail-api";
 import { officeSpacesAsSpaces } from "@/services/office-space-api";
 import { toTitleCase } from "@/utils/format";
-import { buildMetadata } from "@/utils/metadata";
 
 
 export async function generateMetadata({
@@ -20,27 +20,25 @@ export async function generateMetadata({
   const cityPage = await getVerticalCityPageContent("office-space", segment);
 
   if (cityPage) {
-    return buildMetadata(
-      cityPage.title,
-      cityPage.subtitle,
-      `/office-space/${cityPage.city.slug}`,
-    );
+    return buildMetadataWithCmsSeoFallback(`/office-space/${cityPage.city.slug}`, {
+      title: cityPage.title,
+      description: cityPage.subtitle,
+    });
   }
 
   const office = await loadOfficeSpaceDetail(segment);
   if (office) {
-    return buildMetadata(
-      `${office.name} | Office Space`,
-      `${office.description ?? ""}`.trim() || "Explore premium office spaces across India.",
-      `/office-space/${office.slug}`,
-    );
+    return buildMetadataWithCmsSeoFallback(`/office-space/${office.slug}`, {
+      title: `${office.name} | Office Space`,
+      description:
+        `${office.description ?? ""}`.trim() || "Explore premium office spaces across India.",
+    });
   }
 
-  return buildMetadata(
-    `${toTitleCase(segment)} | Office Space`,
-    "Explore premium office spaces and managed offices across top cities in India.",
-    `/office-space/${segment}`,
-  );
+  return buildMetadataWithCmsSeoFallback(`/office-space/${segment}`, {
+    title: `${toTitleCase(segment)} | Office Space`,
+    description: "Explore premium office spaces and managed offices across top cities in India.",
+  });
 }
 
 export default async function OfficeSpaceSegmentPage({
