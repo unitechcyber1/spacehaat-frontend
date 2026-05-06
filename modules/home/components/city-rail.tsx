@@ -60,7 +60,7 @@ export function CityRail({ cities, basePath = "/coworking" }: CityRailProps) {
       {/* Mobile & tablet: 2-column grid (see design) */}
       <div className="mt-8 grid grid-cols-2 gap-2.5 min-[480px]:gap-3.5 lg:hidden">
         {visibleCities.map((city) => (
-          <div key={`grid-${city.id}`} className="min-w-0">
+          <div key={`grid-${city.slug}`} className="min-w-0">
             <CityCard city={city} basePath={basePath} variant="railGrid" />
           </div>
         ))}
@@ -73,7 +73,7 @@ export function CityRail({ cities, basePath = "/coworking" }: CityRailProps) {
           className="no-scrollbar mt-8 flex snap-x gap-3 overflow-x-auto pb-2 sm:gap-4"
         >
           {visibleCities.map((city) => (
-            <div key={city.id} className="w-[14rem] shrink-0 snap-start sm:w-[15.5rem]">
+            <div key={city.slug} className="w-[14rem] shrink-0 snap-start sm:w-[15.5rem]">
               <CityCard city={city} basePath={basePath} variant="rail" />
             </div>
           ))}

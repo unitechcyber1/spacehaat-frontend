@@ -15,6 +15,7 @@ const CITY_SEQUENCE = [
   "bangalore",
   "hyderabad",
   "ahmedabad",
+  "jaipur",
   "chennai",
   "lucknow",
   "indore",
