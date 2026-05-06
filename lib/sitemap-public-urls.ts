@@ -1,4 +1,4 @@
-import type { SitemapUrlEntry } from "@/lib/sitemap-xml";
+import type { SitemapIndexEntry, SitemapUrlEntry } from "@/lib/sitemap-xml";
 import { canonicalCoworkingCitySlug } from "@/services/catalog-city-id";
 import { resolveAppUrl } from "@/services/env-config";
 import { listHomepageCitiesFromAvailable } from "@/services/homepage-available-cities";
@@ -33,24 +33,28 @@ function dedupeSort(urls: string[]): string[] {
   return Array.from(new Set(urls)).sort((a, b) => a.localeCompare(b));
 }
 
-/**
- * Root `/sitemap.xml` — reference-style urlset: homepage + hub URLs + child sitemap documents under `/sitemap/`.
- */
-export function buildRootSitemapEntries(): SitemapUrlEntry[] {
+/** `/sitemap/main-pages-sitemap.xml` — homepage, vertical hubs, list-your-space. */
+export function buildMainPagesSitemapEntries(lastmod: Date): SitemapUrlEntry[] {
   const b = baseOrigin();
-  const now = new Date();
-
   return [
-    { loc: `${b}/`, lastmod: now, priority: 1 },
-    { loc: `${b}/sitemap/city-pages-sitemap.xml`, lastmod: now },
-    { loc: `${b}/sitemap/locality-pages-sitemap.xml`, lastmod: now },
-    { loc: `${b}/sitemap/coworking-spaces-sitemap.xml`, lastmod: now },
-    { loc: `${b}/sitemap/virtual-office-spaces-sitemap.xml`, lastmod: now },
-    { loc: `${b}/sitemap/office-space-sitemap.xml`, lastmod: now },
-    { loc: `${b}/coworking`, lastmod: now, priority: 0.8 },
-    { loc: `${b}/virtual-office`, lastmod: now, priority: 0.8 },
-    { loc: `${b}/office-space`, lastmod: now, priority: 0.8 },
-    { loc: `${b}/list-your-space`, lastmod: now, priority: 0.5 },
+    { loc: `${b}/`, lastmod, changefreq: "daily", priority: 1 },
+    { loc: `${b}/coworking`, lastmod, changefreq: "weekly", priority: 0.8 },
+    { loc: `${b}/virtual-office`, lastmod, changefreq: "weekly", priority: 0.8 },
+    { loc: `${b}/office-space`, lastmod, changefreq: "weekly", priority: 0.8 },
+    { loc: `${b}/list-your-space`, lastmod, changefreq: "monthly", priority: 0.5 },
+  ];
+}
+
+/** Root `/sitemap.xml` — sitemap index (child documents under `/sitemap/`). */
+export function buildRootSitemapIndexEntries(lastmod: Date): SitemapIndexEntry[] {
+  const b = baseOrigin();
+  return [
+    { loc: `${b}/sitemap/main-pages-sitemap.xml`, lastmod },
+    { loc: `${b}/sitemap/city-pages-sitemap.xml`, lastmod },
+    { loc: `${b}/sitemap/locality-pages-sitemap.xml`, lastmod },
+    { loc: `${b}/sitemap/coworking-spaces-sitemap.xml`, lastmod },
+    { loc: `${b}/sitemap/virtual-office-spaces-sitemap.xml`, lastmod },
+    { loc: `${b}/sitemap/office-space-sitemap.xml`, lastmod },
   ];
 }
 
