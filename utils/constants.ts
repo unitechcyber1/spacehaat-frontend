@@ -26,4 +26,10 @@ export const verticals: Array<{
     href: "/office-space",
     description: "Managed and unfurnished office options across India.",
   },
+  {
+    key: "coliving",
+    label: "Coliving & PG",
+    href: "/coliving",
+    description: "Furnished coliving rooms and PG options near campuses and business hubs.",
+  },
 ];

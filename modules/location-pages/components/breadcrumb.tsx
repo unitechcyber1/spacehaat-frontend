@@ -13,6 +13,7 @@ const verticalLabelMap: Record<SpaceVertical, string> = {
   coworking: "Coworking",
   "virtual-office": "Virtual Office",
   "office-space": "Office Space",
+  coliving: "Coliving & PG",
 };
 
 export function Breadcrumb({ vertical, citySlug, locationName }: BreadcrumbProps) {

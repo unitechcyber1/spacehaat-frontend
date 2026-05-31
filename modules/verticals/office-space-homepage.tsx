@@ -1,7 +1,6 @@
 import { SectionWrapper } from "@/components/sections/section-wrapper";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CityCard } from "@/modules/home/components/city-card";
-import { ExpertLeadSection } from "@/modules/home/components/expert-lead-section";
 import { BenefitCards } from "@/modules/verticals/components/benefit-cards";
 import { CaseStudyCard } from "@/modules/verticals/components/case-study-card";
 import { SpaceRail } from "@/modules/verticals/components/space-rail";
@@ -51,7 +50,7 @@ export function OfficeSpaceHomepage({ data }: OfficeSpaceHomepageProps) {
         </SectionWrapper>
       ) : null}
 
-      <SectionWrapper className="bg-[linear-gradient(180deg,rgba(244,248,255,0)_0%,rgba(244,248,255,0.92)_100%)]">
+      <SectionWrapper>
         <SectionHeading
           title="Explore Premium Office Spaces"
         />
@@ -78,14 +77,6 @@ export function OfficeSpaceHomepage({ data }: OfficeSpaceHomepageProps) {
         <div className="mt-10">
           <BenefitCards items={data.benefits} showDescription={false} />
         </div>
-      </SectionWrapper>
-
-      <SectionWrapper id="lead-form">
-        <ExpertLeadSection
-          variant="office-space"
-          leadSection={data.leadSection}
-          mxSpaceType="Web Office"
-        />
       </SectionWrapper>
 
     </>

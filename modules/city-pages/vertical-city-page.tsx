@@ -1,3 +1,4 @@
+import { ColivingCityPage } from "@/modules/coliving/coliving-city-page";
 import { CoworkingCityPage } from "@/modules/coworking/coworking-city-page";
 import { OfficeSpaceCityPage } from "@/modules/office-space/office-space-city-page";
 import { VirtualOfficeCityPage } from "@/modules/virtual-office/virtual-office-city-page";
@@ -15,6 +16,8 @@ export function VerticalCityPage({ data }: VerticalCityPageProps) {
       return <OfficeSpaceCityPage data={data} />;
     case "virtual-office":
       return <VirtualOfficeCityPage data={data} />;
+    case "coliving":
+      return <ColivingCityPage data={data} />;
     default: {
       const _exhaustive: never = data.vertical;
       return _exhaustive;

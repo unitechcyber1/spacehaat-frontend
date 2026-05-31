@@ -17,7 +17,7 @@ export function VerticalHero({ data }: VerticalHeroProps) {
   if (data.vertical === "coworking") {
     return (
       <section className="relative overflow-hidden pb-14 pt-10 sm:pb-20 sm:pt-14">
-        <div className="absolute inset-x-0 top-0 -z-10 h-[36rem] bg-[radial-gradient(circle_at_top_left,rgba(75,154,255,0.16),transparent_32%),radial-gradient(circle_at_70%_12%,rgba(123,97,255,0.12),transparent_24%),linear-gradient(180deg,#f7fbff_0%,#ffffff_90%)]" />
+        <div className="absolute inset-x-0 top-0 -z-10 h-[36rem] bg-[radial-gradient(circle_at_top_left,var(--color-brand-soft),transparent_32%),radial-gradient(circle_at_70%_12%,rgba(76,175,80,0.08),transparent_24%),linear-gradient(180deg,var(--color-page-bg)_0%,var(--color-page-bg)_90%)]" />
         <Container>
           <div className="grid items-center gap-12 lg:grid-cols-[1.02fr_0.98fr]">
             <div className="max-w-3xl">
@@ -84,7 +84,7 @@ export function VerticalHero({ data }: VerticalHeroProps) {
 
     return (
       <section className="relative overflow-hidden pb-14 pt-10 sm:pb-20 sm:pt-14">
-        <div className="absolute inset-x-0 top-0 -z-10 h-[38rem] bg-[radial-gradient(circle_at_top_left,rgba(75,154,255,0.16),transparent_32%),radial-gradient(circle_at_70%_12%,rgba(123,97,255,0.12),transparent_24%),linear-gradient(180deg,#f7fbff_0%,#ffffff_90%)]" />
+        <div className="absolute inset-x-0 top-0 -z-10 h-[38rem] bg-[radial-gradient(circle_at_top_left,var(--color-brand-soft),transparent_32%),radial-gradient(circle_at_70%_12%,rgba(76,175,80,0.08),transparent_24%),linear-gradient(180deg,var(--color-page-bg)_0%,var(--color-page-bg)_90%)]" />
 
         <Container className="relative">
           <div className="grid min-w-0 items-stretch gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,31rem)] lg:gap-12 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,33rem)] xl:gap-14">
@@ -168,9 +168,10 @@ export function VerticalHero({ data }: VerticalHeroProps) {
     );
   }
 
-  return (
+  if (data.vertical === "office-space") {
+    return (
     <section className="relative overflow-hidden pb-14 pt-10 sm:pb-20 sm:pt-14">
-      <div className="absolute inset-x-0 top-0 -z-10 h-[38rem] bg-[radial-gradient(circle_at_top_left,rgba(63,92,171,0.18),transparent_30%),radial-gradient(circle_at_84%_8%,rgba(145,176,255,0.16),transparent_22%),linear-gradient(180deg,#f5f8fd_0%,#ffffff_92%)]" />
+      <div className="absolute inset-x-0 top-0 -z-10 h-[38rem] bg-[radial-gradient(circle_at_top_left,var(--color-brand-soft),transparent_30%),radial-gradient(circle_at_84%_8%,rgba(76,175,80,0.08),transparent_22%),linear-gradient(180deg,var(--color-page-bg)_0%,var(--color-page-bg)_92%)]" />
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-[1.02fr_0.98fr]">
           <div className="max-w-3xl">
@@ -217,5 +218,8 @@ export function VerticalHero({ data }: VerticalHeroProps) {
         </div>
       </Container>
     </section>
-  );
+    );
+  }
+
+  return null;
 }

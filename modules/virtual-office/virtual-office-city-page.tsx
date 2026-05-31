@@ -1,33 +1,28 @@
-import { Container } from "@/components/ui/container";
-import { CityPageExpertLead } from "@/modules/city-pages/components/city-page-expert-lead";
-import { CityPageFaqSection } from "@/modules/city-pages/components/city-page-faq-section";
-import { CityPageHero } from "@/modules/city-pages/components/city-page-hero";
-import { CityPageLeadCtaBand } from "@/modules/city-pages/components/city-page-lead-cta-band";
-import { VirtualOfficeCityListing } from "@/modules/virtual-office/components/virtual-office-city-listing";
+import {
+  getVirtualOfficeCityCatalogBySlug,
+  getVirtualOfficeCityDisplayName,
+  type VirtualOfficeCatalogCity,
+} from "@/lib/virtual-office-city-catalog";
+import { VoCityPageExperience } from "@/modules/virtual-office/components/city-page/vo-city-page-experience";
 import type { CityPageData } from "@/types";
 
-const EYEBROW = "Trust-led city search";
+function resolveVirtualOfficeCatalog(data: CityPageData): VirtualOfficeCatalogCity {
+  const fromRaw = getVirtualOfficeCityCatalogBySlug(data.city.slug);
+  if (fromRaw) return fromRaw;
+
+  return {
+    name: data.city.name,
+    id: data.catalogCityId ?? data.city.id,
+    slug: data.city.slug,
+    locations: data.popularLocations.map((loc) => ({
+      locality: loc.name,
+    })),
+  };
+}
 
 export function VirtualOfficeCityPage({ data }: { data: CityPageData }) {
-  return (
-    <>
-      <CityPageHero eyebrow={EYEBROW} title={data.title} />
-      <section className="pb-14 sm:pb-20">
-        <Container>
-          <VirtualOfficeCityListing data={data} />
-        </Container>
-      </section>
-      <CityPageLeadCtaBand
-        title={data.leadCta.title}
-        description={data.leadCta.description}
-        ctaLabel={data.leadCta.ctaLabel}
-      />
-      <CityPageExpertLead
-        cityName={data.city.name}
-        submitLabel={data.leadCta.ctaLabel}
-        mxSpaceType="Virtual Office"
-      />
-      <CityPageFaqSection pageTitle={data.title} faqs={data.faqs} />
-    </>
-  );
+  const catalog = resolveVirtualOfficeCatalog(data);
+  const cityDisplay = getVirtualOfficeCityDisplayName(data.city.slug, catalog.name);
+
+  return <VoCityPageExperience data={data} catalog={catalog} cityDisplay={cityDisplay} />;
 }

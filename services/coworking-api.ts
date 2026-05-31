@@ -23,7 +23,12 @@ import {
   resolveCoworkingApiBaseUrl,
   resolveCoworkingApiTimeoutMs,
 } from "@/services/env-config";
-import { loadMicroLocationsByCitySpaceType, slugifyMicroLocationName } from "@/services/location-api";
+import { buildApiClientHeaders } from "@/services/api-client-headers";
+import {
+  loadMicroLocationsByCitySpaceType,
+  normalizeLocationSegment,
+  resolveMicroLocationFromSegment,
+} from "@/services/location-api";
 import {
   coworkingApiWorkspaceToSpace,
   isCoworkingWorkspaceShape,
@@ -57,6 +62,13 @@ export type CoworkingSearchHit = {
   slug: string;
 };
 
+export type CoworkingWorkspacesListFilters = {
+  minPrice?: number;
+  maxPrice?: number;
+  sortBy?: string;
+  orderBy?: 1 | -1;
+};
+
 function isLikelyMongoObjectId(value: string): boolean {
   return /^[a-f0-9]{24}$/i.test(value.trim());
 }
@@ -79,7 +91,7 @@ function getCoworkingAxios(): AxiosInstance {
     coworkingAxios = axios.create({
       baseURL: resolveCoworkingApiBaseUrl(),
       timeout: coworkingAxiosTimeoutMs,
-      headers: { Accept: "application/json" },
+      headers: buildApiClientHeaders(),
     });
   } else {
     coworkingAxios.defaults.baseURL = resolveCoworkingApiBaseUrl();
@@ -155,6 +167,7 @@ async function fetchCoworkingWorkspacesList(
   name?: string,
   micro_location?: string,
   virtual?: boolean,
+  listFilters?: CoworkingWorkspacesListFilters,
 ): Promise<CoworkingModel.WorkSpacesListResponse> {
   if (!isCoworkingUserApiProxyEnabled()) {
     return mockWorkspacesList(cityCatalogId, limit, name, micro_location, virtual);
@@ -169,6 +182,16 @@ async function fetchCoworkingWorkspacesList(
     const micro = micro_location?.trim();
     if (micro) params.micro_location = micro;
     if (virtual) params.virtual = true;
+    if (listFilters?.minPrice != null && Number.isFinite(listFilters.minPrice)) {
+      params.minPrice = listFilters.minPrice;
+    }
+    if (listFilters?.maxPrice != null && Number.isFinite(listFilters.maxPrice)) {
+      params.maxPrice = listFilters.maxPrice;
+    }
+    if (listFilters?.sortBy?.trim()) {
+      params.sortBy = listFilters.sortBy.trim();
+      params.orderBy = listFilters.orderBy ?? -1;
+    }
     const { data } = await getCoworkingAxios().get<unknown>(coworkingApiPaths.workSpaces, {
       params,
     });
@@ -224,10 +247,18 @@ export async function coworkingWorkspacesListForCity(
   limit = DEFAULT_WORKSPACES_LIST_LIMIT,
   microLocationId?: string,
   virtual?: boolean,
+  listFilters?: CoworkingWorkspacesListFilters,
 ): Promise<CoworkingModel.WorkSpace[] | null> {
   const city = catalogCityId.trim();
   if (!city) return null;
-  const payload = await loadCoworkingWorkspacesList(city, limit, undefined, microLocationId, virtual);
+  const payload = await loadCoworkingWorkspacesList(
+    city,
+    limit,
+    undefined,
+    microLocationId,
+    virtual,
+    listFilters,
+  );
   const arr = payload.data;
   if (!arr?.length) return null;
   if (!isCoworkingWorkspaceShape(arr[0])) return null;
@@ -297,37 +328,16 @@ export async function getVerticalLocationPageContent(
   const cityPage = getCityPageData(vertical, cityRouteSlug, EMPTY_CITY_PAGE_FILTERS);
   if (!cityPage?.catalogCityId) return null;
 
-  let microKey = location.trim();
-  try {
-    microKey = decodeURIComponent(microKey);
-  } catch {
-    /* keep trimmed segment */
-  }
-  microKey = microKey.trim();
+  const microKey = normalizeLocationSegment(location);
   if (!microKey) return null;
 
   let workspaceMicroLocationId: string | null = null;
   if (isLikelyMongoObjectId(microKey)) {
     workspaceMicroLocationId = microKey;
   } else {
-    const hits = await loadMicroLocationsByCitySpaceType(cityPage.catalogCityId, true);
-    const norm = microKey.toLowerCase().replace(/_/g, "-");
-    for (const h of hits) {
-      if (h.id === microKey) {
-        workspaceMicroLocationId = h.id;
-        break;
-      }
-      const slug = h.slug?.trim().toLowerCase().replace(/_/g, "-");
-      const key = h.key?.trim().toLowerCase().replace(/_/g, "-");
-      if ((slug && slug === norm) || (key && key === norm)) {
-        workspaceMicroLocationId = h.id;
-        break;
-      }
-      if (slugifyMicroLocationName(h.name) === norm) {
-        workspaceMicroLocationId = h.id;
-        break;
-      }
-    }
+    const hits = await loadMicroLocationsByCitySpaceType(cityPage.catalogCityId, "coworking");
+    const hit = resolveMicroLocationFromSegment(hits, microKey);
+    if (hit) workspaceMicroLocationId = hit.id;
   }
 
   let spaces: Space[] = [];

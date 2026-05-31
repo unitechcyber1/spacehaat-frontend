@@ -55,7 +55,10 @@ export async function getSimilarSpaces(
 
 export async function resolveVerticalSegment(vertical: SpaceVertical, segment: string) {
   const cityKey =
-    vertical === "coworking" || vertical === "virtual-office" || vertical === "office-space"
+    vertical === "coworking" ||
+    vertical === "virtual-office" ||
+    vertical === "office-space" ||
+    vertical === "coliving"
       ? canonicalCoworkingCitySlug(segment.trim())
       : segment.trim();
 

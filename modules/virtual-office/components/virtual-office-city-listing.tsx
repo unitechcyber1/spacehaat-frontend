@@ -51,8 +51,6 @@ export function VirtualOfficeCityListing({ data }: { data: CityPageData }) {
   if (loading) {
     return <SpaceGridSkeleton count={4} />;
   }
-  console.log("virtualOfficeWorkspaces", virtualOfficeWorkspaces);
-
   return (
     <Pagination
       spaces={data.spaces}

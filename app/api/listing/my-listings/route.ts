@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-import { getVendorCoworkingListings, getVendorOfficeListings } from "@/services/listing-api";
+import {
+  getVendorCoworkingListings,
+  getVendorOfficeListings,
+  getVendorPgListings,
+} from "@/services/listing-api";
 import { getListingSession, respondListing } from "@/services/listing-session";
 
 const DEFAULT_LIMIT = 100;
@@ -24,18 +28,21 @@ export async function GET(request: Request) {
     Math.max(1, Number(searchParams.get("limit")) || DEFAULT_LIMIT),
   );
 
-  const [co, of] = await Promise.all([
+  const [co, of, pg] = await Promise.all([
     getVendorCoworkingListings(session.userId, limit, session.token),
     getVendorOfficeListings(session.userId, limit, session.token),
+    getVendorPgListings(session.userId, limit, session.token),
   ]);
 
   if (!co.ok) return respondListing(co);
   if (!of.ok) return respondListing(of);
+  if (!pg.ok) return respondListing(pg);
 
   return NextResponse.json(
     {
       coworking: co.data?.data ?? [],
       office: of.data?.data ?? [],
+      coliving: pg.data?.data ?? [],
     },
     { status: 200 },
   );

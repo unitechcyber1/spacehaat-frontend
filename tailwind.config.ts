@@ -10,6 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        page: "var(--color-page-bg)",
         ink: "var(--color-ink)",
         muted: "var(--color-muted)",
         surface: "var(--color-surface)",

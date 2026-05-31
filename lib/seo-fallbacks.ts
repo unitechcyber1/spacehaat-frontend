@@ -1,7 +1,7 @@
 import type { SeoContent } from "@/types/seo.model";
 import { verticals, APP_NAME } from "@/utils/constants";
 
-type VerticalKey = "home" | "coworking" | "office" | "virtual" | "listing" | "other";
+type VerticalKey = "home" | "coworking" | "office" | "virtual" | "coliving" | "listing" | "other";
 
 function pickVertical(pathname: string, slug: string): VerticalKey {
   const s = slug.toLowerCase();
@@ -11,6 +11,7 @@ function pickVertical(pathname: string, slug: string): VerticalKey {
     if (s === "home") return "other";
     if (s === "coworking" || s.startsWith("coworking-")) return "coworking";
     if (s === "office-space" || s.startsWith("office-space-")) return "office";
+    if (s === "coliving" || s.startsWith("coliving-")) return "coliving";
     if (s === "virtual-office" || s.startsWith("virtual-office-")) return "virtual";
     if (s.startsWith("list-your-space") || s.startsWith("add")) return "listing";
     return "other";
@@ -22,6 +23,9 @@ function pickVertical(pathname: string, slug: string): VerticalKey {
   }
   if (p.startsWith("/office-space") || s === "office-space" || s.startsWith("office-space-")) {
     return "office";
+  }
+  if (p.startsWith("/coliving") || s === "coliving" || s.startsWith("coliving-")) {
+    return "coliving";
   }
   if (p.startsWith("/virtual-office") || s === "virtual-office" || s.startsWith("virtual-office-")) {
     return "virtual";
@@ -43,16 +47,17 @@ export function getFallbackSeoContent(pathname: string, slug: string): SeoConten
   const coworking = verticals.find((x) => x.key === "coworking")!;
   const office = verticals.find((x) => x.key === "office-space")!;
   const virtual = verticals.find((x) => x.key === "virtual-office")!;
+  const coliving = verticals.find((x) => x.key === "coliving")!;
 
   if (v === "home") {
     return {
       title: "Premium workspace discovery across India",
       description:
-        "Compare coworking spaces, virtual offices, and managed office options with SpaceHaat — find locations, plans, and deals that match your team.",
+        "Compare coworking spaces, virtual offices, managed office options, and coliving/PG homes with SpaceHaat — find locations, plans, and deals that match your team.",
       path: "/",
       footer_title: `Why ${APP_NAME}`,
       footer_description: `<p>SpaceHaat is a premium discovery platform to compare coworking spaces, virtual offices, and office spaces across India. We help you shortlist better-fit options with less noise.</p>`,
-      keywords: "coworking, virtual office, office space, India, SpaceHaat",
+      keywords: "coworking, virtual office, office space, coliving, PG, India, SpaceHaat",
     };
   }
 
@@ -81,6 +86,15 @@ export function getFallbackSeoContent(pathname: string, slug: string): SeoConten
       path: p,
       footer_title: `Virtual office on ${APP_NAME}`,
       footer_description: `<p>${virtual.description} Get a credible business address, mail handling, and meeting-room access when you need a compliance-ready set-up.</p>`,
+    };
+  }
+  if (v === "coliving") {
+    return {
+      title: `Coliving & PG across India | ${APP_NAME}`,
+      description: coliving.description,
+      path: p,
+      footer_title: `Coliving & PG on ${APP_NAME}`,
+      footer_description: `<p>${coliving.description} Compare furnished rooms, meal plans, and security before you shortlist a move-in date.</p>`,
     };
   }
   if (v === "listing") {

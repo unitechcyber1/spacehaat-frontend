@@ -17,13 +17,24 @@ type ImageGalleryProps = {
   imageAdjustments?: Array<ImageGalleryAdjustment | undefined>;
 };
 
-function filterStyleForAllImagesIndex(
-  index: number,
-  userImageCount: number,
+type ImageEntry = { src: string; originalIndex: number };
+
+function buildImageEntries(images: string[]): ImageEntry[] {
+  return images
+    .map((raw, originalIndex) => ({
+      src: (raw ?? "").trim(),
+      originalIndex,
+    }))
+    .filter((e): e is ImageEntry => Boolean(e.src));
+}
+
+function filterStyleForImageIndex(
+  originalIndex: number,
+  imageCount: number,
   adjustments?: Array<ImageGalleryAdjustment | undefined>,
 ): CSSProperties | undefined {
-  if (index < 0 || index >= userImageCount) return undefined;
-  const adj = adjustments?.[index];
+  if (originalIndex < 0 || originalIndex >= imageCount) return undefined;
+  const adj = adjustments?.[originalIndex];
   if (!adj) return undefined;
   const b = adj.brightness ?? 1;
   const c = adj.contrast ?? 1;
@@ -35,21 +46,23 @@ export function ImageGallery({ name, images, imageAdjustments }: ImageGalleryPro
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [mobileIndex, setMobileIndex] = useState(0);
   const mobileRailRef = useRef<HTMLDivElement | null>(null);
+  const thumbRailRef = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number | null>(null);
-  const fallbackImages = [
-    "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1400&q=80",
-    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=80",
-    "https://images.unsplash.com/photo-1497366412874-3415097a27e7?auto=format&fit=crop&w=1400&q=80",
-    "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?auto=format&fit=crop&w=1400&q=80",
-  ];
-  const userImageCount = images.length;
-  const allImages = [...images, ...fallbackImages].filter(Boolean);
-  const gridImages = allImages.slice(0, 5);
+
+  const entries = buildImageEntries(images);
+  const imageCount = images.length;
+  const displayImages = entries.map((e) => e.src);
+  const gridImages = displayImages.slice(0, 5);
   const primary = gridImages[0];
-  const secondary = gridImages.slice(1, 5);
+
   if (!primary) {
     return null;
   }
+
+  const styleAt = (displayIndex: number) => {
+    const orig = entries[displayIndex]?.originalIndex ?? displayIndex;
+    return filterStyleForImageIndex(orig, imageCount, imageAdjustments);
+  };
 
   useEffect(() => {
     const el = mobileRailRef.current;
@@ -75,6 +88,15 @@ export function ImageGallery({ name, images, imageAdjustments }: ImageGalleryPro
     };
   }, [gridImages.length]);
 
+  /** Keep active thumbnail in view when opening / changing selection in the modal. */
+  useEffect(() => {
+    if (activeIndex === null) return;
+    const rail = thumbRailRef.current;
+    if (!rail) return;
+    const thumb = rail.querySelector<HTMLElement>(`[data-thumb-index="${activeIndex}"]`);
+    thumb?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }, [activeIndex]);
+
   return (
     <>
       <div className="space-y-3">
@@ -91,12 +113,12 @@ export function ImageGallery({ name, images, imageAdjustments }: ImageGalleryPro
               priority
               className="object-cover transition duration-700 group-hover:scale-105"
               sizes="(max-width: 1024px) 100vw, 52vw"
-              style={filterStyleForAllImagesIndex(0, userImageCount, imageAdjustments)}
+              style={styleAt(0)}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/40 via-transparent to-transparent" />
           </button>
 
-          {secondary.map((image, index) => {
+          {gridImages.slice(1).map((image, index) => {
             const idx = index + 1;
             return (
               <button
@@ -111,7 +133,7 @@ export function ImageGallery({ name, images, imageAdjustments }: ImageGalleryPro
                   fill
                   className="object-cover transition duration-500 group-hover:scale-105"
                   sizes="(max-width: 1280px) 24vw, 18vw"
-                  style={filterStyleForAllImagesIndex(idx, userImageCount, imageAdjustments)}
+                  style={styleAt(idx)}
                 />
               </button>
             );
@@ -147,7 +169,7 @@ export function ImageGallery({ name, images, imageAdjustments }: ImageGalleryPro
                     fill
                     className="object-cover transition duration-500 group-hover:scale-105"
                     sizes="100vw"
-                    style={filterStyleForAllImagesIndex(index, userImageCount, imageAdjustments)}
+                    style={styleAt(index)}
                   />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-950/35 via-transparent to-transparent" />
                 </div>
@@ -187,45 +209,56 @@ export function ImageGallery({ name, images, imageAdjustments }: ImageGalleryPro
       </div>
 
       {activeIndex !== null ? (
-        <div className="fixed inset-0 z-[90] bg-[#020617]/90 p-4 backdrop-blur-sm">
-          <div className="mx-auto flex h-full w-full max-w-6xl flex-col">
-            <div className="mb-3 flex justify-end">
+        <div className="fixed inset-0 z-[90] flex flex-col bg-[#020617]/95 p-3 pt-[max(0.75rem,env(safe-area-inset-top))] pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-sm sm:p-4">
+          <div className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col">
+            <div className="mb-2 flex shrink-0 justify-end sm:mb-3">
               <button
                 type="button"
                 onClick={() => setActiveIndex(null)}
-                className="inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-2 text-sm text-white"
+                className="inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-2 text-sm text-white transition hover:bg-white/20"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4" aria-hidden />
                 Close
               </button>
             </div>
-            <div className="relative flex-1 overflow-hidden rounded-[1.25rem] border border-white/10">
+
+            <div className="relative min-h-0 flex-1 overflow-hidden rounded-[1.25rem] border border-white/10">
               <Image
-                src={allImages[activeIndex]}
+                src={displayImages[activeIndex] ?? primary}
                 alt={`${name} enlarged image`}
                 fill
-                className="object-contain"
+                className="object-contain p-1 sm:p-2"
                 sizes="100vw"
-                style={filterStyleForAllImagesIndex(activeIndex, userImageCount, imageAdjustments)}
+                priority
+                style={styleAt(activeIndex)}
               />
             </div>
-            <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto pb-1">
-              {allImages.map((image, index) => (
+
+            <div
+              ref={thumbRailRef}
+              className="no-scrollbar mt-3 flex max-h-[5.5rem] shrink-0 gap-2 overflow-x-auto overflow-y-hidden pb-1 pt-0.5 [-webkit-overflow-scrolling:touch]"
+              aria-label="Photo thumbnails"
+            >
+              {displayImages.map((image, index) => (
                 <button
                   key={`${image}-${index}-thumb`}
                   type="button"
+                  data-thumb-index={index}
                   onClick={() => setActiveIndex(index)}
-                  className={`relative h-16 w-24 overflow-hidden rounded-lg border ${
-                    index === activeIndex ? "border-white" : "border-white/20 opacity-70"
-                  }`}
+                  className={[
+                    "relative h-16 w-28 shrink-0 overflow-hidden rounded-lg border-2 transition sm:h-[4.5rem] sm:w-32",
+                    index === activeIndex
+                      ? "border-white ring-2 ring-white/40"
+                      : "border-transparent opacity-75 hover:opacity-100",
+                  ].join(" ")}
                 >
                   <Image
                     src={image}
                     alt={`${name} thumbnail ${index + 1}`}
                     fill
                     className="object-cover"
-                    sizes="96px"
-                    style={filterStyleForAllImagesIndex(index, userImageCount, imageAdjustments)}
+                    sizes="128px"
+                    style={styleAt(index)}
                   />
                 </button>
               ))}

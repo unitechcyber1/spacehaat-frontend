@@ -1,5 +1,4 @@
 import { headers } from "next/headers";
-import { connection } from "next/server";
 
 import { getFallbackSeoContent } from "@/lib/seo-fallbacks";
 import { pathnameToSeoSlug } from "@/lib/pathname-to-seo-slug";
@@ -16,17 +15,14 @@ export type ResolvedSeo = {
 };
 
 /**
- * Resolves the SEO document for the current request. Uses `x-seo-slug` / `x-pathname`
- * (set in middleware) and fallbacks for RSC/Flight. Not wrapped in `react.cache` so
- * a fresh `headers()` read is used per invocation after `router.refresh()`.
- * Falls back to {@link getFallbackSeoContent} by vertical when the API has no match.
+ * Resolves SEO for `<head>` metadata on the current request. Uses middleware
+ * `x-pathname` when present; CMS sections below the fold use client pathname
+ * via {@link SeoCmsRouteSections} so soft navigations stay fast.
  */
 export async function getResolvedSeoForRequest(): Promise<ResolvedSeo> {
-  await connection();
   const h = await headers();
   const pathname = (await getRequestPathnameForSeo(h)) || "";
   const pathNorm = pathname && pathname.length > 0 ? pathname : "/";
-  // Prefer slug from resolved pathname; `x-seo-slug` can be stale on soft navigations.
   const slug = pathname
     ? pathnameToSeoSlug(pathname)
     : h.get("x-seo-slug")?.trim() || "generic";

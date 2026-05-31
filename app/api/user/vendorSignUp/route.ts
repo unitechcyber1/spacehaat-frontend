@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { completeVendorAuthWithoutOtpStep } from "@/lib/listing-vendor-auth-complete";
 import { registerVendor } from "@/services/listing-api";
 import type { ListingModel } from "@/types/listing.model";
 
@@ -44,6 +45,11 @@ export async function POST(request: Request) {
   };
 
   const result = await registerVendor(payload);
+  if (result.ok && result.status < 400) {
+    const sessionRes = await completeVendorAuthWithoutOtpStep(phone_number);
+    if (sessionRes) return sessionRes;
+  }
+
   return NextResponse.json(result.data ?? { message: result.message }, {
     status: result.status,
   });

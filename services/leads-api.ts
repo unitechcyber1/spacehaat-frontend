@@ -4,6 +4,7 @@
 
 import axios from "axios";
 
+import { buildApiClientHeaders } from "@/services/api-client-headers";
 import {
   resolveLeadsSubmitTimeoutMs,
   resolveLeadsSubmitUrl,
@@ -14,6 +15,6 @@ export { resolveLeadsSubmitUrl } from "@/services/env-config";
 export async function submitLead(body: Record<string, unknown>): Promise<void> {
   await axios.post(resolveLeadsSubmitUrl(), body, {
     timeout: resolveLeadsSubmitTimeoutMs(),
-    headers: { "Content-Type": "application/json" },
+    headers: buildApiClientHeaders(),
   });
 }
