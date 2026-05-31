@@ -1,0 +1,1424 @@
+.coliving-listing-root {
+  --font-display: var(--font-sans), -apple-system, system-ui, sans-serif;
+  --lfd-sidebar: 272px;
+  --lfd-tip: 300px;
+  --lfd-pad-x: 40px;
+  --lfd-pad-y: 28px;
+  --font-body: var(--font-sans), -apple-system, system-ui, sans-serif;
+  --c-bg: #f9f8f5;
+  --c-surface: #ffffff;
+  --c-surface-2: #f4f4f1;
+  --c-ink: var(--color-ink);
+  --c-ink-2: #3d3d47;
+  --c-muted: var(--color-muted);
+  --c-faint: #a8a8b0;
+  --c-line: #e8e8e3;
+  --c-line-strong: #d8d8d2;
+  --c-primary: var(--color-brand);
+  --c-primary-ink: #ffffff;
+  --c-primary-soft: var(--color-brand-soft);
+  --c-primary-tint: color-mix(in srgb, var(--color-brand) 8%, white);
+  --c-primary-line: color-mix(in srgb, var(--color-brand) 35%, white);
+  --c-accent: var(--color-accent);
+  --c-success: #0d7c66;
+  --c-success-soft: #e3f2ee;
+  --c-danger: #b43d3d;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+  --shadow-card: 0 1px 2px rgba(20,20,26,.04), 0 1px 4px rgba(20,20,26,.04);
+  --shadow-pop: 0 8px 24px rgba(20,20,26,.08), 0 2px 6px rgba(20,20,26,.04);
+  font-family: var(--font-body);
+  color: var(--c-ink);
+}
+
+/* ── form chrome ─────────────────────────────────────────── */
+.coliving-listing-root .lf-screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--c-bg);
+  font-family: var(--font-body);
+  color: var(--c-ink);
+  overflow: hidden;
+}
+
+/* topbar */
+.coliving-listing-root .lf-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 10px;
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-line);
+}
+.coliving-listing-root .lf-logo {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+  color: var(--c-ink);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.coliving-listing-root .lf-logo .lf-logo-dot {
+  width: 8px; height: 8px; border-radius: 2px;
+  background: var(--c-primary);
+  transform: rotate(45deg);
+}
+.coliving-listing-root .lf-save {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-muted);
+  background: transparent;
+  border: 1px solid var(--c-line);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.coliving-listing-root .lf-save:hover { background: var(--c-surface-2); color: var(--c-ink); }
+
+/* stepper */
+.coliving-listing-root .lf-stepper {
+  background: var(--c-surface);
+  padding: 6px 18px 14px;
+  border-bottom: 1px solid var(--c-line);
+}
+.coliving-listing-root .lf-stepper-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.coliving-listing-root .lf-stepper-meta .lf-step-n { color: var(--c-primary); }
+.coliving-listing-root .lf-stepper-meta .lf-step-pct { color: var(--c-faint); font-variant-numeric: tabular-nums; }
+
+.coliving-listing-root .lf-bar {
+  display: flex;
+  gap: 4px;
+  height: 4px;
+}
+.coliving-listing-root .lf-bar-seg {
+  flex: 1;
+  height: 100%;
+  background: var(--c-line);
+  border-radius: 999px;
+  transition: background .25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.coliving-listing-root .lf-bar-seg.done { background: var(--c-primary); }
+.coliving-listing-root .lf-bar-seg.active { background: var(--c-primary); }
+.coliving-listing-root .lf-bar-seg.active::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, var(--c-primary) 0%, var(--c-primary) 60%, transparent 100%);
+  animation: lf-pulse 1.6s ease-in-out infinite;
+  opacity: 0.6;
+}
+@keyframes lf-pulse {
+  0%, 100% { transform: translateX(-30%); }
+  50% { transform: translateX(30%); }
+}
+
+/* header */
+.coliving-listing-root .lf-head {
+  padding: 22px 22px 4px;
+  background: var(--c-bg);
+}
+.coliving-listing-root .lf-eyebrow {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-primary);
+  margin-bottom: 8px;
+}
+.coliving-listing-root .lf-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--c-ink);
+  margin: 0 0 6px;
+  text-wrap: pretty;
+}
+.coliving-listing-root .lf-sub {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--c-muted);
+  margin: 0;
+}
+
+/* body */
+.coliving-listing-root .lf-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 22px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* field */
+.coliving-listing-root .lf-field { display: flex; flex-direction: column; gap: 6px; }
+.coliving-listing-root .lf-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-ink);
+  letter-spacing: -0.005em;
+}
+.coliving-listing-root .lf-helper { font-size: 12.5px; color: var(--c-muted); line-height: 1.4; }
+.coliving-listing-root .lf-helper.tip {
+  background: var(--c-primary-tint);
+  color: var(--c-primary);
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  display: flex; align-items: flex-start; gap: 8px;
+  font-weight: 500;
+}
+
+/* input */
+.coliving-listing-root .lf-input, .lf-textarea, .lf-select {
+  width: 100%;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-sm);
+  height: 48px;
+  padding: 0 14px;
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  color: var(--c-ink);
+  transition: border-color .15s, box-shadow .15s, background .15s;
+  outline: none;
+}
+.coliving-listing-root .lf-textarea { height: auto; min-height: 96px; padding: 12px 14px; resize: vertical; line-height: 1.5; }
+.coliving-listing-root .lf-input::placeholder, .lf-textarea::placeholder { color: var(--c-faint); }
+.coliving-listing-root .lf-input:focus, .lf-textarea:focus, .lf-select:focus {
+  border-color: var(--c-primary);
+  background: var(--c-surface);
+  box-shadow: 0 0 0 4px var(--c-primary-soft);
+}
+.coliving-listing-root .lf-input.filled { background: var(--c-surface); }
+
+/* leading icon variant */
+.coliving-listing-root .lf-input-wrap {
+  position: relative;
+}
+.coliving-listing-root .lf-input-wrap .lf-input { padding-left: 40px; }
+.coliving-listing-root .lf-input-wrap .lf-leading {
+  position: absolute;
+  top: 50%; left: 14px;
+  transform: translateY(-50%);
+  color: var(--c-faint);
+  pointer-events: none;
+  display: flex;
+}
+
+/* card selector (2 options big cards) */
+.coliving-listing-root .lf-cardgroup { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.coliving-listing-root .lf-card-opt {
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-line);
+  border-radius: var(--r-md);
+  padding: 14px 12px;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color .15s, background .15s, transform .12s;
+  font-family: inherit;
+}
+.coliving-listing-root .lf-card-opt:hover { border-color: var(--c-line-strong); }
+.coliving-listing-root .lf-card-opt.selected {
+  border-color: var(--c-primary);
+  background: var(--c-primary-tint);
+}
+.coliving-listing-root .lf-card-opt .lf-card-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--c-surface-2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-ink-2);
+}
+.coliving-listing-root .lf-card-opt.selected .lf-card-icon {
+  background: var(--c-primary);
+  color: white;
+}
+.coliving-listing-root .lf-card-opt .lf-card-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--c-ink);
+}
+.coliving-listing-root .lf-card-opt .lf-card-desc {
+  font-size: 12.5px;
+  color: var(--c-muted);
+  line-height: 1.35;
+}
+
+/* segmented toggle */
+.coliving-listing-root .lf-seg {
+  display: flex;
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-line);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+}
+.coliving-listing-root .lf-seg button {
+  flex: 1;
+  height: 38px;
+  border: none;
+  background: transparent;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-muted);
+  cursor: pointer;
+  transition: background .15s, color .15s, box-shadow .15s;
+}
+.coliving-listing-root .lf-seg button.selected {
+  background: var(--c-surface);
+  color: var(--c-ink);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(20,20,26,.06), 0 2px 6px rgba(20,20,26,.04);
+}
+
+/* radio list */
+.coliving-listing-root .lf-radiolist { display: flex; flex-direction: column; gap: 6px; }
+.coliving-listing-root .lf-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--c-ink);
+}
+.coliving-listing-root .lf-radio.selected {
+  border-color: var(--c-primary);
+  background: var(--c-primary-tint);
+}
+.coliving-listing-root .lf-radio .lf-radio-dot {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--c-line-strong);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.coliving-listing-root .lf-radio.selected .lf-radio-dot {
+  border-color: var(--c-primary);
+}
+.coliving-listing-root .lf-radio.selected .lf-radio-dot::after {
+  content: '';
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--c-primary);
+}
+
+/* yes/no toggle */
+.coliving-listing-root .lf-yesno {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+}
+.coliving-listing-root .lf-yesno-label { font-size: 14px; font-weight: 500; color: var(--c-ink); }
+.coliving-listing-root .lf-switch {
+  position: relative;
+  width: 44px; height: 26px;
+  background: var(--c-line-strong);
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: background .2s;
+  flex-shrink: 0;
+}
+.coliving-listing-root .lf-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 20px; height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform .2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.coliving-listing-root .lf-switch.on { background: var(--c-primary); }
+.coliving-listing-root .lf-switch.on::after { transform: translateX(18px); }
+
+/* pills (multi-select) */
+.coliving-listing-root .lf-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.coliving-listing-root .lf-pill {
+  padding: 8px 14px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-ink-2);
+  cursor: pointer;
+  transition: all .12s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.coliving-listing-root .lf-pill:hover { border-color: var(--c-line-strong); }
+.coliving-listing-root .lf-pill.selected {
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+  color: white;
+}
+
+/* room card */
+.coliving-listing-root .lf-room-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.coliving-listing-root .lf-room-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--c-line);
+}
+.coliving-listing-root .lf-room-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-ink);
+  display: flex; align-items: center; gap: 8px;
+}
+.coliving-listing-root .lf-room-card-title .lf-room-num {
+  background: var(--c-primary-tint);
+  color: var(--c-primary);
+  font-size: 11px; font-weight: 700;
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.coliving-listing-root .lf-icon-btn {
+  background: transparent;
+  border: none;
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  color: var(--c-muted);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.coliving-listing-root .lf-icon-btn:hover { background: var(--c-surface-2); color: var(--c-danger); }
+.coliving-listing-root .lf-add-room {
+  width: 100%;
+  border: 1.5px dashed var(--c-line-strong);
+  background: transparent;
+  color: var(--c-primary);
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 14px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.coliving-listing-root .lf-add-room:hover { background: var(--c-primary-tint); border-color: var(--c-primary-line); }
+
+/* amenity grid */
+.coliving-listing-root .lf-amen-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.coliving-listing-root .lf-amen {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  padding: 12px 6px 10px;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all .12s;
+  position: relative;
+}
+.coliving-listing-root .lf-amen:hover { border-color: var(--c-line-strong); }
+.coliving-listing-root .lf-amen.selected {
+  border-color: var(--c-primary);
+  background: var(--c-primary-tint);
+}
+.coliving-listing-root .lf-amen-icon {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-ink-2);
+}
+.coliving-listing-root .lf-amen.selected .lf-amen-icon { color: var(--c-primary); }
+.coliving-listing-root .lf-amen-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--c-ink-2);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.coliving-listing-root .lf-amen.selected .lf-amen-label { color: var(--c-primary); font-weight: 600; }
+.coliving-listing-root .lf-amen-check {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 16px; height: 16px;
+  background: var(--c-primary);
+  color: white;
+  border-radius: 50%;
+  display: none;
+  align-items: center; justify-content: center;
+}
+.coliving-listing-root .lf-amen.selected .lf-amen-check { display: flex; }
+
+.coliving-listing-root .lf-section-h {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  margin: 2px 0 6px;
+}
+
+/* map mock */
+.coliving-listing-root .lf-map {
+  position: relative;
+  height: 160px;
+  background:
+    repeating-linear-gradient(0deg, var(--c-line) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, var(--c-line) 0 1px, transparent 1px 28px),
+    #ECECE6;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.coliving-listing-root .lf-map .lf-map-road {
+  position: absolute;
+  background: #DCDCD3;
+}
+.coliving-listing-root .lf-map .lf-map-pin {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -100%);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.18));
+}
+.coliving-listing-root .lf-map-pin-label {
+  position: absolute;
+  top: 12px; left: 12px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--c-ink);
+  display: flex; align-items: center; gap: 5px;
+  box-shadow: var(--shadow-card);
+}
+
+/* uploader */
+.coliving-listing-root .lf-upload-zone {
+  border: 1.5px dashed var(--c-line-strong);
+  background: var(--c-primary-tint);
+  border-radius: var(--r-md);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.coliving-listing-root .lf-upload-zone .lf-upload-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-primary-line);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-primary);
+}
+.coliving-listing-root .lf-upload-zone .lf-upload-title {
+  font-size: 14px; font-weight: 600; color: var(--c-ink);
+}
+.coliving-listing-root .lf-upload-zone .lf-upload-sub { font-size: 12px; color: var(--c-muted); }
+.coliving-listing-root .lf-upload-btn {
+  margin-top: 4px;
+  background: var(--c-primary);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--r-sm);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.coliving-listing-root .lf-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 12px;
+}
+.coliving-listing-root .lf-photo {
+  aspect-ratio: 1;
+  border-radius: var(--r-sm);
+  background:
+    repeating-linear-gradient(135deg, rgba(0,0,0,0.04) 0 2px, transparent 2px 8px),
+    var(--c-surface-2);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+}
+.coliving-listing-root .lf-photo.cover::after {
+  content: 'Cover';
+  position: absolute; top: 4px; left: 4px;
+  background: var(--c-primary);
+  color: white;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* badge banner */
+.coliving-listing-root .lf-banner {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--c-success-soft);
+  border: 1px solid #B7D9D0;
+  border-radius: var(--r-md);
+}
+.coliving-listing-root .lf-banner-ic {
+  width: 32px; height: 32px;
+  background: var(--c-success);
+  color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.coliving-listing-root .lf-banner-content { font-size: 12.5px; color: var(--c-ink-2); line-height: 1.45; }
+.coliving-listing-root .lf-banner-content b { color: var(--c-ink); font-weight: 600; display: block; margin-bottom: 1px; }
+
+/* footer */
+.coliving-listing-root .lf-foot {
+  display: flex;
+  gap: 10px;
+  padding: 14px 18px 22px;
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-line);
+}
+.coliving-listing-root .lf-btn {
+  flex: 1;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid var(--c-line);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center; justify-content: center; gap: 6px;
+  transition: background .12s, border-color .12s;
+}
+.coliving-listing-root .lf-btn.ghost:hover { background: var(--c-surface-2); }
+.coliving-listing-root .lf-btn.primary {
+  background: var(--c-primary);
+  color: var(--c-primary-ink);
+  border-color: var(--c-primary);
+  flex: 2;
+}
+.coliving-listing-root .lf-btn.primary:hover { filter: brightness(1.08); }
+.coliving-listing-root .lf-foot-hint {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11.5px; color: var(--c-faint);
+  padding: 0 18px 8px;
+}
+
+/* counter */
+.coliving-listing-root .lf-counter {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 12px;
+  color: var(--c-muted);
+  font-variant-numeric: tabular-nums;
+}
+.coliving-listing-root .lf-counter b { color: var(--c-ink); font-weight: 600; }
+
+/* INR prefix input */
+.coliving-listing-root .lf-money-wrap {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-sm);
+  background: var(--c-surface);
+  height: 48px;
+  overflow: hidden;
+  transition: border-color .15s, box-shadow .15s;
+}
+.coliving-listing-root .lf-money-wrap:focus-within {
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 4px var(--c-primary-soft);
+}
+.coliving-listing-root .lf-money-pre {
+  padding: 0 12px;
+  display: flex; align-items: center;
+  background: var(--c-surface-2);
+  color: var(--c-muted);
+  font-size: 14px;
+  font-weight: 500;
+  border-right: 1px solid var(--c-line);
+}
+.coliving-listing-root .lf-money-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14.5px;
+  padding: 0 14px;
+  color: var(--c-ink);
+}
+
+/* success */
+.coliving-listing-root .lf-success {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 28px;
+  text-align: center;
+  gap: 18px;
+}
+.coliving-listing-root .lf-check-burst {
+  position: relative;
+  width: 110px; height: 110px;
+  display: flex; align-items: center; justify-content: center;
+}
+.coliving-listing-root .lf-check-burst .lf-ring {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: var(--c-primary-tint);
+  animation: lf-ring 1.8s ease-out infinite;
+}
+.coliving-listing-root .lf-check-burst .lf-ring:nth-child(2) { animation-delay: .6s; }
+@keyframes lf-ring {
+  0% { transform: scale(0.85); opacity: 0.6; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+.coliving-listing-root .lf-check-burst .lf-check {
+  position: relative;
+  width: 76px; height: 76px; border-radius: 50%;
+  background: var(--c-primary);
+  color: white;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 24px rgba(76,175,80,.32);
+}
+.coliving-listing-root .lf-success h1 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--c-ink);
+  margin: 4px 0 0;
+  line-height: 1.18;
+  text-wrap: balance;
+}
+.coliving-listing-root .lf-success p {
+  font-size: 14px;
+  color: var(--c-muted);
+  margin: 0;
+  line-height: 1.5;
+  text-wrap: pretty;
+  max-width: 280px;
+}
+.coliving-listing-root .lf-success-stats {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0 4px;
+  font-size: 11.5px;
+  color: var(--c-muted);
+}
+.coliving-listing-root .lf-success-stats .lf-stat {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 999px;
+  padding: 6px 12px;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.coliving-listing-root .lf-success-stats .lf-stat b { color: var(--c-ink); font-weight: 700; }
+
+.coliving-listing-root .lf-success-actions {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+  margin-top: 8px;
+}
+.coliving-listing-root .lf-success-actions .lf-btn { flex: none; }
+
+/* property summary card on success */
+.coliving-listing-root .lf-summary {
+  width: 100%;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  padding: 14px;
+  text-align: left;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.coliving-listing-root .lf-summary-thumb {
+  width: 56px; height: 56px;
+  border-radius: var(--r-sm);
+  background:
+    repeating-linear-gradient(135deg, rgba(76,175,80,0.1) 0 2px, transparent 2px 8px),
+    var(--c-primary-tint);
+  flex-shrink: 0;
+}
+.coliving-listing-root .lf-summary-meta { flex: 1; min-width: 0; }
+.coliving-listing-root .lf-summary-meta .lf-summary-name {
+  font-weight: 700; font-size: 14px; color: var(--c-ink);
+  margin-bottom: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.coliving-listing-root .lf-summary-meta .lf-summary-loc {
+  font-size: 12px; color: var(--c-muted);
+  display: flex; align-items: center; gap: 4px;
+}
+.coliving-listing-root .lf-summary-status {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  background: #FBF0E5;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Desktop chrome — scoped to .lfd container so it doesn't fight mobile styles */
+
+.coliving-listing-root--app .lfd {
+  width: 100%;
+  min-height: 100dvh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--c-bg);
+  font-family: var(--font-body);
+  color: var(--c-ink);
+  overflow: hidden;
+}
+
+/* topbar */
+.coliving-listing-root .lfd-top {
+  flex-shrink: 0;
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-line);
+}
+.coliving-listing-root .lfd-top-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 60px;
+  padding: 12px var(--lfd-pad-x);
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+}
+.coliving-listing-root .lfd-top-l {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+  flex: 1;
+}
+.coliving-listing-root .lfd-logo {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--c-ink);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.coliving-listing-root .lfd-logo:hover { color: var(--c-primary); }
+.coliving-listing-root .lfd-logo .lf-logo-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--c-primary);
+  transform: rotate(45deg);
+}
+.coliving-listing-root .lfd-crumb {
+  font-size: 13px;
+  color: var(--c-muted);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+.coliving-listing-root .lfd-crumb a {
+  color: var(--c-muted);
+  text-decoration: none;
+}
+.coliving-listing-root .lfd-crumb a:hover { color: var(--c-ink); }
+.coliving-listing-root .lfd-crumb b { color: var(--c-ink); font-weight: 600; }
+.coliving-listing-root .lfd-crumb-property {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--c-ink-2);
+}
+.coliving-listing-root .lfd-crumb-sep { color: var(--c-faint); user-select: none; }
+.coliving-listing-root .lfd-top-r {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.coliving-listing-root .lfd-top-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--c-line);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-ink-2);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.coliving-listing-root .lfd-top-link:hover {
+  background: var(--c-surface-2);
+  color: var(--c-ink);
+}
+.coliving-listing-root .lfd-top-link--primary {
+  border-color: transparent;
+  background: var(--c-ink);
+  color: #fff;
+}
+.coliving-listing-root .lfd-top-link--primary:hover {
+  background: #2a2a2a;
+  color: #fff;
+}
+.coliving-listing-root .lfd-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.coliving-listing-root .lfd-autosave {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--c-faint); margin-right: 6px;
+}
+.coliving-listing-root .lfd-autosave .lfd-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--c-success);
+}
+
+/* body split */
+.coliving-listing-root .lfd-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--lfd-sidebar) minmax(0, 1fr);
+  min-height: 0;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* sidebar */
+.coliving-listing-root .lfd-side {
+  background: var(--c-surface);
+  border-right: 1px solid var(--c-line);
+  padding: var(--lfd-pad-y) 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+}
+.coliving-listing-root .lfd-side-h {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-faint);
+  margin-bottom: 4px;
+}
+.coliving-listing-root .lfd-side-prog {
+  background: var(--c-primary-tint);
+  border: 1px solid var(--c-primary-line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+}
+.coliving-listing-root .lfd-side-prog-h {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 6px;
+}
+.coliving-listing-root .lfd-side-prog-h .lfd-prog-label {
+  font-size: 12.5px; font-weight: 600; color: var(--c-primary);
+}
+.coliving-listing-root .lfd-side-prog-h .lfd-prog-pct {
+  font-size: 18px; font-weight: 700;
+  color: var(--c-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+}
+.coliving-listing-root .lfd-side-bar {
+  height: 4px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.coliving-listing-root .lfd-side-bar-fill {
+  height: 100%;
+  background: var(--c-primary);
+  border-radius: 999px;
+  transition: width .3s ease;
+}
+
+.coliving-listing-root .lfd-side-list {
+  display: flex; flex-direction: column;
+  gap: 2px;
+}
+.coliving-listing-root .lfd-side-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  color: var(--c-ink-2);
+  transition: background .12s;
+}
+.coliving-listing-root .lfd-side-item:hover { background: var(--c-surface-2); }
+.coliving-listing-root .lfd-side-item.active { background: var(--c-primary-tint); }
+.coliving-listing-root .lfd-side-item.done { color: var(--c-muted); }
+
+.coliving-listing-root .lfd-side-item .lfd-side-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--c-line-strong);
+  background: var(--c-surface);
+  color: var(--c-muted);
+  font-size: 12px; font-weight: 700;
+  flex-shrink: 0;
+  transition: all .15s;
+}
+.coliving-listing-root .lfd-side-item.active .lfd-side-num {
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+  color: white;
+  box-shadow: 0 0 0 4px var(--c-primary-soft);
+}
+.coliving-listing-root .lfd-side-item.done .lfd-side-num {
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+  color: white;
+}
+.coliving-listing-root .lfd-side-item .lfd-side-text {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column;
+}
+.coliving-listing-root .lfd-side-item .lfd-side-text b {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: inherit;
+  line-height: 1.2;
+}
+.coliving-listing-root .lfd-side-item.active .lfd-side-text b { color: var(--c-primary); }
+.coliving-listing-root .lfd-side-item .lfd-side-text span {
+  font-size: 11.5px;
+  color: var(--c-faint);
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
+/* connector line between steps */
+.coliving-listing-root .lfd-side-item { position: relative; }
+.coliving-listing-root .lfd-side-item:not(:last-child)::before {
+  content:''; position: absolute;
+  left: 25px; top: 38px; bottom: -2px;
+  width: 1.5px; background: var(--c-line);
+}
+.coliving-listing-root .lfd-side-item.done:not(:last-child)::before {
+  background: var(--c-primary);
+}
+
+.coliving-listing-root .lfd-side-help {
+  margin-top: auto;
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-line);
+  border-radius: 10px;
+  padding: 14px;
+}
+.coliving-listing-root .lfd-side-help-h {
+  font-size: 13px; font-weight: 600; color: var(--c-ink);
+  margin-bottom: 4px;
+  display: flex; align-items: center; gap: 6px;
+}
+.coliving-listing-root .lfd-side-help-p {
+  font-size: 12px; color: var(--c-muted); line-height: 1.45;
+  margin: 0 0 8px;
+}
+.coliving-listing-root .lfd-side-help a {
+  font-size: 12px; font-weight: 600;
+  color: var(--c-primary);
+  text-decoration: none;
+}
+
+/* main */
+.coliving-listing-root .lfd-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--c-bg);
+}
+.coliving-listing-root .lfd-main-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--lfd-pad-y) var(--lfd-pad-x);
+  min-width: 0;
+}
+.coliving-listing-root .lfd-main-inner {
+  width: 100%;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.coliving-listing-root .lfd-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+.coliving-listing-root .lfd-head-text { max-width: 540px; }
+.coliving-listing-root .lfd-eyebrow {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-primary);
+  margin-bottom: 8px;
+}
+.coliving-listing-root .lfd-title {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--c-ink);
+  margin: 0 0 6px;
+  text-wrap: balance;
+}
+.coliving-listing-root .lfd-sub {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--c-muted);
+  margin: 0;
+}
+.coliving-listing-root .lfd-meta-pill {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 999px;
+  padding: 6px 12px;
+  color: var(--c-muted);
+  white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 6px;
+  flex-shrink: 0;
+}
+
+/* body */
+.coliving-listing-root .lfd-body-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--shadow-card);
+}
+
+/* DESKTOP-specific overrides scoped under .lfd */
+.coliving-listing-root .lfd .lf-field { gap: 8px; }
+.coliving-listing-root .lfd .lf-label { font-size: 13.5px; }
+.coliving-listing-root .lfd .lf-helper { font-size: 12.5px; }
+.coliving-listing-root .lfd .lf-input,
+.coliving-listing-root .lfd .lf-textarea,
+.coliving-listing-root .lfd .lf-select { height: 46px; }
+.coliving-listing-root .lfd .lf-textarea { height: auto; min-height: 100px; }
+
+/* card group — bigger, more padding */
+.coliving-listing-root .lfd .lf-cardgroup { gap: 14px; }
+.coliving-listing-root .lfd .lf-card-opt {
+  padding: 18px 18px 16px;
+  gap: 10px;
+}
+.coliving-listing-root .lfd .lf-card-opt .lf-card-icon { width: 42px; height: 42px; }
+.coliving-listing-root .lfd .lf-card-opt .lf-card-title { font-size: 15px; }
+.coliving-listing-root .lfd .lf-card-opt .lf-card-desc { font-size: 13px; }
+
+/* radio list — horizontal */
+.coliving-listing-root .lfd .lf-radiolist { flex-direction: row; gap: 10px; }
+.coliving-listing-root .lfd .lf-radiolist .lf-radio { flex: 1; justify-content: flex-start; }
+
+/* segmented */
+.coliving-listing-root .lfd .lf-seg { max-width: 360px; }
+
+/* amenity grid — 6 cols */
+.coliving-listing-root .lfd .lf-amen-grid {
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.coliving-listing-root .lfd .lf-amen { padding: 14px 8px 12px; }
+.coliving-listing-root .lfd .lf-amen-icon { width: 36px; height: 36px; }
+.coliving-listing-root .lfd .lf-amen-label { font-size: 12px; }
+
+/* map — bigger */
+.coliving-listing-root .lfd .lf-map { height: 280px; }
+
+/* room cards — 2 per row */
+.coliving-listing-root .lfd-rooms-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* photo grid — 5 cols */
+.coliving-listing-root .lfd .lf-photo-grid {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+/* upload zone — bigger */
+.coliving-listing-root .lfd .lf-upload-zone {
+  padding: 36px 24px;
+  gap: 10px;
+}
+.coliving-listing-root .lfd .lf-upload-zone .lf-upload-icon { width: 52px; height: 52px; }
+.coliving-listing-root .lfd .lf-upload-zone .lf-upload-title { font-size: 15px; }
+
+/* foot */
+.coliving-listing-root .lfd-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px var(--lfd-pad-x);
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-line);
+  flex-shrink: 0;
+}
+.coliving-listing-root .lfd-foot-l { display: flex; align-items: center; gap: 14px; font-size: 12.5px; color: var(--c-muted); }
+.coliving-listing-root .lfd-foot-r { display: flex; gap: 10px; }
+.coliving-listing-root .lfd-btn {
+  height: 44px;
+  border-radius: 10px;
+  padding: 0 22px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid var(--c-line);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  transition: background .12s, border-color .12s;
+}
+.coliving-listing-root .lfd-btn.ghost:hover { background: var(--c-surface-2); }
+.coliving-listing-root .lfd-btn.primary {
+  background: var(--c-primary);
+  color: var(--c-primary-ink);
+  border-color: var(--c-primary);
+  padding: 0 28px;
+}
+.coliving-listing-root .lfd-btn.primary:hover { filter: brightness(1.08); }
+.coliving-listing-root .lfd-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* yes/no inline rows (desktop spacing) */
+.coliving-listing-root .lfd .lf-yesno { padding: 14px 18px; }
+
+/* section title for grouping */
+.coliving-listing-root .lfd-group-h {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  margin: 6px 0 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.coliving-listing-root .lfd-group-h .lfd-group-count {
+  background: var(--c-primary-tint);
+  color: var(--c-primary);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* success page — desktop */
+.coliving-listing-root .lfd-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 48px 56px;
+  text-align: center;
+  gap: 22px;
+}
+.coliving-listing-root .lfd-success .lf-check-burst { width: 140px; height: 140px; }
+.coliving-listing-root .lfd-success .lf-check-burst .lf-check {
+  width: 96px; height: 96px;
+}
+.coliving-listing-root .lfd-success h1 { font-size: 32px; margin: 8px 0 0; }
+.coliving-listing-root .lfd-success p { font-size: 15px; max-width: 460px; }
+.coliving-listing-root .lfd-success-row {
+  display: flex; gap: 12px;
+  margin-top: 6px;
+}
+.coliving-listing-root .lfd-success-row .lf-btn,
+.coliving-listing-root .lfd-success-row .lfd-btn { flex: 0 0 auto; min-width: 200px; }
+
+/* split form for steps that benefit from a side helper card */
+.coliving-listing-root .lfd-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, var(--lfd-tip));
+  gap: 20px;
+  align-items: start;
+}
+.coliving-listing-root .lfd-split .lfd-body-form {
+  min-width: 0;
+}
+.coliving-listing-root .lfd-aside {
+  position: sticky;
+  top: 0;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 12px;
+  padding: 18px;
+}
+.coliving-listing-root .lfd-aside-h {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  margin-bottom: 10px;
+}
+.coliving-listing-root .lfd-aside-body {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--c-ink-2);
+}
+.coliving-listing-root .lfd-aside-body p { margin: 0 0 10px; }
+.coliving-listing-root .lfd-aside-body ul { margin: 0; padding-left: 16px; }
+.coliving-listing-root .lfd-aside-body li { margin-bottom: 4px; }
+
+/* ── responsive: keep desktop wizard inside viewport ── */
+.coliving-listing-root .lfd-top-l {
+  min-width: 0;
+  flex: 1;
+}
+.coliving-listing-root .lfd-crumb {
+  min-width: 0;
+  flex-wrap: wrap;
+}
+.coliving-listing-root .lfd-main-inner {
+  max-width: 100%;
+}
+.coliving-listing-root .lfd-body-form {
+  min-width: 0;
+}
+
+@media (max-width: 1279px) {
+  .coliving-listing-root {
+    --lfd-pad-x: 20px;
+    --lfd-pad-y: 20px;
+    --lfd-sidebar: 240px;
+    --lfd-tip: 100%;
+  }
+  .coliving-listing-root .lfd-split {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .coliving-listing-root .lfd-aside {
+    position: static;
+  }
+  .coliving-listing-root .lfd-top-inner,
+  .coliving-listing-root .lfd-foot {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .coliving-listing-root .lfd-crumb-property {
+    max-width: 120px;
+  }
+  .coliving-listing-root .lfd-rooms-grid {
+    grid-template-columns: 1fr;
+  }
+  .coliving-listing-root .lfd .lf-amen-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1100px) {
+  .coliving-listing-root {
+    --lfd-sidebar: 220px;
+  }
+  .coliving-listing-root .lfd-side {
+    padding: 16px 14px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .coliving-listing-root .lf-amen-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

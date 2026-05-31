@@ -1,3 +1,4 @@
+import { buildApiClientHeaders } from "@/services/api-client-headers";
 import { resolveApiBaseUrl, resolveListingApiTimeoutMs } from "@/services/env-config";
 
 const PATH = "/api/user/enquiry";
@@ -35,11 +36,7 @@ export async function postUpstreamUserEnquiry(
     const res = await fetch(url, {
       method: "POST",
       signal: ac.signal,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        ...(token ? { token } : {}),
-      },
+      headers: buildApiClientHeaders(token ? { token } : undefined),
       body: JSON.stringify(body),
     });
 

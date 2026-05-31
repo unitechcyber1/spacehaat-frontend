@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
-import { ArrowRight, Building2, Landmark, Users } from "lucide-react";
+import { ArrowRight, Building2, Home, Landmark, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -9,7 +9,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 
-type VerticalId = "coworking" | "office-space" | "virtual-office";
+type VerticalId = "coworking" | "office-space" | "virtual-office" | "coliving";
 
 /** Long enough that the ~1.5s image crossfade can finish before the next tick feels rushed. */
 const ROTATE_MS = 6400;
@@ -69,6 +69,16 @@ const VERTICALS: {
       "https://img.spacehaat.com/images/original/475b4b5ecc2f03baf8973403555fb8167ca0c4fb.jpg",
     imageAlt: "Remote work and business desk concept",
     Icon: Landmark,
+  },
+  {
+    id: "coliving",
+    title: "Coliving & PG",
+    description: "Furnished rooms and managed stays for students and professionals.",
+    href: "/coliving",
+    imageSrc:
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1800&q=80",
+    imageAlt: "Bright furnished coliving bedroom",
+    Icon: Home,
   },
 ];
 

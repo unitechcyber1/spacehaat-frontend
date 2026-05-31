@@ -10,6 +10,7 @@ import {
   resolveCoworkingApiBaseUrl,
   resolveCoworkingApiTimeoutMs,
 } from "@/services/env-config";
+import { buildApiClientHeaders } from "@/services/api-client-headers";
 import { listSpaces } from "@/services/mock-db";
 import type { OfficeSpaceModel } from "@/types/office-space.model";
 
@@ -23,7 +24,7 @@ function getClient(): AxiosInstance {
     client = axios.create({
       baseURL: resolveCoworkingApiBaseUrl(),
       timeout: ms,
-      headers: { Accept: "application/json" },
+      headers: buildApiClientHeaders(),
     });
   } else {
     client.defaults.baseURL = resolveCoworkingApiBaseUrl();

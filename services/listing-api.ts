@@ -33,6 +33,10 @@ import {
   resolveListingApiBaseUrl,
   resolveListingApiTimeoutMs,
 } from "@/services/env-config";
+import {
+  buildApiClientHeaders,
+  buildApiClientHeadersMultipart,
+} from "@/services/api-client-headers";
 import type { CoworkingModel } from "@/types/coworking-workspace.model";
 import type { OfficeSpaceModel } from "@/types/office-space.model";
 import { ListingModel } from "@/types/listing.model";
@@ -85,6 +89,13 @@ export const listingApiPaths = {
   /** Angular `listing.service` — vendor's office rows */
   vendorOfficeSpacesList: (userId: string, limit: number) =>
     `/api/admin/officeSpaces?userid=${encodeURIComponent(userId)}&limit=${limit}`,
+
+  /** Host PG / co-living listing create (Angular admin PG save) */
+  adminPg: "/api/admin/pg",
+  adminPgById: (id: string) => `/api/admin/pg/${encodeURIComponent(id)}`,
+  /** Vendor PG listings — `GET /api/admin/pgs?userId=&limit=` */
+  adminPgs: (userId: string, limit: number) =>
+    `/api/admin/pgs?userId=${encodeURIComponent(userId)}&limit=${limit}`,
 } as const;
 
 // --------- Axios instance ---------
@@ -97,10 +108,7 @@ function getListingAxios(): AxiosInstance {
     listingAxios = axios.create({
       baseURL: resolveListingApiBaseUrl(),
       timeout: timeoutMs,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
+      headers: buildApiClientHeaders(),
     });
   } else {
     listingAxios.defaults.baseURL = resolveListingApiBaseUrl();
@@ -379,10 +387,7 @@ export async function uploadListingImage(
   try {
     const res = await fetch(url, {
       method: "POST",
-      headers: {
-        Accept: "application/json",
-        ...(token ? { token } : {}),
-      },
+      headers: buildApiClientHeadersMultipart(token ? { token } : undefined),
       body: formData,
     });
 
@@ -634,6 +639,82 @@ export async function getVendorOfficeListings(
   try {
     const res = await getListingAxios().get(
       listingApiPaths.vendorOfficeSpacesList(userId, limit),
+      withToken(token),
+    );
+    return toSuccess(res);
+  } catch (err) {
+    return toFailure(err);
+  }
+}
+
+// =========================================================================
+// Save PG / co-living host listing (`POST /api/admin/pg`)
+// =========================================================================
+
+export async function saveListingPg(
+  payload: Record<string, unknown> & { id?: string },
+  token?: string | null,
+): Promise<ListingApiResult<ListingModel.ApiEnvelope<unknown>>> {
+  try {
+    const { id, ...body } = payload;
+    const path = id ? listingApiPaths.adminPgById(id) : listingApiPaths.adminPg;
+    const method = id ? "put" : "post";
+    const res = await getListingAxios().request({
+      url: path,
+      method,
+      data: body,
+      ...withToken(token),
+    });
+    return toSuccess(res);
+  } catch (err) {
+    return toFailure(err);
+  }
+}
+
+export type VendorPgListingRow = {
+  _id?: string;
+  id?: string;
+  name?: string;
+  city?: string;
+  locality?: string;
+  status?: string;
+  added_on?: string;
+  form_status?: string;
+  image?: string;
+  images?: Array<
+    | string
+    | {
+        image?: string | { id?: string; s3_link?: string; url?: string };
+        order?: number;
+        s3_link?: string;
+        url?: string;
+      }
+  >;
+};
+
+export async function getVendorPgListings(
+  userId: string,
+  limit: number,
+  token?: string | null,
+): Promise<ListingApiResult<ListingModel.ApiEnvelope<VendorPgListingRow[]>>> {
+  try {
+    const res = await getListingAxios().get(
+      listingApiPaths.adminPgs(userId, limit),
+      withToken(token),
+    );
+    return toSuccess(res);
+  } catch (err) {
+    return toFailure(err);
+  }
+}
+
+export async function getAdminPgById(
+  id: string,
+  token?: string | null,
+): Promise<ListingApiResult<ListingModel.ApiEnvelope<Record<string, unknown>>>> {
+  try {
+    const res = await getListingAxios().get(
+      listingApiPaths.adminPgById(id),
       withToken(token),
     );
     return toSuccess(res);

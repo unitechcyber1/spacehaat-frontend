@@ -1,6 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 
+import { buildApiClientHeaders } from "@/services/api-client-headers";
 import { resolveApiBaseUrl } from "@/services/env-config";
+
+export const revalidate = 300;
 
 type Ctx = { params: Promise<{ slug: string }> };
 
@@ -17,13 +20,16 @@ export async function GET(_request: NextRequest, context: Ctx) {
   const base = resolveApiBaseUrl();
   const url = `${base}/api/user/seo/${encodeURIComponent(slug)}`;
   const res = await fetch(url, {
-    cache: "no-store",
-    headers: { Accept: "application/json" },
+    next: { revalidate: 300 },
+    headers: buildApiClientHeaders(),
   });
 
   const text = await res.text();
   return new NextResponse(text, {
     status: res.status,
-    headers: { "content-type": res.headers.get("content-type") || "application/json" },
+    headers: {
+      "content-type": res.headers.get("content-type") || "application/json",
+      "cache-control": "public, s-maxage=300, stale-while-revalidate=600",
+    },
   });
 }

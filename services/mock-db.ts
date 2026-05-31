@@ -445,6 +445,195 @@ const seedSpaces: Space[] = [
     isFeatured: true,
     createdAt: "2026-03-14T10:00:00.000Z",
   },
+  {
+    id: "spc_clv_001",
+    name: "UrbanNest DLF Phase 3 Coliving",
+    slug: "urbannest-dlf-phase-3-coliving",
+    vertical: "coliving",
+    brand: "UrbanNest",
+    city: "gurgaon",
+    location: "dlf-phase-3",
+    address: "DLF Phase 3, Gurugram",
+    images: [
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80",
+    ],
+    price: 14999,
+    spaceTypes: ["Private room", "Twin sharing"],
+    teamSizes: ["1", "2"],
+    plans: [
+      { name: "Twin sharing", price: 14999, unit: "/bed/month" },
+      { name: "Private room", price: 24999, unit: "/month" },
+    ],
+    amenities: ["WiFi", "Housekeeping", "Power backup", "Meals"],
+    highlights: ["Near Cyber City", "Managed coliving", "All-inclusive rent"],
+    description:
+      "Premium coliving and PG-style rooms in DLF Phase 3 with meals, WiFi, and weekly housekeeping included.",
+    rating: 4.6,
+    isFeatured: true,
+    createdAt: "2026-04-01T10:00:00.000Z",
+  },
+  {
+    id: "spc_clv_002",
+    name: "Koramangala Commons Coliving",
+    slug: "koramangala-commons-coliving",
+    vertical: "coliving",
+    brand: "Commons",
+    city: "bangalore",
+    location: "koramangala",
+    address: "Koramangala 5th Block, Bangalore",
+    images: [
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80",
+    ],
+    price: 12999,
+    spaceTypes: ["Studio room", "Double sharing"],
+    teamSizes: ["1", "2"],
+    plans: [
+      { name: "Double sharing", price: 12999, unit: "/bed/month" },
+      { name: "Studio", price: 21999, unit: "/month" },
+    ],
+    amenities: ["WiFi", "Lounge", "Laundry", "CCTV"],
+    highlights: ["Startup neighbourhood", "Flexible lock-in", "Community events"],
+    description:
+      "Coliving near Koramangala’s startup corridor — ideal for founders and working professionals who want a turnkey room.",
+    rating: 4.7,
+    isFeatured: true,
+    createdAt: "2026-04-02T10:00:00.000Z",
+  },
+  {
+    id: "spc_clv_003",
+    name: "Bandra Living Coliving",
+    slug: "bandra-living-coliving",
+    vertical: "coliving",
+    brand: "Bandra Living",
+    city: "mumbai",
+    location: "bandra",
+    address: "Bandra West, Mumbai",
+    images: [
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
+    ],
+    price: 18999,
+    spaceTypes: ["Private room", "Triple sharing"],
+    teamSizes: ["1", "2", "3"],
+    plans: [
+      { name: "Triple sharing", price: 18999, unit: "/bed/month" },
+      { name: "Private room", price: 32999, unit: "/month" },
+    ],
+    amenities: ["WiFi", "AC", "Meals", "Housekeeping"],
+    highlights: ["Linking Road access", "Premium fit-out", "PG-style meals"],
+    description:
+      "High-trust coliving and PG rooms in Bandra with AC, meals, and daily housekeeping for busy professionals.",
+    rating: 4.8,
+    isFeatured: true,
+    createdAt: "2026-04-03T10:00:00.000Z",
+  },
+  {
+    id: "spc_clv_004",
+    name: "Connaught Coliving House",
+    slug: "connaught-coliving-house",
+    vertical: "coliving",
+    brand: "CityStay",
+    city: "delhi",
+    location: "connaught-place",
+    address: "Connaught Place, New Delhi",
+    images: [
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1200&q=80",
+    ],
+    price: 15999,
+    spaceTypes: ["Single room", "Double sharing"],
+    teamSizes: ["1", "2"],
+    plans: [
+      { name: "Double sharing", price: 15999, unit: "/bed/month" },
+      { name: "Single room", price: 23999, unit: "/month" },
+    ],
+    amenities: ["WiFi", "Security", "Meals", "Laundry"],
+    highlights: ["Central Delhi", "Metro access", "Managed PG"],
+    description:
+      "Central Delhi coliving with metro access, security, and meal-inclusive plans for students and young professionals.",
+    rating: 4.5,
+    isFeatured: false,
+    createdAt: "2026-04-04T10:00:00.000Z",
+  },
+  {
+    id: "spc_clv_005",
+    name: "Sector 62 Noida PG & Coliving",
+    slug: "sector-62-noida-pg-coliving",
+    vertical: "coliving",
+    brand: "Staywise",
+    city: "noida",
+    location: "sector-62",
+    address: "Sector 62, Noida",
+    images: [
+      "https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=1200&q=80",
+    ],
+    price: 9999,
+    spaceTypes: ["PG triple", "Coliving private"],
+    teamSizes: ["1", "2", "3"],
+    plans: [
+      { name: "PG triple", price: 9999, unit: "/bed/month" },
+      { name: "Private room", price: 16999, unit: "/month" },
+    ],
+    amenities: ["WiFi", "Parking", "Meals", "Housekeeping"],
+    highlights: ["Near IT corridor", "Student friendly", "Transparent pricing"],
+    description:
+      "Affordable PG and coliving near Noida’s IT corridor with meals, WiFi, and structured house rules.",
+    rating: 4.4,
+    isFeatured: false,
+    createdAt: "2026-04-05T10:00:00.000Z",
+  },
+  {
+    id: "spc_clv_006",
+    name: "Koregaon Park Student Hub",
+    slug: "koregaon-park-student-hub",
+    vertical: "coliving",
+    brand: "Student Hub",
+    city: "pune",
+    location: "koregaon-park",
+    address: "Koregaon Park, Pune",
+    images: [
+      "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?auto=format&fit=crop&w=1200&q=80",
+    ],
+    price: 10999,
+    spaceTypes: ["Twin PG", "Coliving suite"],
+    teamSizes: ["1", "2"],
+    plans: [
+      { name: "Twin PG", price: 10999, unit: "/bed/month" },
+      { name: "Suite", price: 19999, unit: "/month" },
+    ],
+    amenities: ["WiFi", "Meals", "Study lounge", "Laundry"],
+    highlights: ["Near FC Road", "Young community", "Flexible tenure"],
+    description:
+      "Student-friendly PG and coliving in Koregaon Park with study lounge and meal plans designed for campus life.",
+    rating: 4.5,
+    isFeatured: false,
+    createdAt: "2026-04-06T10:00:00.000Z",
+  },
+  {
+    id: "spc_clv_007",
+    name: "Gachibowli Nest Coliving",
+    slug: "gachibowli-nest-coliving",
+    vertical: "coliving",
+    brand: "Nest Coliving",
+    city: "hyderabad",
+    location: "gachibowli",
+    address: "Gachibowli, Hyderabad",
+    images: [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+    ],
+    price: 11999,
+    spaceTypes: ["Private room", "Quad sharing"],
+    teamSizes: ["1", "2", "3", "4"],
+    plans: [
+      { name: "Quad sharing", price: 11999, unit: "/bed/month" },
+      { name: "Private room", price: 18999, unit: "/month" },
+    ],
+    amenities: ["WiFi", "Gym", "Meals", "Housekeeping"],
+    highlights: ["Tech park commute", "Gym access", "All-inclusive"],
+    description:
+      "Tech-corridor coliving in Gachibowli with gym, meals, and quick access to HITEC City and financial district offices.",
+    rating: 4.6,
+    isFeatured: true,
+    createdAt: "2026-04-07T10:00:00.000Z",
+  },
 ];
 
 /** Homepage and search: only these cities, in display order (two-column grid). */
@@ -851,6 +1040,10 @@ function buildCityPageTitle(vertical: SpaceVertical, cityName: string) {
     return `Virtual Offices in ${cityName}`;
   }
 
+  if (vertical === "coliving") {
+    return `Coliving & PG in ${cityName}`;
+  }
+
   return `Office Spaces in ${cityName}`;
 }
 
@@ -868,6 +1061,10 @@ function buildCityPageSubtitle(vertical: SpaceVertical, cityName: string) {
 
   if (vertical === "virtual-office") {
     return `GST-ready business addresses, documentation support, and trusted providers in ${cityName}.`;
+  }
+
+  if (vertical === "coliving") {
+    return `Furnished coliving homes and PG rooms with meals, WiFi, and managed housekeeping across ${cityName}.`;
   }
 
   return `Premium managed offices and enterprise-ready workspaces for growing teams in ${cityName}.`;
@@ -894,6 +1091,18 @@ function buildSeoSection(vertical: SpaceVertical, cityName: string, totalSpaces:
         `Businesses exploring virtual office services in ${cityName} are often looking for support around GST registration, company registration, business correspondence, and mail handling. Those requirements sound simple on paper, but the quality of the provider makes a real difference. Documentation standards, response time, address quality, and support structure all influence whether the process feels easy or frustrating. A better platform experience should help users compare providers with more clarity instead of burying the important details behind vague listings.`,
         `SpaceHaat surfaces trusted virtual office options in ${cityName} and organizes them around the things decision-makers usually care about most: address quality, documentation support, service scope, and pricing fit. With ${totalSpaces}+ relevant options in the current city dataset, users can filter by amenities, service type, and brand to identify stronger matches faster. This creates a more professional journey for founders and operations teams that want to move with confidence.`,
         `The benefit of choosing the right virtual office in ${cityName} goes beyond paperwork. A better address can improve first impressions, simplify official communication, and support a more credible business setup while the company scales. The wrong provider can create delays and uncertainty. That is why SpaceHaat takes a more curated, advisory-led approach to discovery. Instead of acting like a generic directory, the platform is built to help users understand their options, submit their requirement, and move toward a provider that fits their business needs with more trust.`,
+      ],
+    };
+  }
+
+  if (vertical === "coliving") {
+    return {
+      title: `Best coliving & PG in ${cityName}`,
+      paragraphs: [
+        `${cityName} has strong demand for coliving and PG inventory from students, early-career professionals, and remote workers who want furnished rooms without long furniture procurement cycles. The best coliving spaces in ${cityName} combine predictable monthly pricing, security, housekeeping, and meal options that reduce day-to-day operational friction compared with traditional rentals.`,
+        `When people search for PG in ${cityName}, the decision is rarely only rent. House rules, meal quality, WiFi reliability, AC availability, visitor policy, and proximity to metro or office hubs all influence fit. Coliving adds a more hospitality-led layer: community programming, shared lounges, and clearer service standards. SpaceHaat helps visitors compare these dimensions with a more curated lens instead of noisy, inconsistent listings.`,
+        `SpaceHaat currently highlights ${totalSpaces}+ coliving and PG-style options in ${cityName} with filters for budget, room type, amenities, and brand where available. The objective is faster shortlisting: fewer low-fit options, clearer monthly context, and a smoother path to expert consultation when someone wants help validating availability and move-in timelines.`,
+        `Choosing coliving or PG in ${cityName} should feel intentional. Some renters prioritize lowest monthly outlay, while others prioritize shorter commute, premium security, or private-room comfort. SpaceHaat is built as a discovery and lead platform: explore curated inventory, understand tradeoffs, and move toward a conversation that helps you pick a safer, better-fit home base.`,
       ],
     };
   }
@@ -968,6 +1177,35 @@ function buildFaqs(vertical: SpaceVertical, cityName: string) {
     ];
   }
 
+  if (vertical === "coliving") {
+    return [
+      {
+        id: `${vertical}-${cityName}-faq-1`,
+        question: `What is the difference between PG and coliving in ${cityName}?`,
+        answer:
+          `PG options are often meal-first, room-sharing setups with simpler amenities, while coliving usually adds more hospitality-led services, community programming, and furnished private-room upgrades.`,
+      },
+      {
+        id: `${vertical}-${cityName}-faq-2`,
+        question: `What is typically included in monthly coliving rent in ${cityName}?`,
+        answer:
+          `Most listings include WiFi, housekeeping, and security; many also bundle meals or offer meal plans as add-ons. Always confirm lock-in, deposit, and visitor policy before booking.`,
+      },
+      {
+        id: `${vertical}-${cityName}-faq-3`,
+        question: `Which areas in ${cityName} are best for students and working professionals?`,
+        answer:
+          `The best pocket depends on commute, campus or office proximity, and budget. Premium micro-markets usually offer stronger building security and faster metro access.`,
+      },
+      {
+        id: `${vertical}-${cityName}-faq-4`,
+        question: `How can SpaceHaat help me find coliving or PG in ${cityName}?`,
+        answer:
+          `SpaceHaat helps you compare curated options, filter by budget and amenities, and submit a requirement for a faster shortlist with clearer monthly pricing context.`,
+      },
+    ];
+  }
+
   return [
     {
       id: `${vertical}-${cityName}-faq-1`,
@@ -1002,7 +1240,10 @@ export const getCityPageData = cache(function getCityPageData(
   filters: CityPageFilters = EMPTY_CITY_PAGE_FILTERS,
 ): CityPageData | null {
   const routeSlug =
-    vertical === "coworking" || vertical === "virtual-office" || vertical === "office-space"
+    vertical === "coworking" ||
+    vertical === "virtual-office" ||
+    vertical === "office-space" ||
+    vertical === "coliving"
       ? canonicalCoworkingCitySlug(citySlug.trim())
       : citySlug.trim();
 
@@ -1019,8 +1260,14 @@ export const getCityPageData = cache(function getCityPageData(
     }
   }
 
-  if (!city && (vertical === "coworking" || vertical === "virtual-office" || vertical === "office-space")) {
-    const fromCatalog = listHomepageCitiesFromAvailable().find((item) => item.slug === routeSlug);
+  if (
+    !city &&
+    (vertical === "coworking" ||
+      vertical === "virtual-office" ||
+      vertical === "office-space" ||
+      vertical === "coliving")
+  ) {
+    const fromCatalog = listHomepageCitiesFromAvailable(vertical).find((item) => item.slug === routeSlug);
     if (fromCatalog) {
       city = {
         ...fromCatalog,
@@ -1058,7 +1305,10 @@ export const getCityPageData = cache(function getCityPageData(
     vertical,
     city,
     catalogCityId:
-      vertical === "coworking" || vertical === "office-space" || vertical === "virtual-office"
+      vertical === "coworking" ||
+      vertical === "office-space" ||
+      vertical === "virtual-office" ||
+      vertical === "coliving"
         ? getCatalogCityIdBySlug(routeSlug) ?? undefined
         : undefined,
     title: buildCityPageTitle(vertical, cityName),
@@ -1094,11 +1344,15 @@ export const getCityPageData = cache(function getCityPageData(
       description:
         vertical === "virtual-office"
           ? `Get help comparing trusted virtual office providers in ${cityName}.`
-          : `Talk to our team and shortlist higher-fit workspace options in ${cityName}.`,
+          : vertical === "coliving"
+            ? `Get help comparing coliving and PG options with clearer pricing and move-in timelines in ${cityName}.`
+            : `Talk to our team and shortlist higher-fit workspace options in ${cityName}.`,
       ctaLabel:
         vertical === "virtual-office"
           ? "Get Virtual Office Consultation"
-          : "Get Free Consultation",
+          : vertical === "coliving"
+            ? "Get Coliving Consultation"
+            : "Get Free Consultation",
     },
   };
 });
@@ -1116,6 +1370,10 @@ function buildLocationPageTitle(
     return `Virtual Office in ${locationName}, ${cityName}`;
   }
 
+  if (vertical === "coliving") {
+    return `Coliving & PG in ${locationName}, ${cityName}`;
+  }
+
   return `Office Space in ${locationName}, ${cityName}`;
 }
 
@@ -1130,6 +1388,10 @@ function buildLocationPageSubtitle(
 
   if (vertical === "virtual-office") {
     return `Compare compliance-ready virtual office providers with trusted documentation support near ${locationName}, ${cityName}.`;
+  }
+
+  if (vertical === "coliving") {
+    return `Explore furnished coliving rooms and PG options with meals, WiFi, and security near ${locationName}, ${cityName}.`;
   }
 
   return `Discover premium managed offices and enterprise-ready workspaces near ${locationName}, ${cityName}.`;
@@ -1160,6 +1422,18 @@ function buildLocationInsights(
         "Trusted address quality for official use",
         "Better provider support for GST and registration",
         "More options for mail and reception handling",
+      ],
+    };
+  }
+
+  if (vertical === "coliving") {
+    return {
+      summary: `${locationName} is a strong residential and commuter pocket in ${cityName} for coliving and PG seekers who want shorter travel time, better security, and predictable monthly costs.`,
+      nearby: [`${locationName} Metro`, "Daily needs retail", "Office hubs"],
+      notes: [
+        "Higher density of furnished room inventory",
+        "Better options for meals and housekeeping bundles",
+        "Strong demand from students and early-career renters",
       ],
     };
   }
@@ -1203,6 +1477,17 @@ function buildLocationSeoSection(
         `A virtual office in ${locationName}, ${cityName} gives businesses a practical way to establish a professional address while staying lean on real-estate costs. For startups, remote-first teams, and expanding companies, choosing the right location can improve business credibility and simplify compliance tasks without adding operational complexity.`,
         `Companies usually evaluate virtual office options in ${locationName} for GST registration support, business address quality, documentation readiness, and mail handling services. The difference between providers can be meaningful, so clearer comparison is essential. SpaceHaat helps users evaluate options by service quality and support level, not just headline pricing.`,
         `This page highlights ${totalSpaces}+ location-specific options and supports quick filtering by budget, amenities, and service type. The objective is to help businesses make faster and safer decisions with better local context and stronger trust signals.`,
+      ],
+    };
+  }
+
+  if (vertical === "coliving") {
+    return {
+      title: `Best coliving & PG in ${locationName}, ${cityName}`,
+      paragraphs: [
+        `${locationName} is a practical micro-market in ${cityName} for renters who want furnished rooms, clearer monthly pricing, and faster move-in without coordinating furniture, utilities, and vendors independently. Coliving and PG operators in this pocket often compete on meal quality, security, WiFi reliability, and housekeeping discipline — details that matter more than a generic headline rent.`,
+        `When comparing coliving in ${locationName}, it helps to validate lock-in, deposit structure, visitor policy, AC availability, and what is included in the monthly fee. PG seekers may prioritize meal frequency and curfew rules, while working professionals may prioritize quieter floors and private-room upgrades. SpaceHaat presents location-level inventory with filters that make these comparisons easier.`,
+        `This page currently surfaces ${totalSpaces}+ relevant listings in ${locationName}. If you want faster confirmation on availability, use the consultation form and our team can help shortlist safer matches with stronger operator credibility.`,
       ],
     };
   }
@@ -1264,6 +1549,29 @@ function buildLocationFaqs(
         question: `How quickly can a virtual office be set up in ${locationName}?`,
         answer:
           "Setup speed depends on documentation readiness and provider process, but curated providers usually support faster onboarding.",
+      },
+    ];
+  }
+
+  if (vertical === "coliving") {
+    return [
+      {
+        id: `${vertical}-${cityName}-${locationName}-faq-1`,
+        question: `What should I check before booking coliving in ${locationName}, ${cityName}?`,
+        answer:
+          "Confirm deposit, lock-in, meal plan, visitor policy, AC availability, and what is included in the monthly rent before you commit.",
+      },
+      {
+        id: `${vertical}-${cityName}-${locationName}-faq-2`,
+        question: `Is ${locationName} suitable for students and working professionals?`,
+        answer:
+          "Yes. Pockets like this are often chosen for commute convenience, daily needs access, and a stronger supply of furnished room inventory.",
+      },
+      {
+        id: `${vertical}-${cityName}-${locationName}-faq-3`,
+        question: `How can SpaceHaat help with PG or coliving in ${locationName}?`,
+        answer:
+          "SpaceHaat helps you compare curated listings, filter by budget and amenities, and request a faster shortlist with clearer monthly pricing context.",
       },
     ];
   }
@@ -1334,7 +1642,7 @@ export function getLocationPageData(
     vertical,
     city,
     catalogCityId:
-      vertical === "coworking" || vertical === "office-space"
+      vertical === "coworking" || vertical === "office-space" || vertical === "coliving"
         ? getCatalogCityIdBySlug(citySlug) ?? undefined
         : undefined,
     citySlug,
@@ -1375,15 +1683,22 @@ export function getLocationPageData(
     ),
     faqs: buildLocationFaqs(vertical, locationName, city.name),
     leadCta: {
-      title: `Looking for the perfect workspace in ${locationName}?`,
+      title:
+        vertical === "coliving"
+          ? `Looking for the right coliving or PG in ${locationName}?`
+          : `Looking for the perfect workspace in ${locationName}?`,
       description:
         vertical === "virtual-office"
           ? `Get support to compare trusted virtual office providers in ${locationName}, ${city.name}.`
-          : `Tell us your requirement and get a faster shortlist in ${locationName}, ${city.name}.`,
+          : vertical === "coliving"
+            ? `Tell us your budget and move-in date for a faster shortlist of coliving and PG options in ${locationName}, ${city.name}.`
+            : `Tell us your requirement and get a faster shortlist in ${locationName}, ${city.name}.`,
       ctaLabel:
         vertical === "virtual-office"
           ? "Get Virtual Office Consultation"
-          : "Get Free Consultation",
+          : vertical === "coliving"
+            ? "Get Coliving Consultation"
+            : "Get Free Consultation",
     },
   };
 }
@@ -1470,15 +1785,22 @@ export function buildLocationPageDataFromSpaces(
     seoSection: buildLocationSeoSection(vertical, locationName, city.name, locationSpaces.length),
     faqs: buildLocationFaqs(vertical, locationName, city.name),
     leadCta: {
-      title: `Looking for the perfect workspace in ${locationName}?`,
+      title:
+        vertical === "coliving"
+          ? `Looking for the right coliving or PG in ${locationName}?`
+          : `Looking for the perfect workspace in ${locationName}?`,
       description:
         vertical === "virtual-office"
           ? `Get support to compare trusted virtual office providers in ${locationName}, ${city.name}.`
-          : `Tell us your requirement and get a faster shortlist in ${locationName}, ${city.name}.`,
+          : vertical === "coliving"
+            ? `Tell us your budget and move-in date for a faster shortlist of coliving and PG options in ${locationName}, ${city.name}.`
+            : `Tell us your requirement and get a faster shortlist in ${locationName}, ${city.name}.`,
       ctaLabel:
         vertical === "virtual-office"
           ? "Get Virtual Office Consultation"
-          : "Get Free Consultation",
+          : vertical === "coliving"
+            ? "Get Coliving Consultation"
+            : "Get Free Consultation",
     },
   };
 }
@@ -1581,6 +1903,24 @@ const virtualOfficeComparisonRows: ComparisonRow[] = [
     id: "vo_compare_004",
     feature: "Support model",
     values: ["Email", "Dedicated advisor", "Priority concierge"],
+  },
+];
+
+const colivingBenefits: WhySpaceHaatItem[] = [
+  {
+    id: "clv_benefit_001",
+    title: "Move-in ready rooms",
+    description: "Furnished beds, wardrobes, and WiFi so you can shift without buying furniture upfront.",
+  },
+  {
+    id: "clv_benefit_002",
+    title: "PG or coliving clarity",
+    description: "Compare meal plans, security, and house rules with clearer monthly pricing context.",
+  },
+  {
+    id: "clv_benefit_003",
+    title: "City-smart locations",
+    description: "Shortlist options near tech parks, campuses, and metro corridors that match your commute.",
   },
 ];
 
@@ -1735,6 +2075,56 @@ export function getVerticalLandingData(vertical: SpaceVertical): VerticalLanding
         columns: ["Starter", "Business", "Premium"],
         rows: virtualOfficeComparisonRows,
       },
+      brands: listBrands().slice(0, 4),
+    };
+  }
+
+  if (vertical === "coliving") {
+    return {
+      vertical,
+      hero: {
+        eyebrow: "Coliving & PG",
+        title: "Find Coliving & PG Rooms Across Top Indian Cities",
+        subtitle:
+          "Furnished rooms, meal-inclusive PG options, and managed coliving homes with clearer monthly pricing.",
+        ctaLabel: "Explore Coliving",
+        image:
+          "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1600&q=80",
+        imageLabel: "Modern furnished coliving room",
+        stats: [
+          { label: "Room formats", value: "Sharing to private suites" },
+          { label: "Move-in", value: "Furnished, WiFi-ready" },
+          { label: "Best for", value: "Students & young professionals" },
+        ],
+      },
+      cities,
+      featuredSpaces,
+      benefits: colivingBenefits,
+      howItWorks: [
+        {
+          id: "clv_step_001",
+          title: "Choose your city",
+          description: "Start with where you study or work so commute and safety tradeoffs stay realistic.",
+        },
+        {
+          id: "clv_step_002",
+          title: "Compare plans",
+          description: "Review meals, housekeeping, AC, and deposit terms side by side before you shortlist.",
+        },
+        {
+          id: "clv_step_003",
+          title: "Talk to an expert",
+          description: "Share your budget and move-in date for a faster, higher-fit coliving or PG shortlist.",
+        },
+      ],
+      leadSection: {
+        title: "Get Coliving Help",
+        description:
+          "Tell us your city, budget, and sharing preference. We help you shortlist coliving and PG options with clearer monthly costs.",
+        ctaLabel: "Get Coliving Help",
+        bullets: ["Curated operators", "Faster shortlist", "Less listing noise"],
+      },
+      searchOptions: getSearchOptions(),
       brands: listBrands().slice(0, 4),
     };
   }

@@ -5,6 +5,7 @@ import {
   footerAbout,
   footerBottomKeywordLinks,
   footerBottomTagline,
+  footerColiving,
   footerCompany,
   footerCoworkingByCity,
   footerCoworkingGurugramAreas,
@@ -83,12 +84,18 @@ export function FooterMarketingSection() {
             </div>
           </nav>
 
-          {/* Column 3 — Virtual office, office space, meeting rooms */}
-          <nav aria-label="Virtual office and office space">
+          {/* Column 3 — Virtual office, coliving, office space, meeting rooms */}
+          <nav aria-label="Virtual office, coliving, and office space">
             <div>
               <p className={groupTitleClass}>Virtual Office</p>
               <div className="mt-4">
                 <VerticalLinkList items={footerVirtualOffice} />
+              </div>
+            </div>
+            <div className="mt-10">
+              <p className={groupTitleClass}>Coliving & PG</p>
+              <div className="mt-4">
+                <VerticalLinkList items={footerColiving} />
               </div>
             </div>
             <div className="mt-10">

@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { Container } from "@/components/ui/container";
-import { LeadForm } from "@/modules/home/components/lead-form";
 import { LeadCTA } from "@/modules/city-pages/components/lead-cta";
 import { Breadcrumb } from "@/modules/location-pages/components/breadcrumb";
 import { FAQSection } from "@/modules/location-pages/components/faq-section";
@@ -12,12 +11,6 @@ import { formatCurrency } from "@/utils/format";
 type VerticalLocationPageProps = {
   data: LocationPageData;
 };
-
-const leadMxByVertical = {
-  coworking: "Web Coworking",
-  "virtual-office": "Virtual Office",
-  "office-space": "Web Office",
-} as const;
 
 const toneMap = {
   coworking: {
@@ -34,6 +27,10 @@ const toneMap = {
     eyebrow: "Premium micro-market advisory",
     description:
       "Enterprise-ready office inventory focused on this location.",
+  },
+  coliving: {
+    eyebrow: "Coliving & PG discovery",
+    description: "Furnished rooms and meal-inclusive options curated for this locality.",
   },
 } as const;
 
@@ -151,36 +148,7 @@ export function VerticalLocationPage({
         </Container>
       </section>
 
-      <Container>
-        <FAQSection faqs={data.faqs} locationName={data.locationName} />
-      </Container>
-
-      <section className="pb-28 sm:pb-24" id="lead-form">
-        <Container>
-          <div className="overflow-hidden rounded-[2rem] border border-slate-200/80 bg-[linear-gradient(135deg,#08111f_0%,#122444_58%,#2a57b2_100%)] p-8 text-white shadow-[0_30px_90px_rgba(15,23,42,0.22)] sm:p-10">
-            <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/64">
-                  Expert support
-                </p>
-                <h2 className="mt-4 font-display text-3xl leading-tight sm:text-4xl">
-                  Looking for the perfect workspace in {data.locationName}?
-                </h2>
-                <p className="mt-4 max-w-xl text-[0.98rem] leading-7 text-white/74">
-                  Share your requirement and we will help you shortlist better-fit options quickly.
-                </p>
-              </div>
-              <div className="rounded-[1.5rem] bg-white p-5 text-ink sm:p-6">
-                <LeadForm
-                  submitLabel={data.leadCta.ctaLabel}
-                  city={data.locationName}
-                  mxSpaceType={leadMxByVertical[data.vertical]}
-                />
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
+      <FAQSection faqs={data.faqs} locationName={data.locationName} />
 
     </>
   );

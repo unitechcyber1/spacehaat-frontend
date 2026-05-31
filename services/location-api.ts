@@ -11,6 +11,7 @@ import {
   resolveCoworkingApiBaseUrl,
   resolveCoworkingApiTimeoutMs,
 } from "@/services/env-config";
+import { buildApiClientHeaders } from "@/services/api-client-headers";
 import { listSpaces } from "@/services/mock-db";
 import { CoworkingModel } from "@/types/coworking-workspace.model";
 import { toTitleCase } from "@/utils/format";
@@ -18,6 +19,8 @@ import { toTitleCase } from "@/utils/format";
 export const microLocationByCitySpaceTypePath = "/api/user/microLocationByCitySpaceType" as const;
 
 export type MicroLocation = CoworkingModel.MicroLocation;
+
+export type MicroLocationSpaceType = "coworking" | "coliving";
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v);
@@ -54,13 +57,22 @@ function microLocationsFromWire(raw: unknown): MicroLocation[] {
       (typeof row.micro_location_key === "string" && row.micro_location_key.trim()) ||
       undefined;
     const icon = typeof row.icon === "string" ? row.icon : "";
+    const forCoworking =
+      row.for_coWorking === true ||
+      row.for_coworking === true ||
+      row.forCoworking === true;
+    const forColiving =
+      row.for_coLiving === true ||
+      row.for_coliving === true ||
+      row.forColiving === true;
+
     out.push({
       id,
       icon,
       name,
-      for_coWorking: true,
-      for_office: false,
-      for_coLiving: false,
+      for_coWorking: forCoworking,
+      for_office: row.for_office === true || row.for_office_space === true,
+      for_coLiving: forColiving,
       slug,
       key: key || undefined,
     });
@@ -68,10 +80,14 @@ function microLocationsFromWire(raw: unknown): MicroLocation[] {
   return out;
 }
 
-function mockMicroLocationsForCity(cityCatalogId: string): MicroLocation[] {
+function mockMicroLocationsForCity(
+  cityCatalogId: string,
+  spaceType: MicroLocationSpaceType,
+): MicroLocation[] {
   const slug = resolveCatalogIdToSlug(cityCatalogId.trim());
   if (!slug) return [];
-  const spaces = listSpaces({ vertical: "coworking", city: slug });
+  const vertical = spaceType === "coliving" ? "coliving" : "coworking";
+  const spaces = listSpaces({ vertical, city: slug });
   const seen = new Map<string, MicroLocation>();
   for (const s of spaces) {
     const locSlug = (s.location ?? "central").trim() || "central";
@@ -80,14 +96,44 @@ function mockMicroLocationsForCity(cityCatalogId: string): MicroLocation[] {
       id: locSlug,
       icon: "",
       name: toTitleCase(locSlug.replace(/_/g, "-")),
-      for_coWorking: true,
+      for_coWorking: spaceType === "coworking",
       for_office: false,
-      for_coLiving: false,
+      for_coLiving: spaceType === "coliving",
       slug: locSlug,
       key: locSlug,
     });
   }
   return Array.from(seen.values());
+}
+
+/** Decode and normalize a locality segment from the URL. */
+export function normalizeLocationSegment(segment: string): string {
+  let value = segment.trim();
+  try {
+    value = decodeURIComponent(value);
+  } catch {
+    /* keep trimmed segment */
+  }
+  return value.trim();
+}
+
+/** Match a URL locality segment to a micro-location row from the catalog API. */
+export function resolveMicroLocationFromSegment(
+  hits: MicroLocation[],
+  segment: string,
+): MicroLocation | null {
+  const microKey = normalizeLocationSegment(segment);
+  if (!microKey) return null;
+
+  const norm = microKey.toLowerCase().replace(/_/g, "-");
+  for (const hit of hits) {
+    if (hit.id === microKey) return hit;
+    const slug = hit.slug?.trim().toLowerCase().replace(/_/g, "-");
+    const key = hit.key?.trim().toLowerCase().replace(/_/g, "-");
+    if ((slug && slug === norm) || (key && key === norm)) return hit;
+    if (slugifyMicroLocationName(hit.name) === norm) return hit;
+  }
+  return null;
 }
 
 let locationApiAxios: AxiosInstance | null = null;
@@ -98,7 +144,7 @@ function getLocationApiAxios(): AxiosInstance {
     locationApiAxios = axios.create({
       baseURL: resolveCoworkingApiBaseUrl(),
       timeout: ms,
-      headers: { Accept: "application/json" },
+      headers: buildApiClientHeaders(),
     });
   } else {
     locationApiAxios.defaults.baseURL = resolveCoworkingApiBaseUrl();
@@ -109,23 +155,28 @@ function getLocationApiAxios(): AxiosInstance {
 
 async function fetchMicroLocationsByCitySpaceType(
   cityCatalogId: string,
-  forCoworking: boolean,
+  spaceType: MicroLocationSpaceType,
 ): Promise<MicroLocation[]> {
   const id = cityCatalogId.trim();
-  if (!id || !forCoworking) return [];
+  if (!id) return [];
 
   if (!isCoworkingUserApiProxyEnabled()) {
-    return mockMicroLocationsForCity(id);
+    return mockMicroLocationsForCity(id, spaceType);
   }
+
+  const params =
+    spaceType === "coliving"
+      ? { cityId: id, for_coliving: true }
+      : { cityId: id, for_coworking: true };
 
   try {
     const { data } = await getLocationApiAxios().get<unknown>(microLocationByCitySpaceTypePath, {
-      params: { cityId: id, for_coworking: true },
+      params,
     });
     const parsed = microLocationsFromWire(data);
-    return parsed.length > 0 ? parsed : mockMicroLocationsForCity(id);
+    return parsed.length > 0 ? parsed : mockMicroLocationsForCity(id, spaceType);
   } catch {
-    return mockMicroLocationsForCity(id);
+    return mockMicroLocationsForCity(id, spaceType);
   }
 }
 

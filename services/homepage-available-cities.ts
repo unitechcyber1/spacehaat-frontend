@@ -1,3 +1,4 @@
+import { colivingCityRailImage } from "@/lib/coliving-city-images";
 import {
   AVAILABLE_CITY,
   AVAILABLE_CITY_OFFICE_SPACE,
@@ -50,10 +51,11 @@ function isCatalogEntry(entry: unknown): entry is LooseEntry {
  * Falls back gracefully if a city is missing for the vertical.
  */
 export function listHomepageCitiesFromAvailable(
-  vertical: "coworking" | "office-space" | "virtual-office" = "coworking",
+  vertical: "coworking" | "office-space" | "virtual-office" | "coliving" = "coworking",
 ): City[] {
   const bySlug = new Map<string, LooseEntry>();
 
+  /** Coliving uses the same catalog rail as coworking (`AVAILABLE_CITY`) for consistent city grid + ordering. */
   const source =
     vertical === "office-space"
       ? AVAILABLE_CITY_OFFICE_SPACE
@@ -77,12 +79,15 @@ export function listHomepageCitiesFromAvailable(
     const id =
       typeof entry.id === "string" && entry.id.length > 0 ? entry.id : `available_${slug}`;
 
+    const colivingImage = vertical === "coliving" ? colivingCityRailImage(slug) : undefined;
+
     result.push({
       id,
       name: toDisplayName(rawName),
       slug,
-      image: entry.image as string,
-      tagline: "Premium workspace inventory",
+      image: colivingImage ?? (entry.image as string),
+      tagline:
+        vertical === "coliving" ? "Coliving & PG homes" : "Premium workspace inventory",
       spaceCount: 0,
     });
 

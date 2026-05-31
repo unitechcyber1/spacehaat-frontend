@@ -3,6 +3,7 @@ import type { ListingModel } from "@/types/listing.model";
 
 import type { OfficeWizardState } from "../components/office-wizard/use-office-wizard";
 import { emptyLocation } from "../components/wizard/shared-location-step";
+import { mapListingImagesFromApi } from "./map-listing-images";
 
 /**
  * Map API office space (vendor GET) into wizard state for editing.
@@ -31,14 +32,7 @@ export function mapOfficeSpaceToOfficeWizardState(
   const officeType = (other?.office_type as ListingModel.OfficeType | string | undefined) ?? "";
 
   const amenties = office.amenties as ListingModel.Amenity[] | undefined;
-  const images: ListingModel.ListingImage[] = (office.images ?? []).map((row, i) => {
-    const asset = row?.image as { id?: string; s3_link?: string } | undefined;
-    return {
-      image: asset?.id ?? "",
-      url: asset?.s3_link ?? "",
-      order: typeof row?.order === "number" ? row.order : i + 1,
-    };
-  }).filter((x) => x.image || x.url);
+  const images = mapListingImagesFromApi(office.images);
 
   return {
     name: String(office.name ?? "").trim(),

@@ -5,7 +5,7 @@ import { listHomepageCitiesFromAvailable } from "@/services/homepage-available-c
 import { listCitiesByVertical, listSpaces } from "@/services/mock-db";
 import type { SpaceVertical } from "@/types";
 
-const VERTICALS: SpaceVertical[] = ["coworking", "virtual-office", "office-space"];
+const VERTICALS: SpaceVertical[] = ["coworking", "virtual-office", "office-space", "coliving"];
 
 function baseOrigin(): string {
   return resolveAppUrl().replace(/\/$/, "");
@@ -17,7 +17,12 @@ export function toAbsoluteUrl(pathname: string): string {
 }
 
 function normalizeCitySegment(vertical: SpaceVertical, citySlug: string): string {
-  if (vertical === "coworking" || vertical === "virtual-office" || vertical === "office-space") {
+  if (
+    vertical === "coworking" ||
+    vertical === "virtual-office" ||
+    vertical === "office-space" ||
+    vertical === "coliving"
+  ) {
     return canonicalCoworkingCitySlug(citySlug);
   }
   return citySlug.trim();
@@ -41,6 +46,7 @@ export function buildMainPagesSitemapEntries(lastmod: Date): SitemapUrlEntry[] {
     { loc: `${b}/coworking`, lastmod, changefreq: "weekly", priority: 0.8 },
     { loc: `${b}/virtual-office`, lastmod, changefreq: "weekly", priority: 0.8 },
     { loc: `${b}/office-space`, lastmod, changefreq: "weekly", priority: 0.8 },
+    { loc: `${b}/coliving`, lastmod, changefreq: "weekly", priority: 0.8 },
     { loc: `${b}/list-your-space`, lastmod, changefreq: "monthly", priority: 0.5 },
   ];
 }
@@ -55,6 +61,7 @@ export function buildRootSitemapIndexEntries(lastmod: Date): SitemapIndexEntry[]
     { loc: `${b}/sitemap/coworking-spaces-sitemap.xml`, lastmod },
     { loc: `${b}/sitemap/virtual-office-spaces-sitemap.xml`, lastmod },
     { loc: `${b}/sitemap/office-space-sitemap.xml`, lastmod },
+    { loc: `${b}/sitemap/coliving-spaces-sitemap.xml`, lastmod },
   ];
 }
 
@@ -101,6 +108,10 @@ export function collectVirtualOfficeSpacesSitemapUrls(): string[] {
 
 export function collectOfficeSpaceSitemapUrls(): string[] {
   return collectVerticalSpaceDetailUrls("office-space");
+}
+
+export function collectColivingSpacesSitemapUrls(): string[] {
+  return collectVerticalSpaceDetailUrls("coliving");
 }
 
 function collectVerticalSpaceDetailUrls(vertical: SpaceVertical): string[] {

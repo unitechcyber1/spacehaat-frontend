@@ -12,6 +12,7 @@ import {
   type CoworkingSearchHit,
 } from "@/services/coworking-api";
 import { loadOfficeSpaceSearchHits, type OfficeSpaceSearchHit } from "@/services/office-space-api";
+import { loadPgSearchHits, type PgSearchHit } from "@/services/pg-api";
 import { getCatalogCityIdBySlug } from "@/services/catalog-city-id";
 import { SearchOption } from "@/types";
 import { cn } from "@/utils/cn";
@@ -30,7 +31,7 @@ type SearchBarProps = {
 type SharedSearchState = {
   selectedLocation: string;
   locationInput: string;
-  selectedSpaceType: "coworking" | "office-space" | "virtual-office";
+  selectedSpaceType: "coworking" | "office-space" | "virtual-office" | "coliving";
   selectedSpaceName: string;
   spaceNameInput: string;
   selectedSpaceSlug: string;
@@ -75,7 +76,7 @@ export function SearchBar({
   const [selectedLocation, setSelectedLocation] = useState(locations[0]?.label ?? "");
   const [locationInput, setLocationInput] = useState(locations[0]?.label ?? "");
   const [selectedSpaceType, setSelectedSpaceType] = useState<
-    "coworking" | "office-space" | "virtual-office"
+    "coworking" | "office-space" | "virtual-office" | "coliving"
   >("coworking");
   const [selectedSpaceName, setSelectedSpaceName] = useState("");
   const [spaceNameInput, setSpaceNameInput] = useState("");
@@ -85,6 +86,8 @@ export function SearchBar({
   const [coworkingHitsLoading, setCoworkingHitsLoading] = useState(false);
   const [officeHits, setOfficeHits] = useState<OfficeSpaceSearchHit[]>([]);
   const [officeHitsLoading, setOfficeHitsLoading] = useState(false);
+  const [pgHits, setPgHits] = useState<PgSearchHit[]>([]);
+  const [pgHitsLoading, setPgHitsLoading] = useState(false);
   const [hasHydrated, setHasHydrated] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -110,9 +113,10 @@ export function SearchBar({
     { id: "coworking", label: "Coworking Space" },
     { id: "office-space", label: "Office Space" },
     { id: "virtual-office", label: "Virtual Office" },
+    { id: "coliving", label: "Coliving & PG" },
   ] as const;
   const spaceNamesByType: Record<
-    "coworking" | "office-space" | "virtual-office",
+    "coworking" | "office-space" | "virtual-office" | "coliving",
     string[]
   > = {
     coworking: [
@@ -133,6 +137,12 @@ export function SearchBar({
       "Deskline Business Address Pune",
       "Signature Address Madhapur",
     ],
+    coliving: [
+      "UrbanNest DLF Phase 3 Coliving",
+      "Koramangala Commons Coliving",
+      "Bandra Living Coliving",
+      "Gachibowli Nest Coliving",
+    ],
   };
   const selectedTypeLabel =
     workspaceTypes.find((item) => item.id === selectedSpaceType)?.label ??
@@ -148,6 +158,18 @@ export function SearchBar({
     () => (resolvedLocationSlug ? getCatalogCityIdBySlug(resolvedLocationSlug) : null),
     [resolvedLocationSlug],
   );
+
+  /** API `city` param uses display name (e.g. Gurugram), not URL slug. */
+  const resolvedCityLabel = useMemo(() => {
+    const input = (locationInput.trim() || selectedLocation || "").trim();
+    if (!input) return "";
+    const normalized = input.toLowerCase();
+    const match = locations.find(
+      (loc) =>
+        loc.label.toLowerCase() === normalized || loc.value.toLowerCase() === normalized,
+    );
+    return match?.label ?? input;
+  }, [locationInput, selectedLocation, locations]);
 
   const filteredLocations = useMemo(() => {
     const query = locationInput.trim().toLowerCase();
@@ -238,6 +260,49 @@ export function SearchBar({
       window.clearTimeout(timer);
     };
   }, [activeField, selectedSpaceType, catalogCityId, resolvedLocationSlug, spaceNameInput]);
+
+  useEffect(() => {
+    if (activeField !== "spaceName" || selectedSpaceType !== "coliving") {
+      return;
+    }
+    if (!resolvedLocationSlug.trim()) {
+      setPgHits([]);
+      setPgHitsLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    const name = spaceNameInput.trim();
+    const delay = name.length > 0 ? 320 : 0;
+
+    setPgHitsLoading(true);
+    const timer = window.setTimeout(() => {
+      loadPgSearchHits(resolvedLocationSlug, resolvedCityLabel, {
+        name: name || undefined,
+        limit: 50,
+      })
+        .then((hits) => {
+          if (!cancelled) setPgHits(hits);
+        })
+        .catch(() => {
+          if (!cancelled) setPgHits([]);
+        })
+        .finally(() => {
+          if (!cancelled) setPgHitsLoading(false);
+        });
+    }, delay);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [
+    activeField,
+    selectedSpaceType,
+    resolvedLocationSlug,
+    resolvedCityLabel,
+    spaceNameInput,
+  ]);
 
   useEffect(() => {
     setHasHydrated(true);
@@ -437,6 +502,15 @@ export function SearchBar({
 
       if (selectedSpaceType === "office-space" && selectedSpaceSlug.trim()) {
         router.push(`/office-space/${selectedSpaceSlug.trim()}`);
+        if (variant === "homepage") {
+          setIsMobileSearchOpen(false);
+          setActiveField(null);
+        }
+        return;
+      }
+
+      if (selectedSpaceType === "coliving" && selectedSpaceSlug.trim()) {
+        router.push(`/coliving/${selectedSpaceSlug.trim()}`);
         if (variant === "homepage") {
           setIsMobileSearchOpen(false);
           setActiveField(null);
@@ -858,6 +932,51 @@ export function SearchBar({
                           officeHits.length === 0 ? (
                             <div className="rounded-xl border border-dashed border-slate-300 px-3 py-5 text-sm text-slate-500">
                               No matching spaces found.
+                            </div>
+                          ) : null}
+                        </>
+                      ) : selectedSpaceType === "coliving" ? (
+                        <>
+                          {pgHitsLoading ? (
+                            <div className="rounded-xl px-3 py-5 text-sm text-slate-500">
+                              Loading coliving & PG…
+                            </div>
+                          ) : null}
+                          {!pgHitsLoading && !resolvedLocationSlug.trim() ? (
+                            <div className="rounded-xl border border-dashed border-slate-300 px-3 py-5 text-sm text-slate-500">
+                              Choose a city first to load coliving & PG listings.
+                            </div>
+                          ) : null}
+                          {!pgHitsLoading && resolvedLocationSlug.trim() && pgHits.length > 0 ? (
+                            <div className="grid max-h-[20rem] gap-2 overflow-y-auto overscroll-y-contain pr-1 [scrollbar-gutter:stable]">
+                              {pgHits.map((hit) => (
+                                <button
+                                  key={hit.id}
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedSpaceName(hit.name);
+                                    setSpaceNameInput(hit.name);
+                                    setSelectedSpaceSlug(hit.slug);
+                                    setActiveField(null);
+                                  }}
+                                  className="flex shrink-0 items-center gap-3 rounded-xl px-3 py-3 text-left transition hover:bg-slate-100"
+                                >
+                                  <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100">
+                                    <Building2 className="h-5 w-5 text-slate-600" />
+                                  </span>
+                                  <span className="min-w-0">
+                                    <span className="block text-lg text-slate-800">{hit.name}</span>
+                                    {hit.locality ? (
+                                      <span className="block text-sm text-slate-500">{hit.locality}</span>
+                                    ) : null}
+                                  </span>
+                                </button>
+                              ))}
+                            </div>
+                          ) : null}
+                          {!pgHitsLoading && resolvedLocationSlug.trim() && pgHits.length === 0 ? (
+                            <div className="rounded-xl border border-dashed border-slate-300 px-3 py-5 text-sm text-slate-500">
+                              No matching listings found.
                             </div>
                           ) : null}
                         </>

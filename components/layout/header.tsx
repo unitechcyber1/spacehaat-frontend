@@ -93,12 +93,16 @@ export function Header() {
 
   const useSolidHeader = !isHomepage || isScrolled;
   const shouldExpandHeader = isHomepage && isScrolled && isHeaderSearchExpanded;
+  const isColivingListingWizard = pathname?.startsWith("/add/coliving-space");
+
+  if (isColivingListingWizard) {
+    return null;
+  }
 
   return (
     <header
       className={cn(
-        "inset-x-0 top-0 z-50 overflow-visible transition-[height,background-color,border-color,box-shadow] duration-300",
-        isHomepage ? "fixed" : "sticky",
+        "sticky top-0 z-50 w-full overflow-visible transition-[height,background-color,border-color,box-shadow] duration-300",
         shouldExpandHeader ? "h-[18rem]" : "h-20",
         useSolidHeader
           ? "border-b border-slate-200/80 bg-white/92 backdrop-blur-xl"

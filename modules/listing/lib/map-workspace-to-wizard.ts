@@ -3,6 +3,7 @@ import type { ListingModel } from "@/types/listing.model";
 
 import type { CoworkingHoursState, CoworkingWizardState, DeskTypeSelection } from "../components/coworking-wizard/types";
 import { emptyLocation } from "../components/wizard/shared-location-step";
+import { mapListingImagesFromApi } from "./map-listing-images";
 
 const defaultHours: CoworkingHoursState = {
   weekdayOpen: true,
@@ -104,11 +105,7 @@ export function mapWorkSpaceToCoworkingWizardState(ws: CoworkingModel.WorkSpace)
   }
 
   const amenties = ws.amenties as ListingModel.Amenity[] | undefined;
-  const images: ListingModel.ListingImage[] = (ws.images ?? []).map((row, i) => ({
-    image: row?.image?.id ?? "",
-    url: row?.image?.s3_link ?? "",
-    order: typeof row?.order === "number" ? row.order : i + 1,
-  })).filter((x) => x.image || x.url);
+  const images = mapListingImagesFromApi(ws.images);
 
   return {
     name: String(ws.name ?? "").trim(),

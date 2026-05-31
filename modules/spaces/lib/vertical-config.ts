@@ -23,4 +23,9 @@ export const verticalConfig: Record<
     description: "Managed and traditional office inventory for growing teams.",
     href: "/office-space",
   },
+  coliving: {
+    label: "Coliving & PG",
+    description: "Furnished rooms, PGs, and coliving homes with clear monthly pricing.",
+    href: "/coliving",
+  },
 };

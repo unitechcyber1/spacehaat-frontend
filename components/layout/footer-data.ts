@@ -3,7 +3,7 @@
 export const footerAbout = {
   title: "About SpaceHaat",
   paragraphs: [
-    "SpaceHaat is India's premium workspace discovery platform — built for professionals, startups, and enterprise teams who need more than just a desk. We curate verified coworking spaces, virtual offices, and private office spaces across Gurugram, Noida, Delhi, Bangalore, Mumbai, Hyderabad, Pune, Chennai, and beyond.",
+    "SpaceHaat is India's premium workspace discovery platform — built for professionals, startups, and enterprise teams who need more than just a desk. We curate verified coworking spaces, virtual offices, private office spaces, and coliving/PG homes across Gurugram, Noida, Delhi, Bangalore, Mumbai, Hyderabad, Pune, Chennai, and beyond.",
     "Every listing is operator-verified. Pricing is real. And our expert team is available to shortlist, compare, and negotiate on your behalf — at zero consultation cost.",
   ],
 } as const;
@@ -13,6 +13,7 @@ export const footerBottomKeywordLinks = [
   { label: "Coworking Spaces in India", href: "/coworking" },
   { label: "Virtual Office India", href: "/virtual-office" },
   { label: "Office Space for Rent", href: "/office-space" },
+  { label: "Coliving & PG India", href: "/coliving" },
   { label: "Coworking Space Gurugram", href: "/coworking/gurgaon" },
   { label: "Coworking Space Bangalore", href: "/coworking/bangalore" },
   { label: "Coworking Space Mumbai", href: "/coworking/mumbai" },
@@ -57,6 +58,13 @@ export const footerOfficeSpace = [
   { label: "Office Space for Startups", href: "/office-space" },
 ] as const;
 
+export const footerColiving = [
+  { label: "Coliving & PG in Gurugram", href: "/coliving/gurgaon" },
+  { label: "Coliving in Bangalore", href: "/coliving/bangalore" },
+  { label: "PG and Coliving in Mumbai", href: "/coliving/mumbai" },
+  { label: "Coliving rooms in Hyderabad", href: "/coliving/hyderabad" },
+] as const;
+
 export const footerMeetingRooms = [
   { label: "Meeting Rooms in Gurugram", href: "/coworking/gurgaon" },
   { label: "Meeting Rooms in Noida", href: "/coworking/noida" },
@@ -72,4 +80,4 @@ export const footerCompany = [
 
 /** Kept for backwards compatibility / plain-text reuse. */
 export const footerSeoKeywords =
-  "Coworking Spaces in India | Virtual Office India | Office Space for Rent | Coworking Space Gurugram | Coworking Space Bangalore | Coworking Space Mumbai";
+  "Coworking Spaces in India | Virtual Office India | Office Space for Rent | Coliving PG India | Coworking Space Gurugram | Coworking Space Bangalore | Coworking Space Mumbai";

@@ -1,5 +1,4 @@
 import { Container } from "@/components/ui/container";
-import { CityPageExpertLead } from "@/modules/city-pages/components/city-page-expert-lead";
 import { CityPageFaqSection } from "@/modules/city-pages/components/city-page-faq-section";
 import { CityPageHero } from "@/modules/city-pages/components/city-page-hero";
 import { CityPageLeadCtaBand } from "@/modules/city-pages/components/city-page-lead-cta-band";
@@ -32,11 +31,6 @@ export function CoworkingCityPage({ data }: { data: CityPageData }) {
         description={data.leadCta.description}
         ctaLabel={data.leadCta.ctaLabel}
       />
-      {/* <CityPageExpertLead
-        cityName={data.city.name}
-        submitLabel={data.leadCta.ctaLabel}
-        mxSpaceType="Web Coworking"
-      /> */}
       <CityPageFaqSection pageTitle={data.title} faqs={data.faqs} />
     </>
   );

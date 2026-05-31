@@ -14,7 +14,7 @@ export function VerticalSpaceCard({
   space: Space;
   className?: string;
 }) {
-  if (space.vertical === "office-space") {
+  if (space.vertical === "office-space" || space.vertical === "coliving") {
     return <OfficeSpaceSeedCard space={space} className={className} />;
   }
 

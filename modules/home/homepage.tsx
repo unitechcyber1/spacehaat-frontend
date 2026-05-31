@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CityRail } from "@/modules/home/components/city-rail";
 import { HowItWorksCards } from "@/modules/home/components/how-it-works-cards";
-import { ExpertLeadSection } from "@/modules/home/components/expert-lead-section";
 import { HostListingCtaBanner } from "@/modules/home/components/host-listing-cta-banner";
 import { PremiumVerticalShowcase } from "@/modules/home/components/premium-vertical-showcase";
 import { SpacehaatSelectShowcase } from "@/modules/home/components/spacehaat-select-showcase";
@@ -57,7 +56,7 @@ export function Homepage({ data }: HomepageProps) {
         <PremiumVerticalShowcase />
       </SectionWrapper>
 
-      <SectionWrapper className="bg-[linear-gradient(180deg,rgba(244,248,255,0)_0%,rgba(244,248,255,0.92)_100%)]">
+      <SectionWrapper>
         <SectionHeading
           title="Explore Premium Coworking Spaces"
           action={
@@ -92,7 +91,7 @@ export function Homepage({ data }: HomepageProps) {
           <SpacehaatSelectShowcase />
         </div>
       </SectionWrapper>
-      <SectionWrapper className="bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)]">
+      <SectionWrapper>
         <SectionHeading
           title="How It Works"
         />
@@ -103,9 +102,6 @@ export function Homepage({ data }: HomepageProps) {
         />
       </SectionWrapper>
 
-      <SectionWrapper id="lead-form">
-        <ExpertLeadSection />
-      </SectionWrapper>
       <SectionWrapper>
         <div className="grid gap-4 md:grid-cols-3">
           {data.trustMetrics.map((metric) => (

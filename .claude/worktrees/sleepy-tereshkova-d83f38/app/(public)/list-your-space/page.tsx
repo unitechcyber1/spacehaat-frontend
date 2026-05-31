@@ -503,10 +503,10 @@ export default function ListYourSpacePage() {
                   </a>
                   <span className="mx-1.5 text-ink/40">,</span>
                   <a
-                    href="mailto:hello@spacehaat.com"
+                    href="mailto:info@spacehaat.com"
                     className="font-medium text-ink hover:text-[color:var(--color-brand)]"
                   >
-                    hello@spacehaat.com
+                    info@spacehaat.com
                   </a>
                 </p>
               </div>

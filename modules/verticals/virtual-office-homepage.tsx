@@ -1,7 +1,6 @@
 import { SectionWrapper } from "@/components/sections/section-wrapper";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CityCard } from "@/modules/home/components/city-card";
-import { ExpertLeadSection } from "@/modules/home/components/expert-lead-section";
 import { BenefitCards } from "@/modules/verticals/components/benefit-cards";
 import { VirtualOfficeFitSection } from "@/modules/verticals/components/virtual-office-fit-section";
 import { VirtualOfficeDocumentsProvided } from "@/modules/verticals/components/virtual-office-documents-provided";
@@ -65,14 +64,6 @@ export function VirtualOfficeHomepage({
         <div className="mt-10">
           <BenefitCards items={data.benefits} />
         </div>
-      </SectionWrapper>
-
-      <SectionWrapper id="lead-form">
-        <ExpertLeadSection
-          variant="virtual-office"
-          leadSection={data.leadSection}
-          mxSpaceType="Virtual Office page lead"
-        />
       </SectionWrapper>
 
       <SectionWrapper id="faq" className="bg-[#f9f8f5]">

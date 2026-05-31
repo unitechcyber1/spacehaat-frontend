@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { completeVendorAuthWithoutOtpStep } from "@/lib/listing-vendor-auth-complete";
 import { vendorLogin } from "@/services/listing-api";
 
 export async function POST(request: Request) {
@@ -16,6 +17,11 @@ export async function POST(request: Request) {
   }
 
   const result = await vendorLogin({ phone_number });
+  if (result.ok && result.status < 400) {
+    const sessionRes = await completeVendorAuthWithoutOtpStep(phone_number);
+    if (sessionRes) return sessionRes;
+  }
+
   return NextResponse.json(result.data ?? { message: result.message }, {
     status: result.status,
   });

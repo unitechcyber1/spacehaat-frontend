@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   loadMicroLocationsByCitySpaceType,
   type MicroLocation,
+  type MicroLocationSpaceType,
 } from "@/services/location-api";
 import { cn } from "@/utils/cn";
 
@@ -15,20 +16,23 @@ type PopularLocalitiesRailProps = {
   citySlug: string;
   /** Shown when the API returns nothing or while loading (seed popular locations). */
   fallbackLocations: Array<{ name: string; slug: string }>;
-  /** Route prefix for locality pages (e.g. "/coworking" | "/office-space"). Defaults to "/coworking". */
+  /** Route prefix for locality pages (e.g. "/coworking" | "/coliving"). Defaults to "/coworking". */
   hrefPrefix?: string;
+  /** Catalog API filter — coliving pages use `for_coliving: true`. */
+  spaceType?: MicroLocationSpaceType;
 };
 
 function fallbackToHits(
   fallback: PopularLocalitiesRailProps["fallbackLocations"],
+  spaceType: MicroLocationSpaceType,
 ): MicroLocation[] {
   return fallback.map((loc) => ({
     id: loc.slug,
     icon: "",
     name: loc.name,
-    for_coWorking: true,
+    for_coWorking: spaceType === "coworking",
     for_office: false,
-    for_coLiving: false,
+    for_coLiving: spaceType === "coliving",
     slug: loc.slug,
     key: loc.slug,
   }));
@@ -49,14 +53,18 @@ export function PopularLocalitiesRail({
   citySlug,
   fallbackLocations,
   hrefPrefix = "/coworking",
+  spaceType: spaceTypeProp,
 }: PopularLocalitiesRailProps) {
+  const spaceType: MicroLocationSpaceType =
+    spaceTypeProp ?? (hrefPrefix.startsWith("/coliving") ? "coliving" : "coworking");
+
   const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
   const fallbackRef = useRef(fallbackLocations);
   fallbackRef.current = fallbackLocations;
 
   const [items, setItems] = useState<MicroLocation[]>(() =>
-    fallbackToHits(fallbackLocations),
+    fallbackToHits(fallbackLocations, spaceType),
   );
   const [loading, setLoading] = useState(true);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -75,14 +83,14 @@ export function PopularLocalitiesRail({
     let cancelled = false;
     setLoading(true);
 
-    loadMicroLocationsByCitySpaceType(catalogCityId, true)
+    loadMicroLocationsByCitySpaceType(catalogCityId, spaceType)
       .then((hits) => {
         if (cancelled) return;
         const fb = fallbackRef.current;
-        setItems(hits.length > 0 ? hits : fallbackToHits(fb));
+        setItems(hits.length > 0 ? hits : fallbackToHits(fb, spaceType));
       })
       .catch(() => {
-        if (!cancelled) setItems(fallbackToHits(fallbackRef.current));
+        if (!cancelled) setItems(fallbackToHits(fallbackRef.current, spaceType));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -91,7 +99,7 @@ export function PopularLocalitiesRail({
     return () => {
       cancelled = true;
     };
-  }, [catalogCityId]);
+  }, [catalogCityId, spaceType]);
 
   useEffect(() => {
     if (loading) return;

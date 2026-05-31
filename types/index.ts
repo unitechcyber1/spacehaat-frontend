@@ -1,4 +1,4 @@
-export type SpaceVertical = "coworking" | "virtual-office" | "office-space";
+export type SpaceVertical = "coworking" | "virtual-office" | "office-space" | "coliving";
 
 export type SpacePlan = {
   name: string;
