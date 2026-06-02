@@ -12,8 +12,8 @@ import {
 } from "lucide-react";
 
 import { ContactFormModal } from "@/components/contact/contact-form-modal";
+import { virtualOfficePlanRows } from "@/lib/virtual-office-workspace-plans";
 import { deriveAppCitySlugFromWorkspace } from "@/services/coworking-workspace-mapper";
-import { coworkingPlanCategoryLabel } from "@/services/workspace-plan-pricing";
 import type { CoworkingModel } from "@/types/coworking-workspace.model";
 import { cn } from "@/utils/cn";
 import { formatCurrency } from "@/utils/format";
@@ -35,54 +35,6 @@ function locationSubtitle(workspace: CoworkingModel.WorkSpace): string {
   return city || micro || workspace.location?.address?.trim() || "";
 }
 
-type VirtualOfficePricingSlot = "business-address" | "gst-registration" | "company-registration";
-
-const VIRTUAL_OFFICE_PRICING_ORDER: Array<{ slot: VirtualOfficePricingSlot; label: string }> = [
-  { slot: "business-address", label: "Business Address" },
-  { slot: "gst-registration", label: "GST Registration" },
-  { slot: "company-registration", label: "Company Registration" },
-];
-
-/** Maps API plan category text to one of the three virtual-office pricing rows (or skip). */
-function virtualOfficePlanSlotFromCategoryLabel(rawLabel: string): VirtualOfficePricingSlot | null {
-  const n = rawLabel.trim().toLowerCase().replace(/\s+/g, " ");
-  if (
-    n.includes("company registration") ||
-    n.includes("company incorporation") ||
-    (n.includes("incorporation") && !n.includes("gst"))
-  ) {
-    return "company-registration";
-  }
-  if (n.includes("gst registration") || n.includes("gst address") || /^gst\b/.test(n)) {
-    return "gst-registration";
-  }
-  if (n.includes("business address")) {
-    return "business-address";
-  }
-  return null;
-}
-
-function planTableRows(workspace: CoworkingModel.WorkSpace): { label: string; price: number }[] {
-  const plans = workspace.plans ?? [];
-  const bestPriceBySlot = new Map<VirtualOfficePricingSlot, number>();
-
-  for (const p of plans) {
-    if (p.should_show === false) continue;
-    const wireLabel = coworkingPlanCategoryLabel(p);
-    const slot = virtualOfficePlanSlotFromCategoryLabel(wireLabel);
-    if (!slot) continue;
-    const raw = p.price;
-    const n = typeof raw === "number" ? raw : Number(raw);
-    if (!Number.isFinite(n)) continue;
-    const prev = bestPriceBySlot.get(slot);
-    if (prev === undefined || n < prev) bestPriceBySlot.set(slot, n);
-  }
-
-  return VIRTUAL_OFFICE_PRICING_ORDER.filter(({ slot }) => bestPriceBySlot.has(slot)).map(
-    ({ slot, label }) => ({ label, price: bestPriceBySlot.get(slot)! }),
-  );
-}
-
 function isPopularWorkspace(workspace: CoworkingModel.WorkSpace): boolean {
   const tag = (workspace.spaceTag ?? "").toString().toLowerCase();
   if (tag.includes("popular")) return true;
@@ -98,7 +50,7 @@ export function VirtualOfficeCityListingCard({
   className?: string;
 }) {
   const [contactOpen, setContactOpen] = useState(false);
-  const rows = useMemo(() => planTableRows(workspace), [workspace]);
+  const rows = useMemo(() => virtualOfficePlanRows(workspace), [workspace]);
   const subtitle = useMemo(() => locationSubtitle(workspace), [workspace]);
   const leadTarget = useMemo(
     () => ({

@@ -32,11 +32,11 @@ export function VoCityHero({ citySlug, cityDisplay, catalog, locationNames }: Vo
         <div>
           <VoEyebrow>Virtual Office · {cityDisplay}</VoEyebrow>
           <h1 className="font-display text-[1.65rem] font-bold leading-[1.08] tracking-[-0.03em] text-ink sm:text-[2.65rem]">
-            Virtual Office in {cityDisplay} — Verified Addresses,{" "}
+            Virtual Office in {cityDisplay},{" "}
             <span className="bg-gradient-to-br from-[color:var(--color-brand)] to-[#7AC97D] bg-clip-text text-transparent">
               GST‑Ready Docs
             </span>
-            , Zero Brokerage
+            , Verified Addresses
           </h1>
           <p className="mt-4 max-w-[55ch] text-base leading-relaxed text-[#444] sm:text-lg">
             Compare verified virtual office providers across {locationLine}. Starting{" "}

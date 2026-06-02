@@ -7,6 +7,7 @@ import { VoCityFaqSection } from "@/modules/virtual-office/components/city-page/
 import { VoCityHero } from "@/modules/virtual-office/components/city-page/vo-city-hero";
 import { VoCityLeadProvider } from "@/modules/virtual-office/components/city-page/vo-city-lead-context";
 import { VoCityListingsSection } from "@/modules/virtual-office/components/city-page/vo-city-listings";
+import { VoCityStoriesSection } from "@/modules/virtual-office/components/city-page/vo-city-stories-section";
 import {
   VoCityAudienceSection,
   VoCityDocumentsSection,
@@ -61,6 +62,8 @@ export function VoCityPageExperience({ data, catalog, cityDisplay }: VoCityPageE
           <VoCityDocumentsSection />
 
           <VoCityStatsSection cityDisplay={cityDisplay} />
+
+          <VoCityStoriesSection cityDisplay={cityDisplay} />
 
           <VoCityListingsSection data={data} />
 

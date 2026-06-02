@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { buildMetadataWithCmsSeoFallback } from "@/lib/metadata-with-cms-seo";
+import { buildPgColivingLocationPageParams } from "@/lib/pg-list-priority";
 import { ColivingLocationPage } from "@/modules/coliving/coliving-location-page";
+import { getCatalogCityIdBySlug } from "@/services/catalog-city-id";
 import { getColivingLocationPageContent } from "@/services/coliving-location";
 import { loadPgList } from "@/services/pg-api";
 import { toTitleCase } from "@/utils/format";
@@ -39,14 +41,10 @@ export default async function ColivingLocationRoute({ params }: PageProps) {
 
   const cityName = data.city.name;
   const localityName = data.locationName;
-  const pgList = await loadPgList({
-    city: cityName,
-    locality: localityName,
-    limit: 50,
-    page: 1,
-    sortBy: "rating",
-    orderBy: -1,
-  });
+  const catalogCityId = data.catalogCityId ?? getCatalogCityIdBySlug(data.citySlug) ?? undefined;
+  const pgList = await loadPgList(
+    buildPgColivingLocationPageParams(catalogCityId, cityName, localityName),
+  );
 
   return (
     <ColivingLocationPage

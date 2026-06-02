@@ -518,27 +518,29 @@ export default function ListYourSpacePage() {
               )}
             </div>
 
-            <div className="mx-auto mt-4 flex w-full max-w-md items-start gap-4 rounded-2xl border border-ink/8 bg-white/95 p-5 shadow-[0_8px_28px_rgba(0,0,0,0.05)] sm:p-6">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[color:var(--color-brand-soft)] text-[color:var(--color-brand)]">
-                <Headset className="h-6 w-6" />
+            <div className="mx-auto mt-4 flex w-full max-w-md items-center gap-3 rounded-2xl border border-ink/8 bg-white/95 p-4 shadow-[0_8px_28px_rgba(0,0,0,0.05)] sm:items-start sm:gap-4 sm:p-6">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[color:var(--color-brand-soft)] text-[color:var(--color-brand)] sm:h-12 sm:w-12">
+                <Headset className="h-5 w-5 sm:h-6 sm:w-6" />
               </span>
-              <div className="min-w-0">
-                <h3 className="text-base font-semibold text-ink">Need help listing?</h3>
-                <p className="mt-1 break-words text-sm leading-relaxed text-ink/70">
+              <div className="min-w-0 flex-1">
+                <h3 className="text-sm font-semibold text-ink sm:text-base">Need help listing?</h3>
+                <div className="mt-1.5 flex flex-col gap-1 text-sm sm:mt-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-1 sm:gap-y-0.5">
                   <a
                     href="tel:+917017333425"
-                    className="font-medium text-ink hover:text-[color:var(--color-brand)]"
+                    className="w-fit font-medium leading-snug text-ink whitespace-nowrap hover:text-[color:var(--color-brand)]"
                   >
                     +91 701 733 3425
                   </a>
-                  <span className="mx-1.5 text-ink/40">,</span>
+                  <span className="hidden text-ink/40 sm:inline" aria-hidden>
+                    ,
+                  </span>
                   <a
                     href="mailto:info@spacehaat.com"
-                    className="font-medium text-ink hover:text-[color:var(--color-brand)]"
+                    className="font-medium leading-snug text-ink/80 break-all hover:text-[color:var(--color-brand)] sm:break-normal"
                   >
                     info@spacehaat.com
                   </a>
-                </p>
+                </div>
               </div>
             </div>
 

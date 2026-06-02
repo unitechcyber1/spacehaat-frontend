@@ -1,6 +1,6 @@
-import Image from "next/image";
 import type { ComponentType } from "react";
 
+import { RemoteImage } from "@/components/ui/remote-image";
 import type { HowItWorksStep } from "@/types";
 import { cn } from "@/utils/cn";
 
@@ -12,87 +12,75 @@ type HowItWorksCardsProps = {
 
 export function HowItWorksCards({ steps, icons, className }: HowItWorksCardsProps) {
   return (
-    <div className={cn("grid gap-5 sm:gap-6 lg:grid-cols-3 lg:gap-8", className)}>
+    <div
+      className={cn(
+        "no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1",
+        "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+        "max-lg:-mr-4 max-lg:pr-4",
+        "sm:max-lg:-mr-6 sm:max-lg:pr-6",
+        "sm:gap-3.5",
+        "lg:mr-0 lg:grid lg:snap-none lg:grid-cols-3 lg:gap-8 lg:overflow-visible lg:pr-0 lg:pb-0",
+        className,
+      )}
+      role="list"
+    >
       {steps.map((step, index) => {
-          const Icon = icons[index % icons.length];
-          const hasImage = Boolean(step.imageSrc);
+        const Icon = icons[index % icons.length];
+        const hasImage = Boolean(step.imageSrc);
 
         return (
-            <article
-              key={step.id}
-              tabIndex={hasImage ? 0 : undefined}
-              className={cn(
-                "group relative flex min-h-[22rem] flex-col overflow-hidden rounded-[1rem] p-8 sm:min-h-[24rem]",
-                "bg-[#F9F8F4] shadow-[0_1px_0_rgba(15,23,42,0.06)]",
-                "transition-[box-shadow,transform] duration-300",
-                "hover:shadow-[0_24px_60px_rgba(15,23,42,0.12)]",
-                "focus-within:shadow-[0_24px_60px_rgba(15,23,42,0.12)]",
-                hasImage && "outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-brand)] focus-visible:ring-offset-2",
-              )}
-            >
-              {/* Hover: full-bleed image + bottom-weighted overlay (reference layout) */}
-              {hasImage && step.imageSrc ? (
+          <article
+            key={step.id}
+            role="listitem"
+            className={cn(
+              "relative flex w-[min(15.5rem,78vw)] shrink-0 snap-start flex-col overflow-hidden rounded-xl",
+              "h-[14.75rem] sm:h-[15.5rem]",
+              "lg:h-auto lg:w-auto lg:min-h-[20rem] lg:rounded-[1rem]",
+              !hasImage && "bg-[#F9F8F4] shadow-[0_1px_0_rgba(15,23,42,0.06)]",
+              hasImage && "shadow-[0_10px_32px_rgba(15,23,42,0.14)]",
+            )}
+          >
+            {hasImage && step.imageSrc ? (
+              <>
+                <RemoteImage
+                  src={step.imageSrc}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 78vw, 33vw"
+                />
                 <div
-                  className={cn(
-                    "pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-500 ease-out",
-                    "group-hover:opacity-100 group-focus-within:opacity-100",
-                  )}
+                  className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.88)_0%,rgba(0,0,0,0.5)_38%,rgba(0,0,0,0.12)_68%,transparent_100%)]"
                   aria-hidden
-                >
-                  <Image
-                    src={step.imageSrc}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                  <div
-                    className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.82)_0%,rgba(0,0,0,0.45)_42%,rgba(0,0,0,0.22)_72%,rgba(0,0,0,0.12)_100%)]"
-                    aria-hidden
-                  />
-                </div>
-              ) : null}
+                />
+              </>
+            ) : null}
 
-              <div className="relative z-10 flex min-h-0 flex-1 flex-col">
-                <div
+            <div className="relative z-10 flex min-h-0 flex-1 flex-col p-4 sm:p-5 lg:p-7">
+              <div className={cn(hasImage ? "text-white" : "text-ink")}>
+                <Icon className="h-6 w-6 stroke-[1.5] lg:h-8 lg:w-8" aria-hidden />
+              </div>
+
+              <div className="mt-auto space-y-1 pt-3 lg:space-y-2 lg:pt-5">
+                <h3
                   className={cn(
-                    "text-ink transition-colors duration-300",
-                    hasImage && "group-hover:text-white group-focus-within:text-white",
+                    "text-[0.9375rem] font-bold leading-snug tracking-[-0.02em] lg:text-lg xl:text-xl",
+                    hasImage ? "text-white" : "text-ink",
                   )}
                 >
-                  <Icon
-                    className="h-8 w-8 stroke-[1.5] sm:h-9 sm:w-9"
-                    aria-hidden
-                  />
-                </div>
-
-                {/* Default: breathing room; hover: image shows behind full card */}
-                <div className="min-h-[9rem] flex-1 sm:min-h-[10rem]" aria-hidden />
-
-                <div className="mt-auto space-y-2">
-                  <h3
-                    className={cn(
-                      "text-lg font-bold leading-snug tracking-[-0.02em] transition-colors duration-300 sm:text-xl",
-                      "text-ink",
-                      hasImage &&
-                        "group-hover:text-white group-focus-within:text-white",
-                    )}
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    className={cn(
-                      "text-sm leading-relaxed transition-colors duration-300 sm:text-[0.9375rem]",
-                      "text-muted",
-                      hasImage &&
-                        "group-hover:text-white/80 group-focus-within:text-white/80",
-                    )}
-                  >
-                    {step.description}
-                  </p>
-                </div>
+                  {step.title}
+                </h3>
+                <p
+                  className={cn(
+                    "line-clamp-3 text-xs leading-relaxed lg:line-clamp-none lg:text-sm lg:leading-relaxed",
+                    hasImage ? "text-white/85" : "text-muted",
+                  )}
+                >
+                  {step.description}
+                </p>
               </div>
-            </article>
+            </div>
+          </article>
         );
       })}
     </div>

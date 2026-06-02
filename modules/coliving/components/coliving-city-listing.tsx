@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState, useTransition } from "react"
 import { Button } from "@/components/ui/button";
 import { ColivingCityFiltersModal } from "@/modules/coliving/components/coliving-city-filters-modal";
 import { ColivingCityListingToolbar } from "@/modules/coliving/components/coliving-city-listing-toolbar";
+import { buildPgColivingCityPageParams } from "@/lib/pg-list-priority";
 import { pgListingReactKey } from "@/lib/pg-slug";
 import { ColivingListingCard } from "@/modules/coliving/components/coliving-listing-card";
 import {
@@ -66,10 +67,13 @@ export function ColivingCityListing({
       startTransition(async () => {
         setError(null);
         try {
-          const res = await fetchPgList({
-            ...filtersToParams({ ...nextFilters, city: cityName }, nextPage, PAGE_SIZE),
-            city: cityName,
-          });
+          const res = await fetchPgList(
+            buildPgColivingCityPageParams(
+              data.catalogCityId,
+              cityName,
+              filtersToParams({ ...nextFilters, city: cityName }, nextPage, PAGE_SIZE),
+            ),
+          );
           setItems(res.data);
           setTotal(res.totalRecords);
           setPage(nextPage);
@@ -81,7 +85,7 @@ export function ColivingCityListing({
         }
       });
     },
-    [cityName, data.city.slug, router],
+    [cityName, data.catalogCityId, data.city.slug, router],
   );
 
   useEffect(() => {

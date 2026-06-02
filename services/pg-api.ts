@@ -1,10 +1,15 @@
 /**
- * `GET /api/user/pgs` — list
+ * `GET /api/user/pgs` — list (+ `x-client-key`)
  * `GET /api/user/pgs/:findKey` — detail by Mongo id, pg_id, or slug
+ *
+ * Priority listings (featured first, then full list): set `priorityType` + `priorityCity`
+ * for city/micro-location pages — see {@link buildPgColivingCityPageParams} and
+ * {@link buildPgColivingLocationPageParams} in `@/lib/pg-list-priority`.
  */
 
 import axios, { type AxiosInstance } from "axios";
 
+import { isPgPriorityForType, withPgOverallPriority } from "@/lib/pg-list-priority";
 import { resolvePgListingSlug, slugifyPgName } from "@/lib/pg-slug";
 import { toAbsoluteUrl } from "@/lib/sitemap-public-urls";
 import { canonicalCoworkingCitySlug } from "@/services/catalog-city-id";
@@ -89,6 +94,31 @@ export async function fetchPgDetail(findKey: string): Promise<PgDetailResponse |
   } catch (err: unknown) {
     if (axios.isAxiosError(err) && err.response?.status === 404) return null;
     throw err;
+  }
+}
+
+/**
+ * Coliving homepage featured rail — `priorityType=overall` (featured PGs first).
+ * Prefers rows with `priority.overall.is_active`; falls back to the top of the sorted list.
+ */
+export async function loadColivingHomepageFeaturedPgs(limit = 8): Promise<PgDetail[]> {
+  const cap = Math.min(Math.max(limit, 1), 20);
+  if (!isCoworkingUserApiProxyEnabled()) return [];
+
+  try {
+    const res = await fetchPgList(
+      withPgOverallPriority({
+        limit: Math.max(cap, 12),
+        page: 1,
+        sortBy: "added_on",
+        orderBy: -1,
+      }),
+    );
+    const priorityRows = res.data.filter((pg) => isPgPriorityForType(pg, "overall"));
+    const list = priorityRows.length > 0 ? priorityRows : res.data;
+    return list.slice(0, cap);
+  } catch {
+    return [];
   }
 }
 

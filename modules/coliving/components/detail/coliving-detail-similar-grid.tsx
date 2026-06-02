@@ -88,7 +88,7 @@ export function ColivingDetailSimilarGrid({
           <div className="min-w-0">
             <ColivingEyebrow>Nearby in {locality}</ColivingEyebrow>
             <h2 className="mt-2 font-display text-[clamp(1.75rem,3.6vw,2.625rem)] font-semibold leading-[1.05] tracking-tight text-ink">
-              Similar coliving residences <ColivingAccent>to compare.</ColivingAccent>
+              Similar coliving residences <ColivingAccent>to compare</ColivingAccent>
             </h2>
           </div>
           <Link

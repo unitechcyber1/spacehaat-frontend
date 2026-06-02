@@ -1,10 +1,32 @@
 import { extractPgCoordinates, extractPgNearbyPlaces } from "@/lib/pg-nearby";
 import { resolvePgListingSlug, slugifyPgName } from "@/lib/pg-slug";
 import type { Space } from "@/types";
-import type { PgDetail, PgDetailResponse, PgImage } from "@/types/pg.model";
+import type { PgDetail, PgDetailResponse, PgImage, PgPriorityMap } from "@/types/pg.model";
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return v != null && typeof v === "object" && !Array.isArray(v);
+}
+
+function normalizePgPriority(raw: unknown): PgPriorityMap | undefined {
+  if (!isRecord(raw)) return undefined;
+  const out: PgPriorityMap = {};
+  for (const key of ["overall", "location", "micro_location"] as const) {
+    const slot = raw[key];
+    if (!isRecord(slot)) continue;
+    const is_active = slot.is_active === true || slot.is_active === "true";
+    const orderRaw = slot.order;
+    const order =
+      typeof orderRaw === "number" && Number.isFinite(orderRaw)
+        ? orderRaw
+        : typeof orderRaw === "string"
+          ? Number.parseInt(orderRaw, 10)
+          : undefined;
+    out[key] = {
+      is_active,
+      ...(order != null && Number.isFinite(order) ? { order } : {}),
+    };
+  }
+  return Object.keys(out).length ? out : undefined;
 }
 
 function isMongoObjectId(value: string): boolean {
@@ -63,6 +85,7 @@ export function normalizePgListItem(raw: unknown): PgDetail | null {
   const pg = merged as unknown as PgDetail;
   const nearbyPlaces = extractPgNearbyPlaces(merged);
   const coordinates = extractPgCoordinates(merged) ?? pg.coordinates;
+  const priority = normalizePgPriority(merged.priority) ?? pg.priority;
 
   return {
     ...pg,
@@ -70,6 +93,7 @@ export function normalizePgListItem(raw: unknown): PgDetail | null {
     slug: slug ?? pg.slug?.trim(),
     coordinates,
     nearbyPlaces: nearbyPlaces.length ? nearbyPlaces : pg.nearbyPlaces,
+    priority,
   };
 }
 

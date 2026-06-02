@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { listCities } from "@/services/mock-db";
 import { verticals } from "@/utils/constants";
-import { cn } from "@/utils/cn";
 
 const DEFAULT_FOOTER_LEAD =
   "A premium discovery platform to compare coworking spaces, virtual offices, and office spaces across India.";
@@ -52,16 +51,6 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-5 text-[0.9375rem] leading-relaxed text-slate-600">{DEFAULT_FOOTER_LEAD}</p>
-            <Link
-              href="/#lead-form"
-              className={cn(
-                "mt-7 inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition",
-                "bg-[color:var(--color-brand)] text-white shadow-[0_8px_24px_-4px_rgba(76,175,80,0.45)]",
-                "hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-4px_rgba(46,125,50,0.4)]",
-              )}
-            >
-              Get Free Consultation
-            </Link>
           </div>
 
           <nav aria-label="Services">

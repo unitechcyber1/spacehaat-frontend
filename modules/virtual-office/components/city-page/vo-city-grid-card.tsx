@@ -6,8 +6,8 @@ import { useMemo, useState } from "react";
 import { MapPin } from "lucide-react";
 
 import { ContactFormModal } from "@/components/contact/contact-form-modal";
+import { virtualOfficePlanRows } from "@/lib/virtual-office-workspace-plans";
 import { deriveAppCitySlugFromWorkspace } from "@/services/coworking-workspace-mapper";
-import { coworkingPlanCategoryLabel } from "@/services/workspace-plan-pricing";
 import type { CoworkingModel } from "@/types/coworking-workspace.model";
 import { formatCurrency } from "@/utils/format";
 import { cn } from "@/utils/cn";
@@ -21,20 +21,6 @@ function cardImage(workspace: CoworkingModel.WorkSpace): string {
   return workspace.images?.[0]?.image?.s3_link?.trim() || FALLBACK;
 }
 
-function planLines(workspace: CoworkingModel.WorkSpace): string[] {
-  const lines: string[] = [];
-  for (const p of workspace.plans ?? []) {
-    if (p.should_show === false) continue;
-    const label = coworkingPlanCategoryLabel(p);
-    const raw = p.price;
-    const n = typeof raw === "number" ? raw : Number(raw);
-    if (!Number.isFinite(n)) continue;
-    lines.push(`${label} ${formatCurrency(n)}/mo`);
-    if (lines.length >= 2) break;
-  }
-  return lines;
-}
-
 export function VirtualOfficeCityGridCard({
   workspace,
   className,
@@ -45,7 +31,7 @@ export function VirtualOfficeCityGridCard({
   const [open, setOpen] = useState(false);
   const href = `/virtual-office/${workspace.slug}`;
   const micro = workspace.location?.micro_location?.name?.trim() ?? "";
-  const plans = useMemo(() => planLines(workspace), [workspace]);
+  const planRows = useMemo(() => virtualOfficePlanRows(workspace), [workspace]);
 
   return (
     <>
@@ -75,10 +61,12 @@ export function VirtualOfficeCityGridCard({
               ) : null}
             </div>
           </div>
-          {plans.length > 0 ? (
+          {planRows.length > 0 ? (
             <div className="rounded-lg bg-[#FAF7F2] px-3 py-2 text-[12.5px] leading-relaxed text-[#444] sm:py-2.5 sm:text-[13px]">
-              {plans.map((line) => (
-                <p key={line}>{line}</p>
+              {planRows.map((row) => (
+                <p key={row.label}>
+                  {row.label} {formatCurrency(row.price)}/mo
+                </p>
               ))}
             </div>
           ) : null}

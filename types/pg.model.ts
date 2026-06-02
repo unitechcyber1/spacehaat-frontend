@@ -57,9 +57,20 @@ export interface PgNearbyPlace {
   dist: string;
 }
 
+export type PgPriorityType = "overall" | "location" | "micro_location";
+
+export type PgPrioritySlot = {
+  is_active?: boolean;
+  order?: number;
+};
+
+export type PgPriorityMap = Partial<Record<PgPriorityType, PgPrioritySlot>>;
+
 export interface PgDetail {
   /** Public URL segment for `/coliving/[slug]` — from API when present. */
   slug?: string;
+  /** When set, marks featured slots from `GET /api/user/pgs` priority ordering. */
+  priority?: PgPriorityMap;
   name: string;
   city: string;
   locality: string;
@@ -125,4 +136,16 @@ export type PgListParams = {
   skip?: number;
   sortBy?: string;
   orderBy?: 1 | -1;
+  /** `overall` | `location` | `micro_location` — featured PGs first when set. */
+  priorityType?: PgPriorityType;
+  priority_type?: PgPriorityType;
+  /** Catalog city Mongo `_id`; required for `location` / `micro_location`. */
+  priorityCity?: string;
+  priority_city?: string;
+  /** Virtual-office city priority rail (not coliving). */
+  virtualPriority?: boolean;
+  virtual_priority?: boolean;
+  /** When true, return only active priority PGs for the type. */
+  priorityOnly?: boolean;
+  priority_only?: boolean;
 };
