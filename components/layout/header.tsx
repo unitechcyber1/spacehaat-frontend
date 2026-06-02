@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ContactFormModal } from "@/components/contact/contact-form-modal";
+import { MobileMenuDrawer } from "@/components/layout/mobile-menu-drawer";
 import { SearchBar } from "@/modules/home/components/search-bar";
 import { SearchOption } from "@/types";
 import { cn } from "@/utils/cn";
@@ -255,56 +256,12 @@ export function Header() {
         />
       </div>
 
-      {isMobileMenuOpen ? (
-        <>
-          <button
-            type="button"
-            aria-label="Close menu"
-            className="fixed inset-0 top-20 z-40 bg-black/45 backdrop-blur-[2px] lg:hidden"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-          <div
-            id="site-mobile-menu"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Main navigation"
-            className={cn(
-              "fixed inset-x-0 top-20 z-50 max-h-[min(32rem,calc(100vh-5rem))] overflow-y-auto border-b shadow-[0_24px_60px_rgba(15,23,42,0.12)] lg:hidden",
-              useSolidHeader ? "border-slate-200/80 bg-white" : "border-white/10 bg-[#0f1419]/96 text-white backdrop-blur-xl",
-            )}
-          >
-            <nav className="flex flex-col gap-1 px-4 py-4">
-              {verticals.map((vertical) => (
-                <Link
-                  key={vertical.key}
-                  href={vertical.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={cn(
-                    "rounded-xl px-4 py-3.5 text-base font-medium transition",
-                    useSolidHeader
-                      ? "text-ink hover:bg-slate-100"
-                      : "text-[#f5efe3] hover:bg-white/10",
-                  )}
-                >
-                  {vertical.label}
-                </Link>
-              ))}
-              <Link
-                href={listYourSpaceHref}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={cn(
-                  "mt-2 rounded-xl px-4 py-3.5 text-center text-base font-semibold transition",
-                  useSolidHeader
-                    ? "bg-slate-950 text-white hover:bg-slate-800"
-                    : "border border-[#c9a962]/45 bg-[rgba(32,26,20,0.55)] text-[#faf6ee] hover:bg-[rgba(40,32,26,0.65)]",
-                )}
-              >
-                List Your Space
-              </Link>
-            </nav>
-          </div>
-        </>
-      ) : null}
+      <MobileMenuDrawer
+        open={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+        listYourSpaceHref={listYourSpaceHref}
+        pathname={pathname ?? "/"}
+      />
 
       <div className="lg:hidden">
         <ContactFormModal

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { buildMetadataWithCmsSeoFallback } from "@/lib/metadata-with-cms-seo";
+import { buildPgColivingCityPageParams } from "@/lib/pg-list-priority";
 import { buildPgListParamsFromSearchParams } from "@/lib/pg-list-params";
 import { ColivingCityPage } from "@/modules/coliving/coliving-city-page";
 import { ColivingDetailPage } from "@/modules/coliving/coliving-detail-page";
@@ -51,8 +52,11 @@ export default async function ColivingSegmentPage({ params, searchParams }: Page
 
   const cityData = await getVerticalCityPageContent("coliving", segment);
   if (cityData) {
-    const listParams = buildPgListParamsFromSearchParams(sp);
-    listParams.city = cityData.city.name;
+    const listParams = buildPgColivingCityPageParams(
+      cityData.catalogCityId,
+      cityData.city.name,
+      buildPgListParamsFromSearchParams(sp),
+    );
     const pgList = await loadPgList(listParams);
 
     return (

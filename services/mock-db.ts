@@ -1745,7 +1745,7 @@ export function buildLocationPageDataFromSpaces(
     vertical,
     city,
     catalogCityId:
-      vertical === "coworking" && coworkingCatalogCityId
+      (vertical === "coworking" || vertical === "coliving") && coworkingCatalogCityId
         ? coworkingCatalogCityId
         : undefined,
     workspaceMicroLocationId:

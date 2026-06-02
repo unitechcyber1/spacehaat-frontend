@@ -150,7 +150,7 @@ export function ColivingDetailMain({ pg }: ColivingDetailMainProps) {
 
         <div className="mt-8 max-w-3xl">
           <h2 className="font-display text-[1.65rem] font-semibold leading-[1.12] tracking-tight text-ink sm:text-[1.85rem] lg:text-[2.125rem]">
-            A quiet {pg.type.toLowerCase()} in <ColivingAccent>{pg.locality}</ColivingAccent>.
+            A quiet {pg.type.toLowerCase()} in <ColivingAccent>{pg.locality}</ColivingAccent>
           </h2>
           <p className="mt-4 text-[0.9375rem] leading-relaxed text-ink/90 sm:text-base">{pg.description}</p>
         </div>
@@ -179,7 +179,7 @@ export function ColivingDetailMain({ pg }: ColivingDetailMainProps) {
         <ColivingEyebrow>Pick your room</ColivingEyebrow>
         <ColivingSectionTitle>
           {pg.rooms.length} room type{pg.rooms.length !== 1 ? "s" : ""}.{" "}
-          <ColivingAccent>Same residence.</ColivingAccent>
+          <ColivingAccent>Same residence</ColivingAccent>
         </ColivingSectionTitle>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-[0.9375rem]">
           Every room comes fully furnished with a single bed, mattress, study desk, AC, hot water and a personal
@@ -204,7 +204,7 @@ export function ColivingDetailMain({ pg }: ColivingDetailMainProps) {
       <ColivingBlock id="amenities">
         <ColivingEyebrow>What&apos;s included</ColivingEyebrow>
         <ColivingSectionTitle>
-          Amenities, on the <ColivingAccent>house.</ColivingAccent>
+          Amenities, on the <ColivingAccent>house</ColivingAccent>
         </ColivingSectionTitle>
         <ColivingAmenityTabs active={amenTab} onChange={setAmenTab} />
         <ColivingAmenityGrid items={amenityItems} muted={amenTab === 2} />
@@ -215,7 +215,7 @@ export function ColivingDetailMain({ pg }: ColivingDetailMainProps) {
         <ColivingSectionTitle>
           {pg.food.included ? (
             <>
-              Three meals a day, <ColivingAccent>freshly cooked.</ColivingAccent>
+              Three meals a day, <ColivingAccent>freshly cooked</ColivingAccent>
             </>
           ) : (
             "Meals not included"
@@ -237,7 +237,7 @@ export function ColivingDetailMain({ pg }: ColivingDetailMainProps) {
       <ColivingBlock id="rules">
         <ColivingEyebrow>Good to know</ColivingEyebrow>
         <ColivingSectionTitle>
-          House rules &amp; <ColivingAccent>policies.</ColivingAccent>
+          House rules &amp; <ColivingAccent>policies</ColivingAccent>
         </ColivingSectionTitle>
         <p className="mt-3 max-w-2xl text-sm text-muted">
           Transparent terms before you move in. No surprise clauses on move-out day.
@@ -252,7 +252,7 @@ export function ColivingDetailMain({ pg }: ColivingDetailMainProps) {
       <ColivingBlock id="location">
         <ColivingEyebrow>Where you&apos;ll live</ColivingEyebrow>
         <ColivingSectionTitle>
-          {pg.locality} · <ColivingAccent>{pg.city}.</ColivingAccent>
+          {pg.locality} · <ColivingAccent>{pg.city}</ColivingAccent>
         </ColivingSectionTitle>
         <ColivingMapBlock
           name={pg.name}
@@ -280,7 +280,7 @@ export function ColivingDetailMain({ pg }: ColivingDetailMainProps) {
               {pg.reviews.length !== 1 ? "s" : ""}.
             </>
           ) : (
-            "No reviews yet."
+            "No reviews yet"
           )}
         </ColivingSectionTitle>
         {pg.reviews.length > 0 ? (

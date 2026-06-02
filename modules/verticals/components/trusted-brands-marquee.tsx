@@ -13,14 +13,14 @@ type TrustedBrandsMarqueeProps = {
 
 function BrandLogoCard({ brand }: { brand: Brand }) {
   const inner = (
-    <div className="relative h-9 w-[5.5rem] sm:h-[4.85rem] sm:w-[11.5rem] md:h-[5.5rem] md:w-[12.75rem]">
+    <div className="relative h-14 w-[10.5rem] sm:h-[4.85rem] sm:w-[11.5rem] md:h-[5.5rem] md:w-[12.75rem]">
       {brand.image ? (
         <Image
           src={brand.image}
           alt=""
           fill
           className="object-contain object-center"
-          sizes="(max-width: 640px) 88px, 208px"
+          sizes="(max-width: 640px) 168px, 208px"
         />
       ) : (
         <span className="sr-only">{brand.name}</span>
@@ -48,7 +48,7 @@ function BrandLogoCard({ brand }: { brand: Brand }) {
 function BrandRow({ brands, "aria-hidden": ariaHidden }: { brands: Brand[]; "aria-hidden"?: boolean }) {
   return (
     <div
-      className="flex shrink-0 items-center gap-6 pr-6 sm:gap-8 sm:pr-8 md:gap-10 md:pr-10"
+      className="flex shrink-0 items-center gap-8 pr-8 sm:gap-8 sm:pr-8 md:gap-10 md:pr-10"
       aria-hidden={ariaHidden}
     >
       {brands.map((brand) => (
@@ -64,7 +64,7 @@ export function TrustedBrandsMarquee({ brands, className }: TrustedBrandsMarquee
   return (
     <div
       className={cn(
-        "trusted-brands-marquee overflow-hidden border-y border-slate-200/90 bg-page py-5 sm:py-10",
+        "trusted-brands-marquee overflow-hidden border-y border-slate-200/90 bg-page py-7 sm:py-10",
         className,
       )}
     >

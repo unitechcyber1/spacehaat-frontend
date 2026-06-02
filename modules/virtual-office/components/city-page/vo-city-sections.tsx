@@ -18,6 +18,7 @@ import {
 } from "@/modules/virtual-office/components/city-page/vo-city-ui";
 import { VoCityExplainerDiagram } from "@/modules/virtual-office/components/city-page/vo-city-explainer-diagram";
 import { VoLeadCtaButton } from "@/modules/virtual-office/components/city-page/vo-lead-cta-button";
+import { cn } from "@/utils/cn";
 
 type VoCitySectionsProps = {
   citySlug: string;
@@ -244,7 +245,14 @@ export function VoCityLocationsSection({ cityDisplay, catalog }: VoCitySectionsP
         Every listed address is in a registered commercial building — pre‑vetted for GST acceptance.
       </VoSectionSub>
 
-      <div className="vo-loc-scroll mt-6 flex gap-2.5 overflow-x-auto pb-2 lg:mt-8 lg:gap-5 lg:grid lg:grid-cols-2 lg:overflow-visible lg:pb-0">
+      <div
+        className={cn(
+          "vo-loc-scroll mt-6 flex items-stretch snap-x snap-mandatory gap-3 overflow-x-auto pb-2",
+          "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+          "max-lg:-mr-4 max-lg:pr-4 sm:max-lg:-mr-6 sm:max-lg:pr-6",
+          "lg:mt-8 lg:snap-none lg:grid lg:grid-cols-2 lg:gap-5 lg:overflow-visible lg:pr-0 lg:pb-0",
+        )}
+      >
         {locations.map((loc, index) => {
           const badge = locationBadgeAt(index);
           const wide = index === locations.length - 1 && locations.length % 2 === 1;
@@ -327,17 +335,24 @@ export function VoCityAudienceSection({ cityDisplay }: { cityDisplay: string }) 
     <VoSection>
       <VoEyebrow>Who it&apos;s for</VoEyebrow>
       <VoSectionTitle>Who Gets a Virtual Office in {cityDisplay}?</VoSectionTitle>
-      <div className="vo-aud-scroll mt-6 flex gap-2.5 overflow-x-auto pb-2 lg:mt-8 lg:gap-4 lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0">
+      <div
+        className={cn(
+          "vo-aud-scroll mt-6 flex items-stretch snap-x snap-mandatory gap-3 overflow-x-auto pb-2",
+          "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+          "max-lg:-mr-4 max-lg:pr-4 sm:max-lg:-mr-6 sm:max-lg:pr-6",
+          "lg:mt-8 lg:snap-none lg:grid lg:grid-cols-4 lg:gap-4 lg:overflow-visible lg:pr-0 lg:pb-0",
+        )}
+      >
         {items.map((item) => (
           <div
             key={item.title}
-            className="flex min-w-[54%] shrink-0 snap-start flex-col gap-2 rounded-2xl border border-[#EAE7E0] bg-white p-3.5 sm:min-w-[48%] sm:p-5 lg:min-w-0"
+            className="flex h-full w-[88%] max-w-[88%] shrink-0 snap-start flex-col gap-2 rounded-2xl border border-[#EAE7E0] bg-white p-3.5 sm:p-5 lg:w-auto lg:max-w-none"
           >
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#EDF7EE] text-[20px] sm:h-11 sm:w-11 sm:text-[22px]">
               {item.icon}
             </div>
             <h3 className="text-[15px] font-semibold text-ink sm:text-[17px]">{item.title}</h3>
-            <p className="text-[13px] leading-relaxed text-[#555] sm:text-sm">
+            <p className="line-clamp-3 text-[13px] leading-relaxed text-[#555] sm:text-sm">
               Establish a credible {cityDisplay} presence without a long-term lease.
             </p>
             <span className="mt-auto self-start rounded-md bg-[#EDF7EE] px-2.5 py-1 text-xs font-semibold text-[color:var(--color-brand)]">
@@ -380,11 +395,18 @@ export function VoCityDocumentsSection() {
         The GST department requires specific documents. Here&apos;s what you get — and what each one does.
       </VoSectionSub>
 
-      <div className="vo-docs-scroll mt-6 flex gap-2.5 overflow-x-auto pb-2 lg:mt-8 lg:gap-4 lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0">
+      <div
+        className={cn(
+          "vo-docs-scroll mt-6 flex items-stretch snap-x snap-mandatory gap-3 overflow-x-auto pb-2",
+          "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+          "max-lg:-mr-4 max-lg:pr-4 sm:max-lg:-mr-6 sm:max-lg:pr-6",
+          "lg:mt-8 lg:snap-none lg:grid lg:grid-cols-3 lg:gap-4 lg:overflow-visible lg:pr-0 lg:pb-0",
+        )}
+      >
         {docs.map((doc) => (
           <article
             key={doc.title}
-            className="flex min-w-[56%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-[#EAE7E0] bg-white sm:min-w-[50%] lg:min-w-0"
+            className="flex h-full w-[88%] max-w-[88%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-[#EAE7E0] bg-white lg:w-auto lg:max-w-none"
           >
             <div className="relative border-b border-[#EAE7E0] bg-[#FCFBF7] p-4 sm:p-5">
               <h4 className="text-[15px] font-bold uppercase tracking-wide text-ink">{doc.paper}</h4>
@@ -401,7 +423,7 @@ export function VoCityDocumentsSection() {
             </div>
             <div className="flex flex-1 flex-col gap-2 p-4 sm:p-5">
               <h3 className="text-[15px] font-bold text-ink sm:text-[17px]">{doc.title}</h3>
-              <p className="text-[13px] leading-relaxed text-[#555] sm:text-sm">{doc.body}</p>
+              <p className="line-clamp-3 text-[13px] leading-relaxed text-[#555] sm:text-sm">{doc.body}</p>
               <span className="mt-auto self-start rounded-md bg-[#EDF7EE] px-2.5 py-1 text-xs font-semibold text-[color:var(--color-brand)]">
                 {doc.tag}
               </span>
@@ -434,18 +456,6 @@ export function VoCityStatsSection({ cityDisplay }: { cityDisplay: string }) {
               </p>
               <p className="mt-2 text-sm font-medium text-[#3a2a23]">{s.l}</p>
             </div>
-          ))}
-        </div>
-        <div className="mt-9 grid gap-4 border-t border-black/10 pt-8 sm:grid-cols-3">
-          {[
-            { q: `"Got my ${cityDisplay} GSTIN in 6 days. Docs were perfect — zero rejection."`, a: "E‑commerce founder" },
-            { q: `"Moved to a premium address in 3 days. Clients noticed immediately."`, a: "Independent Consultant" },
-            { q: `"SpaceHaat shortlisted 3 options. We picked the best fit quickly."`, a: "SaaS Startup" },
-          ].map((t) => (
-            <blockquote key={t.a} className="text-sm italic leading-relaxed text-[#3a2a23]">
-              <p>{t.q}</p>
-              <footer className="mt-2 text-[13px] font-semibold not-italic text-[#7a5a4d]">— {t.a}</footer>
-            </blockquote>
           ))}
         </div>
       </div>
