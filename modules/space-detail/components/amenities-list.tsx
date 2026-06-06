@@ -105,7 +105,7 @@ function normalizeAmenityKey(name: string): string {
     .replace(/\s+/g, " ");
 }
 
-function pickAmenityIcon(name: string): AmenityIcon {
+export function pickAmenityIcon(name: string): AmenityIcon {
   const key = normalizeAmenityKey(name);
   if (!key) return Armchair;
 

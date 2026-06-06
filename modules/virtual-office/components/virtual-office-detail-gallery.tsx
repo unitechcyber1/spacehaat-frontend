@@ -1,5 +1,5 @@
 import { Container } from "@/components/ui/container";
-import { ImageGallery } from "@/modules/space-detail/components/image-gallery";
+import { SpaceDetailGallery } from "@/modules/space-detail/components/space-detail-gallery";
 import type { Space } from "@/types";
 
 type VirtualOfficeDetailGalleryProps = {
@@ -7,7 +7,7 @@ type VirtualOfficeDetailGalleryProps = {
 };
 
 /**
- * Lead section for virtual-office detail: photo grid / carousel via {@link ImageGallery},
+ * Lead section for virtual-office detail: photo grid / carousel via {@link SpaceDetailGallery},
  * with optional per-image tone metadata when the space comes from the workspace API.
  */
 export function VirtualOfficeDetailGallery({ space }: VirtualOfficeDetailGalleryProps) {
@@ -36,7 +36,11 @@ export function VirtualOfficeDetailGallery({ space }: VirtualOfficeDetailGallery
             </span>
           ) : null}
         </div>
-        <ImageGallery name={space.name} images={images} imageAdjustments={imageAdjustments} />
+        <SpaceDetailGallery
+          name={space.name}
+          images={images}
+          imageAdjustments={imageAdjustments}
+        />
       </Container>
     </section>
   );

@@ -1,24 +1,17 @@
 import { Container } from "@/components/ui/container";
-import {
-  CoworkingDetailHeader,
-  workspaceAddress,
-  workspaceCitySlugish,
-  workspaceRating,
-} from "@/modules/coworking/components/coworking-detail-header";
-import { CoworkingPricingCards } from "@/modules/coworking/components/coworking-pricing-cards";
-import { AmenitiesList } from "@/modules/space-detail/components/amenities-list";
-import { DetailBottomCtaBand } from "@/modules/space-detail/components/detail-bottom-cta-band";
-import { DetailTrustMarkers } from "@/modules/space-detail/components/detail-trust-markers";
-import { StickyLeadForm } from "@/modules/space-detail/components/sticky-lead-form";
-import { WorkspaceDescription } from "@/modules/space-detail/components/workspace-description";
-import { Highlights } from "@/modules/spaces/components/highlights";
-import { ImageGallery } from "@/modules/space-detail/components/image-gallery";
-import { SimilarSpaces } from "@/modules/spaces/components/similar-spaces";
-import { NEARBY_LANDMARKS_BY_CITY } from "@/modules/space-detail/nearby-landmarks";
-import {
-  coworkingApiWorkspaceToSpace,
-  deriveAppCitySlugFromWorkspace,
-} from "@/services/coworking-workspace-mapper";
+import { CoworkingDetailAbout } from "@/modules/coworking/components/coworking-detail/coworking-detail-about";
+import { CoworkingDetailAmenities } from "@/modules/coworking/components/coworking-detail/coworking-detail-amenities";
+import { CoworkingDetailBreadcrumb } from "@/modules/coworking/components/coworking-detail/coworking-detail-breadcrumb";
+import { CoworkingDetailHero } from "@/modules/coworking/components/coworking-detail/coworking-detail-hero";
+import { CoworkingDetailHighlights } from "@/modules/coworking/components/coworking-detail/coworking-detail-highlights";
+import { CoworkingDetailLocation } from "@/modules/coworking/components/coworking-detail/coworking-detail-location";
+import { CoworkingDetailLeadQuiz } from "@/modules/coworking/components/coworking-detail/coworking-detail-lead-quiz";
+import { CoworkingLeadQuizProvider } from "@/modules/coworking/components/coworking-detail/coworking-detail-lead-quiz-context";
+import { CoworkingDetailMobileBar } from "@/modules/coworking/components/coworking-detail/coworking-detail-mobile-bar";
+import { CoworkingDetailPricing } from "@/modules/coworking/components/coworking-detail/coworking-detail-pricing";
+import { workspaceCitySlugish } from "@/modules/coworking/components/coworking-detail-header";
+import { CoworkingCard } from "@/modules/coworking/components/coworking-card";
+import { SpaceDetailGallery } from "@/modules/space-detail/components/space-detail-gallery";
 import {
   coworkingPlanCategoryLabel,
   filterCoworkingPlansForStartingPrice,
@@ -33,6 +26,31 @@ function workspaceImages(workspace: CoworkingModel.WorkSpace): string[] {
   return imgs as string[];
 }
 
+function leadPriceLabel(workspace: CoworkingModel.WorkSpace): {
+  amount: number;
+  suffix: string;
+  hint: string;
+} {
+  const starting = workspace.starting_price ?? 0;
+  const plans = filterCoworkingPlansForStartingPrice(workspace.plans ?? []);
+  const dayPass = plans.find((p) =>
+    coworkingPlanCategoryLabel(p).toLowerCase().includes("day pass"),
+  );
+  if (dayPass) {
+    const price = typeof dayPass.price === "number" ? dayPass.price : Number(dayPass.price) || 0;
+    return {
+      amount: price || starting,
+      suffix: "/ day pass",
+      hint: "Memberships from ₹7,999/mo · No booking fee",
+    };
+  }
+  return {
+    amount: starting,
+    suffix: "/ mo",
+    hint: "Memberships available · No booking fee",
+  };
+}
+
 export function CoworkingDetailPage({
   workspace,
   similarWorkspaces,
@@ -40,154 +58,81 @@ export function CoworkingDetailPage({
   workspace: CoworkingModel.WorkSpace;
   similarWorkspaces: CoworkingModel.WorkSpace[];
 }) {
-  const startingPrice = workspace.starting_price ?? 0;
-  const eligiblePlans = filterCoworkingPlansForStartingPrice(workspace.plans ?? []);
-  const planRows = eligiblePlans.map((p) => ({
-    name: coworkingPlanCategoryLabel(p),
-    price: typeof p.price === "number" ? p.price : Number(p.price) || 0,
-    unit: workspace.price_type || "per month",
-  }));
-  const plansForHighlights = planRows.length
-    ? planRows
-    : [{ name: "From", price: startingPrice, unit: workspace.price_type || "per month" }];
-
-  const space = {
-    id: workspace.id,
-    name: workspace.name,
-    brand: workspace.brand?.name || "Coworking",
-    city: workspace.location?.city?.name || "",
-    location: workspace.location?.micro_location?.name || "",
-    address: workspaceAddress(workspace),
-    images: workspaceImages(workspace),
-    price: startingPrice,
-    rating: workspaceRating(workspace),
-    highlights: (workspace.amenties ?? []).map((a) => a.name).filter(Boolean).slice(0, 6),
-    amenities: (workspace.amenties ?? []).map((a) => a.name).filter(Boolean),
-    plans: plansForHighlights,
-    description: workspace.description || "",
-    vertical: "coworking",
-  } as any;
-
-  const similarSpaces = similarWorkspaces.map((ws) =>
-    coworkingApiWorkspaceToSpace(ws, deriveAppCitySlugFromWorkspace(ws)),
-  );
-
-  const address = space.address as string;
-  const images = space.images as string[];
-  const cityName = (workspace.location?.city?.name?.trim() || "city") as string;
-  const microName = (workspace.location?.micro_location?.name?.trim() || "micro location") as string;
-  const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
-  const nearbyLandmarks =
-    NEARBY_LANDMARKS_BY_CITY[workspaceCitySlugish(workspace)] ??
-    [toTitleCase(microName), toTitleCase(cityName), "Business District"];
-
-  const tone = {
-    primaryCta: "Request Booking",
-    finalCta: "Get Free Consultation",
-    finalHeading: "Talk to an expert and close the right deal",
+  const images = workspaceImages(workspace);
+  const cityName = workspace.location?.city?.name?.trim() || "city";
+  const micro = workspace.location?.micro_location?.name?.trim() || "";
+  const leadPrice = leadPriceLabel(workspace);
+  const leadTarget = {
+    city: workspaceCitySlugish(workspace),
+    spaceId: workspace.id,
   };
 
   return (
-    <>
-      <section className="pb-8 pt-8 sm:pb-12 sm:pt-12">
-        <Container>
-          <ImageGallery name={space.name} images={images} />
-        </Container>
-      </section>
+    <CoworkingLeadQuizProvider>
+    <div className="bg-[color:var(--color-page-bg)]">
+      <Container className="max-w-[1280px] pt-4 sm:pt-8 max-lg:px-4">
+        <CoworkingDetailBreadcrumb workspace={workspace} />
+        <CoworkingDetailHero workspace={workspace} />
+        <SpaceDetailGallery name={workspace.name} images={images} />
+      </Container>
 
-      <section className="pb-6">
-        <Container>
-          <CoworkingDetailHeader workspace={workspace} />
-        </Container>
-      </section>
+      <Container className="max-w-[1280px]">
+        <div className="grid items-start gap-10 pb-14 pt-8 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-12 lg:pb-[70px]">
+          <main className="min-w-0">
+            <section id="overview" className="pt-2 sm:pt-[30px]">
+              <CoworkingDetailHighlights workspace={workspace} />
+            </section>
 
-      <section className="pb-12">
-        <Container>
-          <Highlights space={space} />
-        </Container>
-      </section>
+            <CoworkingDetailAbout workspace={workspace} />
+            <CoworkingDetailAmenities workspace={workspace} />
+            <CoworkingDetailPricing workspace={workspace} />
+            <CoworkingDetailLocation workspace={workspace} />
+          </main>
 
-      <section className="pb-14 sm:pb-20">
-        <Container>
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-start">
-            <div className="space-y-8">
-              <section className="rounded-[1.5rem] border border-slate-200/80 bg-white p-6 shadow-soft sm:p-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-brand)]">
-                  Pricing plans
-                </p>
-                <div className="mt-6">
-                  <CoworkingPricingCards workspace={workspace} />
+          <CoworkingDetailLeadQuiz
+            workspaceName={workspace.name}
+            citySlug={leadTarget.city}
+            spaceId={leadTarget.spaceId}
+            microlocation={micro}
+            startingFrom={leadPrice.amount}
+            priceSuffix={leadPrice.suffix}
+            membershipHint={leadPrice.hint}
+          />
+        </div>
+      </Container>
+
+      {similarWorkspaces.length > 0 ? (
+        <section id="similar" className="border-t border-[#E7E9E6] pt-8 pb-5 sm:pt-11 sm:pb-6">
+          <Container className="max-w-[1280px]">
+            <p className="text-[12.5px] font-bold uppercase tracking-[0.12em] text-[color:var(--color-brand)]">
+              Keep exploring
+            </p>
+            <h2 className="mt-3 text-[1.65rem] font-extrabold tracking-[-0.03em] text-ink sm:text-[1.7rem]">
+              Similar spaces nearby
+            </h2>
+            <p className="mt-2 max-w-[60ch] text-[15.5px] text-muted">
+              More premium, verified coworking options around {toTitleCase(cityName)}.
+            </p>
+
+            <div className="no-scrollbar mt-6 flex snap-x gap-5 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {similarWorkspaces.map((ws) => (
+                <div
+                  key={ws.id}
+                  className="w-[min(84vw,360px)] shrink-0 snap-start sm:w-[350px]"
+                >
+                  <CoworkingCard workspace={ws} className="h-full" />
                 </div>
-              </section>
-
-              <section className="rounded-[1.5rem] border border-slate-200/80 bg-white p-6 shadow-soft sm:p-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-brand)]">
-                  Amenities
-                </p>
-                <div className="mt-6">
-                  <AmenitiesList amenities={space.amenities} />
-                </div>
-              </section>
-              <section className="rounded-[1.5rem] border border-slate-200/80 bg-white p-6 shadow-soft sm:p-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-brand)]">
-                  About this space
-                </p>
-                <WorkspaceDescription description={space.description} className="mt-5" />
-              </section>
-
-              <section className="rounded-[1.5rem] border border-slate-200/80 bg-white p-6 shadow-soft sm:p-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-brand)]">
-                  Location
-                </p>
-                <p className="mt-4 text-base text-muted">{address}</p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {nearbyLandmarks.map((landmark) => (
-                    <span
-                      key={landmark}
-                      className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-700"
-                    >
-                      Near {landmark}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-6 overflow-hidden rounded-[1.2rem] border border-slate-200/80">
-                  <iframe
-                    title={`Map for ${workspace.name}`}
-                    src={mapSrc}
-                    className="h-80 w-full"
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  />
-                </div>
-              </section>
+              ))}
             </div>
+          </Container>
+        </section>
+      ) : null}
 
-            <div className="lg:sticky lg:top-24 lg:self-start">
-              <StickyLeadForm
-                leadTarget={{ city: workspaceCitySlugish(workspace), spaceId: workspace.id }}
-                submitLabel={tone.primaryCta}
-              />
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <DetailTrustMarkers />
-
-      <section className="pb-14 sm:pb-20">
-        <Container>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-brand)]">
-            Similar spaces
-          </p>
-          <h2 className="mt-3 font-display text-3xl text-ink sm:text-4xl">
-            More premium options in {toTitleCase(cityName)}
-          </h2>
-          <SimilarSpaces spaces={similarSpaces} />
-        </Container>
-      </section>
-
-      <DetailBottomCtaBand finalHeading={tone.finalHeading} finalCta={tone.finalCta} />
-
-    </>
+      <CoworkingDetailMobileBar
+        startingFrom={leadPrice.amount}
+        priceSuffix={leadPrice.suffix}
+      />
+    </div>
+    </CoworkingLeadQuizProvider>
   );
 }

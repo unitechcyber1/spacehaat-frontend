@@ -10,6 +10,7 @@ import { SeoFooterContentSection } from "@/components/seo/seo-footer-content-sec
 import { SeoStructuredData } from "@/components/seo/seo-structured-data";
 import { resolveCanonicalUrl } from "@/lib/canonical-url";
 import { pathnameToSeoSlug } from "@/lib/pathname-to-seo-slug";
+import { isVerticalDetailPagePath } from "@/lib/vertical-detail-route";
 import { normalizeSeoFromResponse } from "@/lib/seo-normalize";
 import { getFallbackSeoContent } from "@/lib/seo-fallbacks";
 import type { SeoContent } from "@/types/seo.model";
@@ -51,10 +52,13 @@ export function SeoCmsRouteSections() {
   const pathname = usePathname() || "/";
   const pathSeg = pathname.split("?")[0] ?? "/";
   const slug = useMemo(() => pathnameToSeoSlug(pathSeg), [pathSeg]);
-  const [seo, setSeo] = useState<SeoContent | null>(() => seoBySlugMemory.get(slug) ?? null);
+  const isDetailPage = useMemo(() => isVerticalDetailPagePath(pathSeg), [pathSeg]);
+  const [seo, setSeo] = useState<SeoContent | null>(() =>
+    isVerticalDetailPagePath(pathSeg) ? null : seoBySlugMemory.get(slug) ?? null,
+  );
 
   useEffect(() => {
-    if (isAddListingRoute(pathSeg)) {
+    if (isAddListingRoute(pathSeg) || isDetailPage) {
       setSeo(null);
       return;
     }
@@ -74,10 +78,19 @@ export function SeoCmsRouteSections() {
     return () => {
       cancelled = true;
     };
-  }, [pathSeg, slug]);
+  }, [pathSeg, slug, isDetailPage]);
 
   if (isAddListingRoute(pathSeg)) {
     return null;
+  }
+
+  if (isDetailPage) {
+    return (
+      <>
+        <Footer />
+        <FooterMarketingSection />
+      </>
+    );
   }
 
   const pageUrl = resolveCanonicalUrl(pathname, seo?.url);

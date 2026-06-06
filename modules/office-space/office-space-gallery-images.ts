@@ -1,8 +1,8 @@
 import type { OfficeSpaceModel } from "@/types/office-space.model";
-import type { ImageGalleryAdjustment } from "@/modules/space-detail/components/image-gallery";
+import type { ImageGalleryAdjustment } from "@/modules/space-detail/components/space-detail-gallery";
 
 /**
- * Builds `images` + optional `imageAdjustments` for {@link ImageGallery} from office-space API data.
+ * Builds `images` + optional `imageAdjustments` for {@link SpaceDetailGallery} from office-space API data.
  */
 export function officeSpaceGalleryImages(office: OfficeSpaceModel.OfficeSpace): {
   images: string[];
