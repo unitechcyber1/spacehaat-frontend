@@ -22,7 +22,10 @@ import { cn } from "@/utils/cn";
 import { formatCurrency } from "@/utils/format";
 
 const ColivingLeafletMap = dynamic(
-  () => import("./coliving-leaflet-map").then((m) => m.ColivingLeafletMap),
+  () =>
+    import("@/modules/space-detail/components/space-detail-leaflet-map-dynamic").then(
+      (m) => m.SpaceDetailLeafletMap,
+    ),
   {
     ssr: false,
     loading: () => (
@@ -381,28 +384,10 @@ export function ColivingMapBlock({
   );
 }
 
-export function ColivingNearbyStrip({
-  items,
-}: {
-  items: { name: string; dist: string; icon?: ReactNode }[];
-}) {
-  return (
-    <div className="mt-4 flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] max-lg:-mx-4 max-lg:px-4 [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-2 lg:overflow-visible lg:pb-0">
-      {items.map((n, i) => (
-        <div
-          key={`${n.name}-${n.dist}-${i}`}
-          className="min-w-[10.5rem] shrink-0 rounded-xl border border-slate-200/80 bg-white px-4 py-3 lg:min-w-0"
-        >
-          <p className="flex items-center gap-1.5 text-sm font-medium text-ink">
-            {n.icon ?? <Clock className="h-3.5 w-3.5 text-muted" aria-hidden />}
-            {n.name}
-          </p>
-          <p className="mt-1 font-mono text-xs text-muted">{n.dist}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
+export {
+  SpaceDetailNearbyStrip as ColivingNearbyStrip,
+  type SpaceDetailNearbyItem,
+} from "@/modules/space-detail/components/space-detail-nearby-strip";
 
 export function ColivingReviewsBlock({
   rating,

@@ -17,6 +17,8 @@ import { ContactFormModal } from "@/components/contact/contact-form-modal";
 import { buildUserEnquiryBody } from "@/lib/user-enquiry-payload";
 import { submitUserEnquiry, UserEnquiryError } from "@/services/user-enquiry-api";
 import { cn } from "@/utils/cn";
+import { formatCurrency } from "@/utils/format";
+
 type LeadTarget = {
   city: string;
   spaceId: string;
@@ -29,6 +31,11 @@ type StickyLeadFormProps = {
   mxSpaceType?: string;
   spaceListingKey?: "work_space" | "office_space" | "living_space";
   microlocation?: string;
+  /** Coworking detail mock layout — desktop card only; pair with {@link CoworkingDetailMobileBar}. */
+  variant?: "default" | "coworking-detail";
+  startingFrom?: number;
+  priceSuffix?: string;
+  membershipHint?: string;
 };
 
 function isValidEmail(v: string): boolean {
@@ -103,6 +110,10 @@ export function StickyLeadForm({
   mxSpaceType = "Web Coworking",
   spaceListingKey = "work_space",
   microlocation = "",
+  variant = "default",
+  startingFrom = 0,
+  priceSuffix = "/ mo",
+  membershipHint,
 }: StickyLeadFormProps) {
   const [isPending, setIsPending] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -300,6 +311,43 @@ export function StickyLeadForm({
             {enquiryError || "Could not submit right now. Please try again."}
           </div>
         ) : null}
+      </>
+    );
+  }
+
+  if (variant === "coworking-detail") {
+    return (
+      <>
+        <aside className="sticky top-[90px] hidden lg:block">
+          <div
+            id="lead-form"
+            className="overflow-hidden rounded-[18px] border border-[#E7E9E6] bg-white shadow-[0_8px_30px_rgba(20,24,29,0.08)]"
+          >
+            <div className="border-b border-[#EEF0ED] bg-gradient-to-b from-[#EDF7EE] to-white px-6 pb-4 pt-5">
+              <p className="text-[13px] font-semibold text-muted">Starting from</p>
+              <p className="mt-0.5 text-[32px] font-extrabold tracking-[-0.03em] text-ink">
+                {startingFrom > 0 ? formatCurrency(startingFrom) : "On request"}{" "}
+                {startingFrom > 0 ? (
+                  <span className="text-[15px] font-semibold text-muted">{priceSuffix}</span>
+                ) : null}
+              </p>
+              {membershipHint ? (
+                <p className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-[color:var(--color-brand)] bg-white px-3 py-1.5 text-[12.5px] font-bold text-[#2f8035]">
+                  {membershipHint}
+                </p>
+              ) : null}
+            </div>
+            <form onSubmit={handleSubmit} className="px-6 pb-6 pt-5">
+              <h3 className="text-lg font-extrabold tracking-[-0.02em] text-ink">Book a free tour</h3>
+              <p className="mt-1 text-[13.5px] text-muted">
+                Share your details — we&apos;ll line up a visit &amp; your best rate.
+              </p>
+              <div className="mt-4">
+                <FormContents compact />
+              </div>
+            </form>
+          </div>
+        </aside>
       </>
     );
   }

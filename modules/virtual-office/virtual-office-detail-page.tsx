@@ -1,10 +1,12 @@
 import { Container } from "@/components/ui/container";
+import { buildMapsLink } from "@/lib/space-detail-map";
 import { VirtualOfficeDetailGallery } from "@/modules/virtual-office/components/virtual-office-detail-gallery";
 import { VirtualOfficeDetailHeader } from "@/modules/virtual-office/components/virtual-office-detail-header";
 import { VirtualOfficePricingCards } from "@/modules/virtual-office/components/virtual-office-pricing-cards";
 import { AmenitiesList } from "@/modules/space-detail/components/amenities-list";
 import { DetailBottomCtaBand } from "@/modules/space-detail/components/detail-bottom-cta-band";
 import { DetailTrustMarkers } from "@/modules/space-detail/components/detail-trust-markers";
+import { SpaceDetailLeafletMap } from "@/modules/space-detail/components/space-detail-leaflet-map-dynamic";
 import { StickyLeadForm } from "@/modules/space-detail/components/sticky-lead-form";
 import { WorkspaceDescription } from "@/modules/space-detail/components/workspace-description";
 import { Highlights } from "@/modules/spaces/components/highlights";
@@ -20,9 +22,8 @@ export function VirtualOfficeDetailPage({
   space: Space;
   similarSpaces: Space[];
 }) {
-  const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(
-    space.address || `${space.location}, ${space.city}`,
-  )}&output=embed`;
+  const mapAddress = space.address || `${space.location}, ${space.city}`;
+  const mapsLink = buildMapsLink(null, mapAddress);
   const nearbyLandmarks =
     NEARBY_LANDMARKS_BY_CITY[String(space.city || "").toLowerCase()] ??
     [toTitleCase(space.location || ""), toTitleCase(space.city || ""), "Business District"];
@@ -93,13 +94,13 @@ export function VirtualOfficeDetailPage({
                     </span>
                   ))}
                 </div>
-                <div className="mt-6 overflow-hidden rounded-[1.2rem] border border-slate-200/80">
-                  <iframe
-                    title={`Map for ${space.name}`}
-                    src={mapSrc}
-                    className="h-80 w-full"
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
+                <div className="mt-6">
+                  <SpaceDetailLeafletMap
+                    name={space.name}
+                    locality={space.location}
+                    city={space.city}
+                    address={mapAddress}
+                    mapsLink={mapsLink}
                   />
                 </div>
               </section>

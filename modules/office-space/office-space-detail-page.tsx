@@ -1,11 +1,13 @@
 import { MapPin, Star } from "lucide-react";
 
 import { Container } from "@/components/ui/container";
+import { buildMapsLink, normalizeMapCoordinates } from "@/lib/space-detail-map";
 import { OfficeSpaceHighlights } from "@/modules/office-space/components/office-space-highlights";
 import { OfficeSpaceCard } from "@/modules/office-space/components/office-space-card";
 import { officeSpaceGalleryImages } from "@/modules/office-space/office-space-gallery-images";
 import { AmenitiesList } from "@/modules/space-detail/components/amenities-list";
-import { ImageGallery } from "@/modules/space-detail/components/image-gallery";
+import { SpaceDetailGallery } from "@/modules/space-detail/components/space-detail-gallery";
+import { SpaceDetailLeafletMap } from "@/modules/space-detail/components/space-detail-leaflet-map-dynamic";
 import { StickyLeadForm } from "@/modules/space-detail/components/sticky-lead-form";
 import { WorkspaceDescription } from "@/modules/space-detail/components/workspace-description";
 import type { OfficeSpaceModel } from "@/types/office-space.model";
@@ -50,21 +52,17 @@ export function OfficeSpaceDetailPage({
 
   const price = office.other_detail?.area_for_lease_in_sq_ft * office.other_detail?.rent_in_sq_ft;
 
-  const lat = typeof office.location?.latitude === "number" ? office.location.latitude : null;
-  const lng = typeof office.location?.longitude === "number" ? office.location.longitude : null;
-  const hasCoords =
-    lat != null &&
-    lng != null &&
-    Number.isFinite(lat) &&
-    Number.isFinite(lng) &&
-    Math.abs(lat) > 0.0001 &&
-    Math.abs(lng) > 0.0001;
-  const mapQuery = hasCoords
-    ? `${lat},${lng}`
-    : [office.location?.address, office.location?.address1, office.location?.city?.name]
-        .filter(Boolean)
-        .join(", ");
-  const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`;
+  const micro = office.location?.micro_location?.name?.trim() || "";
+  const city = office.location?.city?.name?.trim() || "";
+  const coordinates = normalizeMapCoordinates(
+    office.location?.latitude,
+    office.location?.longitude,
+  );
+  const fullAddress =
+    [office.location?.address, office.location?.address1, office.location?.city?.name]
+      .filter(Boolean)
+      .join(", ") || address;
+  const mapsLink = buildMapsLink(coordinates, fullAddress);
 
   const { images: galleryImages, imageAdjustments } = officeSpaceGalleryImages(office);
 
@@ -72,7 +70,7 @@ export function OfficeSpaceDetailPage({
     <>
       <section className="pb-8 pt-8 sm:pb-12 sm:pt-12">
         <Container>
-          <ImageGallery
+          <SpaceDetailGallery
             name={office.name ?? "Office space"}
             images={galleryImages}
             imageAdjustments={imageAdjustments}
@@ -153,13 +151,14 @@ export function OfficeSpaceDetailPage({
                     .filter(Boolean)
                     .join(", ")}
                 </p>
-                <div className="mt-6 overflow-hidden rounded-[1.2rem] border border-slate-200/80">
-                  <iframe
-                    title={`Map for ${office.name}`}
-                    src={mapSrc}
-                    className="h-80 w-full"
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
+                <div className="mt-6">
+                  <SpaceDetailLeafletMap
+                    name={office.name ?? "Office space"}
+                    locality={micro || address}
+                    city={city}
+                    address={fullAddress}
+                    coordinates={coordinates}
+                    mapsLink={mapsLink}
                   />
                 </div>
               </section>
