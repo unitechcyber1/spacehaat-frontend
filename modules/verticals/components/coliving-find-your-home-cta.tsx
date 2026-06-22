@@ -56,7 +56,7 @@ export function ColivingFindYourHomeCta() {
 
               <p className="mt-4 max-w-lg text-base leading-relaxed text-white/85 sm:mt-5 sm:text-lg">
                 Tell us where you&apos;re going. We&apos;ll have a verified shortlist on your screen before the end of
-                the day — and a real human on call until you have your keys.
+                the day and a real human on call until you have your keys.
               </p>
 
               <div className="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">

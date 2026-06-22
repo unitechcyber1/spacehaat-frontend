@@ -34,7 +34,7 @@ const MESSAGES: ChatLine[] = [
     name: "Aditi",
     time: "2:21 PM",
     body:
-      "Hi! I’m on the SpaceHaat Select desk. Tell me your city, team size, and budget — I’ll shortlist verified spaces and pricing bands before we book any tours.",
+      "Hi! I’m on the SpaceHaat Select desk. Tell me your city, team size, and budget. I’ll shortlist verified spaces and in your budget before we book any tours.",
   },
   {
     id: "m2",
@@ -42,7 +42,7 @@ const MESSAGES: ChatLine[] = [
     name: "Vikram",
     time: "2:22 PM",
     body:
-      "We need 12 seats in Bangalore, flexible term, and a mix of meeting rooms. Prefer Indiranagar or Koramangala.",
+      "We need 12 seats in gurgaon, 2 year lease term, and a mix of meeting rooms. Prefer golf course road or cyber city.",
   },
   {
     id: "m3",
@@ -50,7 +50,7 @@ const MESSAGES: ChatLine[] = [
     name: "Aditi",
     time: "2:23 PM",
     body:
-      "Here are two premium options that match your filters — both are operator‑verified and recently toured.",
+      "Here are two premium options that match your requirement. both are premium and recently toured.",
     images: [
       {
         src: "https://img.spacehaat.com/images/latest_images_2024/4800c2456ed218d7deafafb9cfd175be81653008.webp",
@@ -77,7 +77,7 @@ const MESSAGES: ChatLine[] = [
     name: "Aditi",
     time: "2:27 PM",
     body:
-      "Yes — I’ll send a side‑by‑side with rent, CAM, and fit‑out assumptions. We can also line up a virtual walkthrough this week.",
+      "Yes I’ll send a side‑by‑side with rent, CAM, and fit‑out assumptions. We can also line up a visit to the space this week.",
     images: [
       {
         src: "https://img.spacehaat.com/images/latest_images_2024/7ede6a8950fc2e17e34bb48db5fd5d64ff424c99.webp",
@@ -106,7 +106,7 @@ export function SpacehaatSelectShowcase() {
         </p>
         <p className="mx-auto mt-5 max-w-xl text-center text-sm leading-relaxed text-white/88 sm:text-base">
           Our team helps you find off‑market quality inventory, compare operators, and negotiate stronger
-          rates — whether you need coworking, a private office, or a virtual address across India.
+          rates whether you need coworking, a private office, or a virtual address across India.
         </p>
       </div>
 

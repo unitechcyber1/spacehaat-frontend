@@ -2,7 +2,7 @@ import { CoworkingSelectForm } from "@/modules/coworking/homepage/coworking-sele
 import type { SearchOption } from "@/types";
 
 const CHECKS = [
-  "Verified spaces only — no filler listings",
+  "Verified spaces only, no filler listings",
   "Real pricing confirmed before we share",
   "Zero brokerage. No catch.",
 ] as const;
@@ -21,13 +21,13 @@ export function CoworkingSelectCta({ cities }: CoworkingSelectCtaProps) {
             SpaceHaat Select
           </p>
           <h2 className="font-display text-[clamp(1.875rem,2.9vw,2.75rem)] font-bold leading-[1.06] tracking-[-0.03em] text-ink">
-            Tell us what you need.
+            Tell us what you need
             <br />
-            We&apos;ll find it for you.
+            We&apos;ll find it for you
           </h2>
           <p className="mt-5 max-w-[430px] text-base leading-relaxed text-muted sm:text-[16.5px]">
             Our experts shortlist verified spaces in your city within 2 hours. They compare,
-            negotiate, and advise — at zero cost to you.
+            negotiate, and advise at zero cost to you.
           </p>
           <ul className="mt-8 flex flex-col gap-3.5">
             {CHECKS.map((line) => (
@@ -49,7 +49,7 @@ export function CoworkingSelectCta({ cities }: CoworkingSelectCtaProps) {
           <h3 className="relative mb-8 text-[26px] font-bold leading-snug tracking-tight text-white">
             Get shortlisted spaces
             <br />
-            in 2 hours — free.
+            in 2 hours free.
           </h3>
           <CoworkingSelectForm cities={cities} />
           <p className="relative mt-3.5 text-[12.5px] leading-relaxed text-white/85">

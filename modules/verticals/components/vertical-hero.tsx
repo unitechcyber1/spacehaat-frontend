@@ -5,7 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { FadeIn } from "@/components/ui/fade-in";
-import { LeadForm } from "@/modules/home/components/lead-form";
+import {
+  VirtualOfficeHeroDesktopLead,
+  VirtualOfficeHeroLeadRoot,
+} from "@/modules/verticals/components/virtual-office-hero-lead";
 import { VirtualOfficeHeroEnquiryCta } from "@/modules/verticals/components/virtual-office-hero-enquiry-cta";
 import { VerticalLandingData } from "@/types";
 
@@ -80,9 +83,9 @@ export function VerticalHero({ data }: VerticalHeroProps) {
 
   if (data.vertical === "virtual-office") {
     const trustLines = data.hero.badges ?? [];
-    const titleParts = data.hero.title.split("Credible");
 
     return (
+      <VirtualOfficeHeroLeadRoot>
       <section className="relative overflow-hidden pb-14 pt-10 sm:pb-20 sm:pt-14">
         <div className="absolute inset-x-0 top-0 -z-10 h-[38rem] bg-[radial-gradient(circle_at_top_left,var(--color-brand-soft),transparent_32%),radial-gradient(circle_at_70%_12%,rgba(76,175,80,0.08),transparent_24%),linear-gradient(180deg,var(--color-page-bg)_0%,var(--color-page-bg)_90%)]" />
 
@@ -101,15 +104,7 @@ export function VerticalHero({ data }: VerticalHeroProps) {
 
               <FadeIn delay={0.08}>
                 <h1 className="max-w-[22ch] font-display text-[1.85rem] font-semibold leading-[1.1] tracking-[-0.035em] text-ink sm:max-w-none sm:text-4xl sm:leading-[1.08] lg:text-[2.65rem] lg:leading-[1.06]">
-                  {titleParts.length === 2 ? (
-                    <>
-                      {titleParts[0]}
-                      <span className="text-[color:var(--color-brand)] italic">Credible</span>
-                      {titleParts[1]}
-                    </>
-                  ) : (
-                    data.hero.title
-                  )}
+                  {data.hero.title}
                 </h1>
               </FadeIn>
 
@@ -141,30 +136,14 @@ export function VerticalHero({ data }: VerticalHeroProps) {
             </div>
 
             <FadeIn delay={0.1} className="hidden min-w-0 w-full lg:block lg:sticky lg:top-24">
-              <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_28px_70px_rgba(0,0,0,0.22)] sm:p-6 lg:rounded-[1.35rem] lg:p-8 xl:p-9">
-                <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-500 lg:text-[0.7rem]">
-                  Virtual office enquiry
-                </p>
-                <h2 className="mt-2 font-display text-xl font-semibold tracking-[-0.02em] text-ink sm:text-2xl lg:mt-2.5 lg:text-[1.65rem] xl:text-3xl">
-                  Get a free callback
-                </h2>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted lg:mt-2 lg:text-[0.9375rem]">
-                  Share your details — our team will reach out with verified options for your city.
-                </p>
-                <div className="mt-5 lg:mt-6">
-                  <LeadForm
-                    variant="premium"
-                    premiumSize="comfortable"
-                    submitLabel="Request consultation"
-                    city="India"
-                    mxSpaceType="Virtual Office hero"
-                  />
-                </div>
+              <div id="lead-form" className="scroll-mt-24">
+                <VirtualOfficeHeroDesktopLead />
               </div>
             </FadeIn>
           </div>
         </Container>
       </section>
+      </VirtualOfficeHeroLeadRoot>
     );
   }
 

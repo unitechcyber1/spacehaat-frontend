@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { BadgeCheck, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -77,13 +76,10 @@ export function HomeHero({ searchOptions, featuredSpaces }: HomeHeroProps) {
                 <Sparkles className="h-4 w-4 text-[#d4af37]" />
                 Verified, premium inventory only
               </div>
-              <Link
-                href="#lead-form"
-                className="inline-flex items-center gap-2 font-medium text-[#f0e6d4] underline decoration-[#c9a962]/50 underline-offset-4 transition hover:text-[#fffcf5] hover:decoration-[#d4af37]/70"
-              >
-                Get Free Consultation
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#c9a962]/20 bg-[rgba(22,18,14,0.38)] px-4 py-2 text-[#ebe3d4] shadow-[0_12px_36px_rgba(8,6,5,0.28)] backdrop-blur-sm">
+                <BadgeCheck className="h-4 w-4 text-[#d4af37]" />
+                Expert guidance · Zero brokerage
+              </div>
             </div>
           </FadeIn>
         </div>

@@ -18,7 +18,7 @@ const cards: PlanCard[] = [
   {
     title: "Company Registration Plan",
     description:
-      "Get a compliant business address for incorporation and early-stage paperwork — without renting a full office.",
+      "Get a compliant business address for incorporation and early-stage paperwork without renting a full office.",
     bullets: [
       "Premium registration address",
       "Support for incorporation filings",
@@ -42,7 +42,7 @@ const cards: PlanCard[] = [
   {
     title: "Business Address Plan",
     description:
-      "Use a prime business address for branding, invoices, and vendor onboarding — with mail handling support.",
+      "Use a prime business address for branding, invoices, and vendor onboarding with mail handling support.",
     bullets: [
       "Professional business address",
       "Mail scanning / forwarding options",

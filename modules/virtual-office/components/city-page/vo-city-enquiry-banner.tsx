@@ -28,7 +28,7 @@ export function VoCityEnquiryBanner({ cityDisplay }: VoCityEnquiryBannerProps) {
           </h2>
           <p className="mt-4 max-w-lg text-base leading-relaxed text-muted">
             Our experts shortlist the best virtual office for your business type, budget, and GST
-            requirements — at no cost.
+            requirements at no cost.
           </p>
           <ul className="mt-6 space-y-2.5 text-sm text-ink/85">
             {["Curated by compliance experts", "Only verified providers", "Zero brokerage, always"].map(

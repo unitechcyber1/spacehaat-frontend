@@ -32,7 +32,7 @@ export function VoCityExplainerSection() {
       <VoEyebrow>What you actually get</VoEyebrow>
       <VoSectionTitle>More Than Just an Address</VoSectionTitle>
       <VoSectionSub className="mt-3">
-        A virtual office is a complete compliance package — every document Indian regulators need, plus
+        A virtual office is a complete compliance package every document Indian regulators need, plus
         the day‑to‑day services of a physical office.
       </VoSectionSub>
 
@@ -77,11 +77,11 @@ export function VoCityWhySection({ cityDisplay }: { cityDisplay: string }) {
   const items = [
     {
       title: "Business hub advantage",
-      body: `${cityDisplay} hosts major corporates, startups, and enterprise operations — a credible address for clients and regulators.`,
+      body: `${cityDisplay} hosts major corporates, startups, and enterprise operations. A credible address for clients and regulators.`,
     },
     {
       title: "GST-ready documentation",
-      body: "NOC, rent agreement, and utility bills issued by verified operators — aligned with GST portal requirements.",
+      body: "NOC, rent agreement, and utility bills issued by verified operators aligned with GST portal requirements.",
     },
     {
       title: "Faster setup",
@@ -242,7 +242,7 @@ export function VoCityLocationsSection({ cityDisplay, catalog }: VoCitySectionsP
       <VoEyebrow>Where you can register</VoEyebrow>
       <VoSectionTitle>Prime {cityDisplay} Addresses Available</VoSectionTitle>
       <VoSectionSub className="mt-3">
-        Every listed address is in a registered commercial building — pre‑vetted for GST acceptance.
+        Every listed address is in a registered commercial building pre‑vetted for GST acceptance.
       </VoSectionSub>
 
       <div
@@ -270,7 +270,7 @@ export function VoCityLocationsSection({ cityDisplay, catalog }: VoCitySectionsP
       </div>
 
       <div className="mt-8 rounded-2xl border border-[#EAE7E0] bg-white px-6 py-7 text-center">
-        <h3 className="text-xl font-semibold text-ink">Can&apos;t decide? We&apos;ll shortlist for you — free.</h3>
+        <h3 className="text-xl font-semibold text-ink">Can&apos;t decide? We&apos;ll shortlist for you free.</h3>
         <p className="mx-auto mt-3 max-w-xl text-sm text-muted">
           Our consultants match your business type and GST goals to the best address. No brokerage.
         </p>
@@ -295,7 +295,7 @@ export function VoCityTimelineSection() {
       <VoEyebrow>Process</VoEyebrow>
       <VoSectionTitle>From Enquiry to GST Registration in 7 Days</VoSectionTitle>
       <VoSectionSub className="mt-3">
-        A single workflow from KYC to GSTIN — handled by SpaceHaat and the verified operator.
+        A single workflow from KYC to GSTIN handled by SpaceHaat and the verified operator.
       </VoSectionSub>
 
       <div className="mt-9 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
@@ -376,7 +376,7 @@ export function VoCityDocumentsSection() {
     {
       title: "Rent / Leave & Licence Agreement",
       paper: "Rent / Leave & Licence",
-      body: "E‑stamped rental agreement — valid proof of address possession for ROC filings.",
+      body: "E‑stamped rental agreement valid proof of address possession for ROC filings.",
       tag: "E‑stamped · Legally valid",
     },
     {
@@ -392,7 +392,7 @@ export function VoCityDocumentsSection() {
       <VoEyebrow>Compliance</VoEyebrow>
       <VoSectionTitle>Every Document, Explained</VoSectionTitle>
       <VoSectionSub className="mt-3">
-        The GST department requires specific documents. Here&apos;s what you get — and what each one does.
+        The GST department requires specific documents. Here&apos;s what you get and what each one does.
       </VoSectionSub>
 
       <div

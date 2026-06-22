@@ -136,3 +136,20 @@ const LOCATION_BADGES = [
 export function locationBadgeAt(index: number) {
   return LOCATION_BADGES[index % LOCATION_BADGES.length];
 }
+
+/** Nationwide catalog for the virtual office homepage lead wizard (city names as zones). */
+export function getVirtualOfficeHomepageCatalog(): VirtualOfficeCatalogCity {
+  const locations: VirtualOfficeCatalogLocation[] = AVAILABLE_CITY_VIRTUAL_OFFICE.map((entry) => {
+    const slug = catalogEntrySlug(entry as { name: string; slug?: string });
+    return {
+      locality: getVirtualOfficeCityDisplayName(slug, String(entry.name)),
+    };
+  });
+
+  return {
+    name: "India",
+    id: "virtual-office-home",
+    slug: "india",
+    locations,
+  };
+}

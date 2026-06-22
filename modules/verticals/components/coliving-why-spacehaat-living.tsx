@@ -24,7 +24,7 @@ const ITEMS: WhyItem[] = [
     index: "02",
     label: "All-inclusive",
     title: "One bill. Rent, food, Wi-Fi, housekeeping.",
-    body: "No deposits to chase, no electricity arguments, no last-minute add-ons. Every plan lists exactly what's included and what isn't — upfront.",
+    body: "No deposits to chase, no electricity arguments, no last-minute add-ons. Every plan lists exactly what's included and what isn't upfront.",
     icon: CreditCard,
   },
   {
@@ -38,7 +38,7 @@ const ITEMS: WhyItem[] = [
     index: "04",
     label: "Flexible",
     title: "One month or one year. You choose.",
-    body: "From short stays for relocation to long leases for the year ahead — fully flexible terms across our network, with zero brokerage at any tenure.",
+    body: "From short stays for relocation to long leases for the year ahead fully flexible terms across our network, with zero brokerage at any tenure.",
     icon: PlusCircle,
   },
 ];
@@ -62,7 +62,7 @@ export function ColivingWhySpacehaatLiving() {
           </div>
           <div className="flex min-w-0 lg:justify-end lg:pt-7">
             <p className="max-w-md text-left text-base leading-relaxed text-muted sm:text-lg lg:max-w-lg lg:text-right">
-              Same verified, no-broker approach you trust for workspaces — applied to the home you wake up in. Curated.
+              Same verified, no-broker approach you trust for workspaces applied to the home you wake up in. Curated.
               Transparent. Move-in ready.
             </p>
           </div>

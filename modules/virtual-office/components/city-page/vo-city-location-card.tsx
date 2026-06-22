@@ -53,7 +53,7 @@ export function VoCityLocationCard({ locality: loc, cityDisplay, badge, wide }: 
 
         <p className="mt-2.5 hidden shrink-0 text-[12.5px] leading-relaxed text-[#555] sm:mt-4 sm:block sm:text-sm">
           Verified virtual office operators in {loc.locality}. Compare GST-ready plans, documentation
-          support, and pricing — zero brokerage.
+          support, and pricing, zero brokerage.
         </p>
 
         <div className="mt-auto flex shrink-0 flex-col gap-3 border-t border-[#EAE7E0] pt-3.5 sm:mt-5 sm:gap-4 sm:pt-5 sm:flex-row sm:items-center sm:justify-between">

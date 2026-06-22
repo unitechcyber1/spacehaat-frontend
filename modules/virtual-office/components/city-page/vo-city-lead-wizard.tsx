@@ -127,7 +127,7 @@ export function VoCityLeadWizard({
 
       <div className="px-5 pb-4 pt-6 sm:px-[22px]">
         <h3 className="pr-8 text-[19px] font-bold tracking-tight text-ink">
-          Get Virtual Office Details — Free
+          Get Virtual Office Details
         </h3>
         <p className="mt-1 text-[13px] text-muted">Compare plans · Verified providers · Reply in 2 hrs</p>
       </div>

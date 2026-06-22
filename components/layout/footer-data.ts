@@ -3,8 +3,8 @@
 export const footerAbout = {
   title: "About SpaceHaat",
   paragraphs: [
-    "SpaceHaat is India's premium workspace discovery platform — built for professionals, startups, and enterprise teams who need more than just a desk. We curate verified coworking spaces, virtual offices, private office spaces, and coliving/PG homes across Gurugram, Noida, Delhi, Bangalore, Mumbai, Hyderabad, Pune, Chennai, and beyond.",
-    "Every listing is operator-verified. Pricing is real. And our expert team is available to shortlist, compare, and negotiate on your behalf — at zero consultation cost.",
+    "SpaceHaat is India's premium workspace discovery platform built for professionals, startups, and enterprise teams who need more than just a desk. We curate verified coworking spaces, virtual offices, private office spaces, and coliving/PG homes across Gurugram, Noida, Delhi, Bangalore, Mumbai, Hyderabad, Pune, Chennai, and beyond.",
+    "Every listing is operator-verified. Pricing is real. And our expert team is available to shortlist, compare, and negotiate on your behalf at zero consultation cost.",
   ],
 } as const;
 
