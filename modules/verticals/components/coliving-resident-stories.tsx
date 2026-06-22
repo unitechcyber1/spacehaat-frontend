@@ -16,7 +16,7 @@ const STORIES: ResidentStory[] = [
   {
     id: "ananya",
     quote:
-      "I moved cities for a new role and had a tour booked the same evening. The home matched the photos — which I cannot say about the three other PG apps I tried.",
+      "I moved cities for a new role and had a tour booked the same evening. The home matched the photos which I cannot say about the three other PG apps I tried.",
     name: "Ananya Rao",
     role: "Product manager · moved Mumbai → Bangalore",
     avatar:
@@ -34,7 +34,7 @@ const STORIES: ResidentStory[] = [
   {
     id: "riya",
     quote:
-      "As a woman moving alone, the women-only residences with on-site managers were the only thing my parents were comfortable with. The shortlist saved me a week of visits.",
+      "As a woman moving alone, the women only residences with on site managers were the only thing my parents were comfortable with. The shortlist saved me a week of visits.",
     name: "Riya Bansal",
     role: "Designer · Brookhouse, Indiranagar",
     avatar:
@@ -103,7 +103,7 @@ export function ColivingResidentStories() {
           </div>
           <div className="flex min-w-0 lg:justify-end lg:pb-1">
             <p className="max-w-md text-left text-base leading-relaxed text-muted sm:text-lg lg:max-w-lg lg:text-right">
-              From relocations to first jobs, founders&apos; moves to long-stay returns — the homes we list earn their
+              From relocations to first jobs, founders&apos; moves to long-stay returns the homes we list earn their
               reviews honestly.
             </p>
           </div>

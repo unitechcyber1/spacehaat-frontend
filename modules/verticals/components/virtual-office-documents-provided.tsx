@@ -62,7 +62,7 @@ export function VirtualOfficeDocumentsProvided({
             Documents included with your Virtual Office
           </h2>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-muted">
-            We prioritise providers that share the right paperwork clearly — so your GST / ROC process feels smooth and predictable.
+            We prioritise providers that share the right paperwork clearly so your GST / ROC process feels smooth and predictable.
           </p>
 
           <div className="mt-8 grid gap-5 sm:grid-cols-2">

@@ -6,7 +6,7 @@ type MobileConsultationBarProps = {
 };
 
 export function MobileConsultationBar({
-  label = "Get Free Consultation",
+  label = "Expert guidance · Zero brokerage",
   href = "#lead-form",
 }: MobileConsultationBarProps) {
   return (

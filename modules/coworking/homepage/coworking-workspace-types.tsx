@@ -52,7 +52,7 @@ export function CoworkingWorkspaceTypes() {
         <CoworkingSectionHeader
           eyebrow="Workspace Types"
           title="Every Way to Work, Covered"
-          description="From single-day desks to fully managed offices — pick the model that fits your team."
+          description="From single-day desks to fully managed offices, pick the plan that fits your team."
         />
 
         <div className="no-scrollbar -mx-5 flex snap-x gap-2.5 overflow-x-auto px-5 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">

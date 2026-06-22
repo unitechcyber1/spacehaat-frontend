@@ -100,7 +100,7 @@ export function ColivingDetailLeadQuiz({
   spaceListingId,
   localityLabel,
 }: ColivingDetailLeadQuizProps) {
-  const { open, closeQuiz } = useColivingLeadQuiz();
+  const { open, closeQuiz, shaking } = useColivingLeadQuiz();
 
   const plans = space.plans?.length ? space.plans : [{ name: "Standard room", price: space.price }];
   const minPrice = Math.min(...plans.map((p) => p.price));
@@ -266,9 +266,33 @@ export function ColivingDetailLeadQuiz({
         id="booking-panel"
         className="hidden scroll-mt-28 lg:sticky lg:top-32 lg:block lg:self-start lg:scroll-mt-32"
       >
-        <div className="z-30 overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_12px_30px_-12px_rgba(15,23,42,0.18),0_4px_10px_-4px_rgba(15,23,42,0.06)]">
+        <motion.div
+          animate={
+            shaking
+              ? {
+                  x: [0, -6, 6, -4, 4, -2.5, 2.5, -1, 1, 0],
+                  boxShadow: [
+                    "0 12px 30px -12px rgba(15,23,42,0.18), 0 4px 10px -4px rgba(15,23,42,0.06)",
+                    "0 16px 36px -10px rgba(76,175,80,0.22), 0 6px 14px -4px rgba(15,23,42,0.08)",
+                    "0 12px 30px -12px rgba(15,23,42,0.18), 0 4px 10px -4px rgba(15,23,42,0.06)",
+                  ],
+                }
+              : {
+                  x: 0,
+                  boxShadow:
+                    "0 12px 30px -12px rgba(15,23,42,0.18), 0 4px 10px -4px rgba(15,23,42,0.06)",
+                }
+          }
+          transition={{ duration: 0.68, ease: [0.36, 0, 0.2, 1] }}
+          className={cn(
+            "z-30 overflow-hidden rounded-3xl border bg-white",
+            shaking
+              ? "border-[color:var(--color-brand)]/35"
+              : "border-slate-200/80",
+          )}
+        >
           {quizPanel}
-        </div>
+        </motion.div>
       </aside>
 
       <AnimatePresence>

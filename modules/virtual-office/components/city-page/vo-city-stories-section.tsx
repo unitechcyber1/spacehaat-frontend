@@ -153,7 +153,7 @@ function buildStories(cityDisplay: string): VoCityStory[] {
       quote: (
         <>
           Got my {cityDisplay} GSTIN in <b className="font-semibold text-ink">6 days</b>. The documents were
-          perfect — NOC, agreement and the DHBVN bill all lined up, so there was zero rejection. I was
+          perfect NOC, agreement and the DHBVN bill all lined up, so there was zero rejection. I was
           registering from Bangalore and never had to travel once.
         </>
       ),
@@ -168,7 +168,7 @@ function buildStories(cityDisplay: string): VoCityStory[] {
       quote: (
         <>
           Moved to a Cyber City address in <b className="font-semibold text-ink">3 days</b>. Clients noticed it
-          on our invoices immediately — it changed how enterprise buyers took our calls.
+          on our invoices immediately it changed how enterprise buyers took our calls.
         </>
       ),
       initials: "MK",
@@ -181,7 +181,7 @@ function buildStories(cityDisplay: string): VoCityStory[] {
       id: "rohit",
       quote: (
         <>
-          The SpaceHaat team shortlisted 3 options for us — no pressure, no brokerage. We picked Golf Course
+          The SpaceHaat team shortlisted 3 options for us no pressure, no brokerage. We picked Golf Course
           Road and never looked back.
         </>
       ),

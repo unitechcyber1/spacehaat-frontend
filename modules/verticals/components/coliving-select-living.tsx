@@ -45,7 +45,7 @@ function ChatMockup({ className }: { className?: string }) {
           </div>
           <div className="min-w-0 max-w-[min(100%,20rem)] sm:max-w-[22rem]">
             <div className="rounded-2xl rounded-tl-md bg-[#ede8e0] px-3.5 py-3 text-sm leading-relaxed text-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] sm:px-4">
-              Hi! I&apos;m Aditi from the SpaceHaat Living desk. Tell me your city, budget, and move-in date —
+              Hi! I&apos;m Aditi from the SpaceHaat Living desk. Tell me your city, budget, and move-in date
               I&apos;ll shortlist verified homes before we book any tours.
             </div>
             <p className="mt-1.5 text-[0.7rem] leading-snug text-muted">Aditi · 2:21 PM</p>
@@ -132,7 +132,7 @@ export function ColivingSelectLiving() {
             </h2>
 
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted sm:mt-5 sm:text-lg">
-              Tell us your city, budget, and timeline — a Living specialist shortlists verified coliving and PG
+              Tell us your city, budget, and timeline and a Living specialist shortlists verified coliving and PG
               options, confirms what&apos;s included, and helps you tour with confidence. Same Select rigor you know
               from workspace search.
             </p>

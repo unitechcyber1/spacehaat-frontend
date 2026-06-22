@@ -2,7 +2,7 @@ const faqs = [
   {
     question: "Is a virtual office address valid for GST registration?",
     answer:
-      "Yes. A virtual office with the right documentation — NOC, utility bill, and rental agreement — is fully accepted by GST authorities across India. All addresses on SpaceHaat are verified for GST compliance.",
+      "Yes. A virtual office with the right documentation NOC, utility bill, and rental agreement is fully accepted by GST authorities across India. All addresses on SpaceHaat are verified for GST compliance.",
   },
   {
     question: "Can I use a virtual office for company / ROC registration?",
@@ -17,12 +17,12 @@ const faqs = [
   {
     question: "What is APOB and do you support it?",
     answer:
-      "APOB (Additional Place of Business) is required when you want to expand GST registration to a new state. Yes — our GST Registration plan includes APOB support for inter-state sellers.",
+      "APOB (Additional Place of Business) is required when you want to expand GST registration to a new state. Yes our GST Registration plan includes APOB support for inter-state sellers.",
   },
   {
     question: "Is SpaceHaat a virtual office provider or aggregator?",
     answer:
-      "SpaceHaat is a discovery and aggregator platform. We connect you to the best-fit verified provider in your city — giving you unbiased options, better pricing, and expert guidance throughout the process.",
+      "SpaceHaat is a discovery and aggregator platform. We connect you to the best-fit verified provider in your city giving you unbiased options, better pricing, and expert guidance throughout the process.",
   },
   {
     question: "What if I need a virtual office in multiple cities?",

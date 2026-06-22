@@ -14,7 +14,7 @@ const TILES: { icon: LucideIcon; title: string; description: string }[] = [
     icon: Calendar,
     title: "Meeting rooms actually bookable",
     description:
-      "We attempt to book one — not ask whether it's possible. Broken portals and unreachable staff disqualify a space.",
+      "We attempt to book one, not ask whether it's possible. Broken portals and unreachable staff disqualify a space.",
   },
   {
     icon: IndianRupee,
@@ -26,7 +26,7 @@ const TILES: { icon: LucideIcon; title: string; description: string }[] = [
     icon: CheckSquare,
     title: "Walked, not photographed",
     description:
-      "The space had to hold up on a random Wednesday morning — not just a staged broker walkthrough.",
+      "The space had to hold up on a random Wednesday morning, not just a staged broker walkthrough.",
   },
 ];
 
@@ -38,9 +38,9 @@ export function CoworkingVerification() {
           eyebrow="Our Standard"
           title={
             <>
-              Every listing is verified.
+              Every listing is verified
               <br />
-              Here&apos;s what that means.
+              Here&apos;s what that means
             </>
           }
           className="max-w-[640px]"

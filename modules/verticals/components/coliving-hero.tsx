@@ -75,7 +75,7 @@ export function ColivingHero({ data }: ColivingHeroProps) {
 
             <FadeIn delay={0.12}>
               <p className="mt-4 max-w-xl text-[0.98rem] leading-[1.65] text-muted sm:mt-5 hidden sm:block sm:text-lg sm:leading-relaxed">
-                Compare verified coliving residences and premium PGs across India — fully furnished, all-inclusive
+                Compare verified coliving residences and premium PGs across India fully furnished, all-inclusive
                 bills, real photos and confirmed pricing. No brokers. No surprises.
               </p>
             </FadeIn>

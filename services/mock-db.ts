@@ -2028,9 +2028,9 @@ export function getVerticalLandingData(vertical: SpaceVertical): VerticalLanding
       vertical,
       hero: {
         eyebrow: "India's Trusted Virtual Office Provider",
-        title: "Your Business Deserves a Credible Address — Without the Rent",
+        title: "Virtual Office Address for GST Registration & Business Growth",
         subtitle:
-          "Get a GST-ready, compliance-grade virtual office in India's top cities. Verified providers, full documentation support, and setup in 24-48 hours.",
+          "Get a GST-compliant virtual office address in top Indian cities with complete documentation support and fast setup.",
         ctaLabel: "Get Virtual Office",
         image:
           "https://img.spacehaat.com/images/latest_images_2024/1be87877ad43a0a7666804cd6c1052a99b22488d.webp",

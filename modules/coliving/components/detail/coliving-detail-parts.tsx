@@ -18,6 +18,7 @@ import {
 import type { ComponentType, ReactNode } from "react";
 
 import type { MapCoordinates } from "@/lib/coliving-map";
+import { useColivingLeadQuiz } from "@/modules/coliving/components/detail/coliving-detail-lead-quiz-context";
 import { cn } from "@/utils/cn";
 import { formatCurrency } from "@/utils/format";
 
@@ -46,15 +47,15 @@ export function ColivingHostSection({
   verified,
   subtitle,
   tags,
-  bookingHref = "#booking-panel",
 }: {
   hostName: string;
   hostInitials: string;
   verified?: boolean;
   subtitle: string;
   tags: string[];
-  bookingHref?: string;
 }) {
+  const { focusLeadQuiz } = useColivingLeadQuiz();
+
   return (
     <div className="border-b border-slate-200/80 pb-6 max-lg:pt-1 lg:rounded-2xl lg:border lg:bg-white lg:p-6 lg:shadow-soft">
       <div className="flex items-start gap-4">
@@ -95,19 +96,21 @@ export function ColivingHostSection({
             </div>
           ) : null}
         </div>
-        <Link
-          href={bookingHref}
+        <button
+          type="button"
+          onClick={focusLeadQuiz}
           className="hidden shrink-0 items-center justify-center rounded-full border border-slate-200/90 bg-white px-4 py-2.5 text-sm font-medium text-ink transition hover:bg-[#f9f8f5] lg:inline-flex"
         >
           Message host
-        </Link>
+        </button>
       </div>
-      <Link
-        href={bookingHref}
+      <button
+        type="button"
+        onClick={focusLeadQuiz}
         className="mt-5 flex w-full items-center justify-center rounded-full border border-slate-200/90 bg-white py-3 text-sm font-semibold text-ink transition hover:bg-white/80 lg:hidden"
       >
         Message host
-      </Link>
+      </button>
     </div>
   );
 }
