@@ -67,6 +67,8 @@ export type CoworkingWorkspacesListFilters = {
   maxPrice?: number;
   sortBy?: string;
   orderBy?: 1 | -1;
+  /** 1-indexed page — matches upstream `?page=` when supported. */
+  page?: number;
 };
 
 function isLikelyMongoObjectId(value: string): boolean {
@@ -121,8 +123,10 @@ function mockWorkspacesList(
   name?: string,
   micro_location?: string,
   virtual?: boolean,
+  listFilters?: CoworkingWorkspacesListFilters,
 ): CoworkingModel.WorkSpacesListResponse {
   const slug = resolveCatalogIdToSlug(cityCatalogId.trim());
+  const page = Math.max(1, listFilters?.page ?? 1);
   if (!slug) {
     return { data: [], meta: { limit, cityId: cityCatalogId, source: "mock" } };
   }
@@ -141,13 +145,16 @@ function mockWorkspacesList(
   if (microId) {
     all = filterSeedSpacesByMicroLocationKey(all, microId);
   }
-  const slice = all.slice(0, limit);
+  const start = (page - 1) * limit;
+  const slice = all.slice(start, start + limit);
   const data = slice.map((space) => mapSeedSpaceToCoworkingWorkspace(space, cityCatalogId.trim()));
   return {
     data,
     meta: {
       limit,
+      page,
       total: all.length,
+      totalRecords: all.length,
       returned: data.length,
       cityId: cityCatalogId,
       citySlug: slug,
@@ -170,12 +177,14 @@ async function fetchCoworkingWorkspacesList(
   listFilters?: CoworkingWorkspacesListFilters,
 ): Promise<CoworkingModel.WorkSpacesListResponse> {
   if (!isCoworkingUserApiProxyEnabled()) {
-    return mockWorkspacesList(cityCatalogId, limit, name, micro_location, virtual);
+    return mockWorkspacesList(cityCatalogId, limit, name, micro_location, virtual, listFilters);
   }
   try {
+    const page = Math.max(1, listFilters?.page ?? 1);
     const params: Record<string, string | number | boolean> = {
       city: cityCatalogId.trim(),
       limit,
+      page,
     };
     const q = name?.trim();
     if (q) params.name = q;
@@ -201,7 +210,7 @@ async function fetchCoworkingWorkspacesList(
       source: "axios",
     });
   } catch {
-    return mockWorkspacesList(cityCatalogId, limit, name, micro_location, virtual);
+    return mockWorkspacesList(cityCatalogId, limit, name, micro_location, virtual, listFilters);
   }
 }
 
@@ -249,12 +258,10 @@ export async function coworkingWorkspacesListForCity(
   virtual?: boolean,
   listFilters?: CoworkingWorkspacesListFilters,
 ): Promise<CoworkingModel.WorkSpace[] | null> {
-  const city = catalogCityId.trim();
-  if (!city) return null;
-  const payload = await loadCoworkingWorkspacesList(
-    city,
+  const payload = await loadCoworkingWorkspacesPageForCity(
+    catalogCityId,
     limit,
-    undefined,
+    listFilters?.page ?? 1,
     microLocationId,
     virtual,
     listFilters,
@@ -263,6 +270,23 @@ export async function coworkingWorkspacesListForCity(
   if (!arr?.length) return null;
   if (!isCoworkingWorkspaceShape(arr[0])) return null;
   return arr;
+}
+
+/** Paginated list with `totalRecords` for city / microlocation listing UIs. */
+export async function loadCoworkingWorkspacesPageForCity(
+  catalogCityId: string,
+  limit: number,
+  page: number,
+  microLocationId?: string,
+  virtual?: boolean,
+  listFilters?: CoworkingWorkspacesListFilters,
+): Promise<CoworkingModel.WorkSpacesListResponse> {
+  const city = catalogCityId.trim();
+  if (!city) return { data: [], meta: { limit, page, totalRecords: 0 } };
+  return loadCoworkingWorkspacesList(city, limit, undefined, microLocationId, virtual, {
+    ...listFilters,
+    page,
+  });
 }
 
 /** Homepage / header search: name filter on the same workspaces list endpoint. */

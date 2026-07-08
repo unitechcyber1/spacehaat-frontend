@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   applyCoworkingListFiltersClient,
   countActiveCoworkingListFilters,
@@ -12,17 +13,17 @@ import {
   parseCoworkingListFiltersFromSearchParams,
   type CoworkingListFilterState,
 } from "@/lib/coworking-list-filters";
-import { Pagination } from "@/modules/city-pages/components/pagination";
 import { PopularLocalitiesRail } from "@/modules/city-pages/components/popular-localities-rail";
 import { CoworkingFiltersModal } from "@/modules/coworking/components/coworking-filters-modal";
 import { CoworkingListingToolbar } from "@/modules/coworking/components/coworking-listing-toolbar";
+import { SpaceGrid } from "@/modules/spaces/components/space-grid";
 import { SpaceGridSkeleton } from "@/modules/spaces/components/space-grid-skeleton";
-import { coworkingWorkspacesListForCity } from "@/services/coworking-api";
+import { loadCoworkingWorkspacesPageForCity } from "@/services/coworking-api";
 import { mapSeedSpaceToCoworkingWorkspace } from "@/services/coworking-workspace-mapper";
 import type { CoworkingModel } from "@/types/coworking-workspace.model";
 import type { Space } from "@/types";
 
-const LIST_LIMIT = 48;
+const PAGE_SIZE = 24;
 
 type CoworkingFilteredListingProps = {
   listBasePath: string;
@@ -37,6 +38,16 @@ type CoworkingFilteredListingProps = {
     fallbackLocations: { name: string; slug: string }[];
   };
 };
+
+function resolveTotalRecords(
+  meta: CoworkingModel.WorkSpacesListResponse["meta"],
+  loadedCount: number,
+  pageSize: number,
+): number {
+  const fromMeta = meta?.totalRecords ?? meta?.total;
+  if (typeof fromMeta === "number" && Number.isFinite(fromMeta)) return fromMeta;
+  return loadedCount >= pageSize ? loadedCount + pageSize : loadedCount;
+}
 
 export function CoworkingFilteredListing({
   listBasePath,
@@ -55,8 +66,13 @@ export function CoworkingFilteredListing({
     parseCoworkingListFiltersFromSearchParams(new URLSearchParams(searchParams.toString())),
   );
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [rows, setRows] = useState<CoworkingModel.WorkSpace[] | null>(null);
+  const [rows, setRows] = useState<CoworkingModel.WorkSpace[]>([]);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [page, setPage] = useState(1);
+  const [seedMode, setSeedMode] = useState(false);
+  const [seedVisibleCount, setSeedVisibleCount] = useState(PAGE_SIZE);
   const [loading, setLoading] = useState(needsRemote);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -65,41 +81,73 @@ export function CoworkingFilteredListing({
     [filters],
   );
 
-  const fetchList = useCallback(
-    async (nextFilters: CoworkingListFilterState) => {
+  const seedFilteredRows = useMemo(() => {
+    if (!catalogCityId || !seedSpaces.length) return [];
+    const seeded = seedSpaces.map((s) => mapSeedSpaceToCoworkingWorkspace(s, catalogCityId));
+    return applyCoworkingListFiltersClient(seeded, filters) as CoworkingModel.WorkSpace[];
+  }, [catalogCityId, seedSpaces, filters]);
+
+  const fetchPage = useCallback(
+    async (nextFilters: CoworkingListFilterState, pageNum: number, append: boolean) => {
       if (!catalogCityId) return;
 
       setError(null);
-      setLoading(true);
+      if (append) setLoadingMore(true);
+      else setLoading(true);
 
       try {
         const includeSortInRequest = searchParams.has("sortBy");
         const apiFilters = coworkingFiltersToApiParams(nextFilters, { includeSortInRequest });
-        let list = await coworkingWorkspacesListForCity(
+        const payload = await loadCoworkingWorkspacesPageForCity(
           catalogCityId,
-          LIST_LIMIT,
+          PAGE_SIZE,
+          pageNum,
           microLocationId,
           false,
           apiFilters,
         );
 
-        if (list?.length) {
+        let list = payload.data ?? [];
+        if (list.length) {
           list = applyCoworkingListFiltersClient(list, nextFilters) as CoworkingModel.WorkSpace[];
-          setRows(list);
-        } else if (seedSpaces.length) {
-          const seeded = seedSpaces.map((s) => mapSeedSpaceToCoworkingWorkspace(s, catalogCityId));
-          setRows(applyCoworkingListFiltersClient(seeded, nextFilters) as CoworkingModel.WorkSpace[]);
-        } else {
+          const total = resolveTotalRecords(payload.meta, list.length, PAGE_SIZE);
+          setSeedMode(false);
+          setTotalRecords(total);
+          setPage(pageNum);
+          setRows((prev) => (append ? [...prev, ...list] : list));
+        } else if (seedSpaces.length && pageNum === 1) {
+          setSeedMode(true);
+          setTotalRecords(seedFilteredRows.length);
+          setPage(1);
+          setSeedVisibleCount(PAGE_SIZE);
+          setRows([]);
+        } else if (!append) {
+          setSeedMode(false);
+          setTotalRecords(0);
+          setPage(1);
           setRows([]);
         }
       } catch {
-        setError("Could not load coworking spaces. Please try again.");
-        setRows([]);
+        if (seedSpaces.length && pageNum === 1) {
+          setSeedMode(true);
+          setTotalRecords(seedFilteredRows.length);
+          setPage(1);
+          setSeedVisibleCount(PAGE_SIZE);
+          setRows([]);
+          setError(null);
+        } else {
+          setError("Could not load coworking spaces. Please try again.");
+          if (!append) {
+            setRows([]);
+            setTotalRecords(0);
+          }
+        }
       } finally {
         setLoading(false);
+        setLoadingMore(false);
       }
     },
-    [catalogCityId, microLocationId, searchParams, seedSpaces],
+    [catalogCityId, microLocationId, searchParams, seedSpaces.length, seedFilteredRows.length],
   );
 
   useEffect(() => {
@@ -110,17 +158,25 @@ export function CoworkingFilteredListing({
 
     if (!needsRemote) {
       setLoading(false);
+      setSeedMode(true);
       if (seedSpaces.length && catalogCityId) {
         const seeded = seedSpaces.map((s) => mapSeedSpaceToCoworkingWorkspace(s, catalogCityId));
-        setRows(applyCoworkingListFiltersClient(seeded, parsed) as CoworkingModel.WorkSpace[]);
+        const filtered = applyCoworkingListFiltersClient(seeded, parsed) as CoworkingModel.WorkSpace[];
+        setTotalRecords(filtered.length);
+        setSeedVisibleCount(PAGE_SIZE);
       }
       return;
     }
 
     startTransition(() => {
-      void fetchList(parsed);
+      void fetchPage(parsed, 1, false);
     });
-  }, [searchParams, needsRemote, catalogCityId, microLocationId, fetchList, seedSpaces]);
+  }, [searchParams, needsRemote, catalogCityId, microLocationId, fetchPage, seedSpaces]);
+
+  useEffect(() => {
+    if (!seedMode || !needsRemote) return;
+    setTotalRecords(seedFilteredRows.length);
+  }, [seedMode, needsRemote, seedFilteredRows.length]);
 
   const applyFilters = useCallback(
     (next: CoworkingListFilterState) => {
@@ -136,8 +192,25 @@ export function CoworkingFilteredListing({
     applyFilters({ ...DEFAULT_COWORKING_LIST_FILTERS });
   }, [applyFilters]);
 
-  const resultCount = rows?.length ?? 0;
+  const displayedRows = seedMode
+    ? seedFilteredRows.slice(0, seedVisibleCount)
+    : rows;
+
+  const resultCount = seedMode ? seedFilteredRows.length : totalRecords;
+  const hasMore = seedMode
+    ? seedVisibleCount < seedFilteredRows.length
+    : rows.length < totalRecords;
   const showGrid = !loading && !pending;
+  const gridPending = loadingMore;
+
+  const handleLoadMore = useCallback(() => {
+    if (seedMode) {
+      setSeedVisibleCount((current) => current + PAGE_SIZE);
+      return;
+    }
+    if (loading || loadingMore || !hasMore) return;
+    void fetchPage(filters, page + 1, true);
+  }, [seedMode, loading, loadingMore, hasMore, fetchPage, filters, page]);
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -173,7 +246,7 @@ export function CoworkingFilteredListing({
       {error ? (
         <div className="rounded-2xl border border-red-200/80 bg-red-50 px-5 py-4 text-sm text-red-800">
           <p>{error}</p>
-          <button type="button" onClick={() => void fetchList(filters)} className="mt-2 font-semibold underline">
+          <button type="button" onClick={() => void fetchPage(filters, 1, false)} className="mt-2 font-semibold underline">
             Retry
           </button>
         </div>
@@ -181,7 +254,7 @@ export function CoworkingFilteredListing({
 
       {loading || pending ? <SpaceGridSkeleton count={8} /> : null}
 
-      {showGrid && resultCount === 0 ? (
+      {showGrid && displayedRows.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-200/80 bg-white px-6 py-14 text-center">
           <p className="text-lg font-semibold text-ink">No coworking spaces match your filters</p>
           <p className="mt-2 text-sm text-muted">Try a wider price range or change the sort order.</p>
@@ -195,13 +268,27 @@ export function CoworkingFilteredListing({
         </div>
       ) : null}
 
-      {showGrid && resultCount > 0 ? (
-        <Pagination
-          spaces={seedSpaces}
-          coworkingWorkspaces={rows}
-          ctaLabel="View Details"
-          cardVariant="airbnb"
-        />
+      {showGrid && displayedRows.length > 0 ? (
+        <div className={gridPending ? "opacity-60 transition-opacity" : undefined}>
+          <SpaceGrid
+            spaces={[]}
+            coworkingWorkspaces={displayedRows}
+            ctaLabel="View Details"
+            variant="airbnb"
+          />
+          {hasMore ? (
+            <div className="mt-8 flex justify-center">
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={loadingMore}
+                onClick={handleLoadMore}
+              >
+                {loadingMore ? "Loading…" : "Load more"}
+              </Button>
+            </div>
+          ) : null}
+        </div>
       ) : null}
     </div>
   );

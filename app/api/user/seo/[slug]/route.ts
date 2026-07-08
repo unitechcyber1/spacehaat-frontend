@@ -3,9 +3,13 @@ import { type NextRequest, NextResponse } from "next/server";
 import { buildApiClientHeaders } from "@/services/api-client-headers";
 import { resolveApiBaseUrl } from "@/services/env-config";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 type Ctx = { params: Promise<{ slug: string }> };
+
+const NO_CACHE_HEADERS = {
+  "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+} as const;
 
 /**
  * Proxies public SEO docs from the backend: `GET /api/user/seo/:pathSlug` (e.g. `home`).
@@ -20,7 +24,7 @@ export async function GET(_request: NextRequest, context: Ctx) {
   const base = resolveApiBaseUrl();
   const url = `${base}/api/user/seo/${encodeURIComponent(slug)}`;
   const res = await fetch(url, {
-    next: { revalidate: 300 },
+    cache: "no-store",
     headers: buildApiClientHeaders(),
   });
 
@@ -29,7 +33,7 @@ export async function GET(_request: NextRequest, context: Ctx) {
     status: res.status,
     headers: {
       "content-type": res.headers.get("content-type") || "application/json",
-      "cache-control": "public, s-maxage=300, stale-while-revalidate=600",
+      ...NO_CACHE_HEADERS,
     },
   });
 }

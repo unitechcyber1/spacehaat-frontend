@@ -9,39 +9,29 @@ import { SeoFaqsSection } from "@/components/seo/seo-faqs-section";
 import { SeoFooterContentSection } from "@/components/seo/seo-footer-content-section";
 import { SeoStructuredData } from "@/components/seo/seo-structured-data";
 import { resolveCanonicalUrl } from "@/lib/canonical-url";
-import { pathnameToSeoSlug } from "@/lib/pathname-to-seo-slug";
-import { isVerticalDetailPagePath } from "@/lib/vertical-detail-route";
-import { normalizeSeoFromResponse } from "@/lib/seo-normalize";
 import { getFallbackSeoContent } from "@/lib/seo-fallbacks";
+import { pathnameToSeoSlug } from "@/lib/pathname-to-seo-slug";
+import { normalizeSeoFromResponse } from "@/lib/seo-normalize";
+import { isVerticalDetailPagePath } from "@/lib/vertical-detail-route";
 import type { SeoContent } from "@/types/seo.model";
-
-const seoBySlugMemory = new Map<string, SeoContent>();
 
 function isAddListingRoute(pathname: string) {
   return pathname === "/add" || pathname.startsWith("/add/");
 }
 
 async function fetchSeoForSlug(slug: string, pathname: string): Promise<SeoContent> {
-  const cached = seoBySlugMemory.get(slug);
-  if (cached) return cached;
-
   try {
-    const res = await fetch(`/api/user/seo/${encodeURIComponent(slug)}`);
+    const res = await fetch(`/api/user/seo/${encodeURIComponent(slug)}`, { cache: "no-store" });
     if (res.ok) {
       const json = (await res.json().catch(() => null)) as unknown;
       const fromApi = normalizeSeoFromResponse(json);
-      if (fromApi) {
-        seoBySlugMemory.set(slug, fromApi);
-        return fromApi;
-      }
+      if (fromApi) return fromApi;
     }
   } catch {
     // fall through to vertical fallback
   }
 
-  const fallback = getFallbackSeoContent(pathname, slug);
-  seoBySlugMemory.set(slug, fallback);
-  return fallback;
+  return getFallbackSeoContent(pathname, slug);
 }
 
 /**
@@ -53,9 +43,7 @@ export function SeoCmsRouteSections() {
   const pathSeg = pathname.split("?")[0] ?? "/";
   const slug = useMemo(() => pathnameToSeoSlug(pathSeg), [pathSeg]);
   const isDetailPage = useMemo(() => isVerticalDetailPagePath(pathSeg), [pathSeg]);
-  const [seo, setSeo] = useState<SeoContent | null>(() =>
-    isVerticalDetailPagePath(pathSeg) ? null : seoBySlugMemory.get(slug) ?? null,
-  );
+  const [seo, setSeo] = useState<SeoContent | null>(null);
 
   useEffect(() => {
     if (isAddListingRoute(pathSeg) || isDetailPage) {
@@ -64,13 +52,8 @@ export function SeoCmsRouteSections() {
     }
 
     let cancelled = false;
-    const cached = seoBySlugMemory.get(slug);
-    if (cached) {
-      setSeo(cached);
-      return;
-    }
-
     setSeo(null);
+
     void fetchSeoForSlug(slug, pathSeg).then((doc) => {
       if (!cancelled) setSeo(doc);
     });
