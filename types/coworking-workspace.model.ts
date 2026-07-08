@@ -262,6 +262,7 @@ export namespace CoworkingModel {
     data: WorkSpace[];
     meta?: {
       limit?: number;
+      page?: number;
       total?: number;
       /** From wire `totalRecords` when present. */
       totalRecords?: number;

@@ -1,12 +1,9 @@
-import { unstable_cache } from "next/cache";
 import { cache } from "react";
 
+import { normalizeSeoFromResponse } from "@/lib/seo-normalize";
 import { buildApiClientHeaders } from "@/services/api-client-headers";
 import { resolveApiBaseUrl, resolveInternalAppBaseUrl } from "@/services/env-config";
-import { normalizeSeoFromResponse } from "@/lib/seo-normalize";
 import type { SeoContent } from "@/types/seo.model";
-
-const SEO_REVALIDATE_SEC = 300;
 
 async function fetchSeoBySlugInternal(slug: string): Promise<SeoContent | null> {
   if (!slug) return null;
@@ -16,7 +13,7 @@ async function fetchSeoBySlugInternal(slug: string): Promise<SeoContent | null> 
 
   const tryFetch = async (url: string) => {
     const res = await fetch(url, {
-      next: { revalidate: SEO_REVALIDATE_SEC },
+      cache: "no-store",
       headers: buildApiClientHeaders(),
     });
     if (!res.ok) return null;
@@ -36,16 +33,8 @@ async function fetchSeoBySlugInternal(slug: string): Promise<SeoContent | null> 
   return null;
 }
 
-function getSeoBySlugCached(slug: string) {
-  return unstable_cache(
-    () => fetchSeoBySlugInternal(slug),
-    ["seo-by-slug", slug],
-    { revalidate: SEO_REVALIDATE_SEC, tags: [`seo:${slug}`] },
-  )();
-}
-
 /**
  * Deduplicate SEO fetch in the same request (e.g. `generateMetadata` + layout).
- * Cross-request results are cached for {@link SEO_REVALIDATE_SEC}s.
+ * Always hits the upstream API — no cross-request cache.
  */
-export const getSeoBySlug = cache((slug: string) => getSeoBySlugCached(slug));
+export const getSeoBySlug = cache((slug: string) => fetchSeoBySlugInternal(slug));
