@@ -1,3 +1,4 @@
+import { resolvePgContactPhone } from "@/lib/pg-contact";
 import { extractPgCoordinates, extractPgNearbyPlaces } from "@/lib/pg-nearby";
 import { resolvePgListingSlug, slugifyPgName } from "@/lib/pg-slug";
 import type { Space } from "@/types";
@@ -86,6 +87,7 @@ export function normalizePgListItem(raw: unknown): PgDetail | null {
   const nearbyPlaces = extractPgNearbyPlaces(merged);
   const coordinates = extractPgCoordinates(merged) ?? pg.coordinates;
   const priority = normalizePgPriority(merged.priority) ?? pg.priority;
+  const contactPhone = resolvePgContactPhone({ ...pg, ...merged } as PgDetail) ?? undefined;
 
   return {
     ...pg,
@@ -94,6 +96,7 @@ export function normalizePgListItem(raw: unknown): PgDetail | null {
     coordinates,
     nearbyPlaces: nearbyPlaces.length ? nearbyPlaces : pg.nearbyPlaces,
     priority,
+    contactPhone,
   };
 }
 
@@ -111,6 +114,10 @@ export function normalizePgDetailResponse(res: PgDetailResponse): PgDetailRespon
     pickPgApiSlug(res.data as unknown as Record<string, unknown>);
 
   const dataSlug = res.data.slug?.trim() || envelopeSlug;
+  const contactPhone =
+    resolvePgContactPhone(res.data) ??
+    resolvePgContactPhone(res as unknown as PgDetail) ??
+    undefined;
 
   return {
     ...res,
@@ -118,6 +125,7 @@ export function normalizePgDetailResponse(res: PgDetailResponse): PgDetailRespon
     data: {
       ...res.data,
       slug: dataSlug,
+      contactPhone: contactPhone ?? res.data.contactPhone,
     },
   };
 }

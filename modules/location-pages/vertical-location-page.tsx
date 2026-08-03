@@ -108,45 +108,47 @@ export function VerticalLocationPage({
         </Container>
       </section>
 
-      <section className="pb-14 sm:pb-20">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--color-brand)]">
-                SEO Guide
-              </p>
-              <h2 className="mt-4 font-display text-3xl leading-tight text-ink sm:text-[2rem]">
-                {data.seoSection.title}
-              </h2>
-              <div className="mt-5 space-y-4 text-[0.98rem] leading-7 text-muted">
-                {data.seoSection.paragraphs.map((paragraph, index) => (
-                  <p key={`${data.seoSection.title}-${index}`}>{paragraph}</p>
-                ))}
+      {data.vertical !== "coworking" ? (
+        <section className="pb-14 sm:pb-20">
+          <Container>
+            <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--color-brand)]">
+                  SEO Guide
+                </p>
+                <h2 className="mt-4 font-display text-3xl leading-tight text-ink sm:text-[2rem]">
+                  {data.seoSection.title}
+                </h2>
+                <div className="mt-5 space-y-4 text-[0.98rem] leading-7 text-muted">
+                  {data.seoSection.paragraphs.map((paragraph, index) => (
+                    <p key={`${data.seoSection.title}-${index}`}>{paragraph}</p>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-[1.6rem] border border-slate-200/80 bg-white p-6 shadow-soft">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Popular spaces in this location
+                </p>
+                <div className="mt-5 grid gap-3">
+                  {data.popularSpaces.map((space) => (
+                    <Link
+                      key={space.id}
+                      href={`/${space.vertical}/${space.slug}`}
+                      className="rounded-[1rem] border border-slate-200/80 bg-slate-50 px-4 py-4 transition hover:border-slate-300 hover:bg-white"
+                    >
+                      <p className="font-semibold text-ink">{space.name}</p>
+                      <p className="mt-1 text-sm text-muted">{space.brand}</p>
+                      <p className="mt-2 text-sm text-slate-700">
+                        Starting from {formatCurrency(space.price)}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="rounded-[1.6rem] border border-slate-200/80 bg-white p-6 shadow-soft">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Popular spaces in this location
-              </p>
-              <div className="mt-5 grid gap-3">
-                {data.popularSpaces.map((space) => (
-                  <Link
-                    key={space.id}
-                    href={`/${space.vertical}/${space.slug}`}
-                    className="rounded-[1rem] border border-slate-200/80 bg-slate-50 px-4 py-4 transition hover:border-slate-300 hover:bg-white"
-                  >
-                    <p className="font-semibold text-ink">{space.name}</p>
-                    <p className="mt-1 text-sm text-muted">{space.brand}</p>
-                    <p className="mt-2 text-sm text-slate-700">
-                      Starting from {formatCurrency(space.price)}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
+      ) : null}
 
       <FAQSection faqs={data.faqs} locationName={data.locationName} />
 
