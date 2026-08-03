@@ -16,7 +16,10 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { buildUserEnquiryBody } from "@/lib/user-enquiry-payload";
+import type { PgOwnerContact } from "@/lib/pg-owner-contact";
+import { ColivingOwnerContactSuccess } from "@/modules/coliving/components/coliving-owner-contact-success";
 import { useColivingLeadQuiz } from "@/modules/coliving/components/detail/coliving-detail-lead-quiz-context";
+import { fetchPgOwnerContact } from "@/services/pg-owner-contact-api";
 import { submitUserEnquiry } from "@/services/user-enquiry-api";
 import type { Space } from "@/types";
 import { cn } from "@/utils/cn";
@@ -93,12 +96,15 @@ type ColivingDetailLeadQuizProps = {
   space: Space;
   spaceListingId?: string;
   localityLabel?: string;
+  /** Shown as owner name when unlock API omits name. */
+  ownerNameFallback?: string | null;
 };
 
 export function ColivingDetailLeadQuiz({
   space,
   spaceListingId,
   localityLabel,
+  ownerNameFallback,
 }: ColivingDetailLeadQuizProps) {
   const { open, closeQuiz, shaking } = useColivingLeadQuiz();
 
@@ -112,6 +118,7 @@ export function ColivingDetailLeadQuiz({
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [unlockedContact, setUnlockedContact] = useState<PgOwnerContact | null>(null);
 
   const [room, setRoom] = useState("");
   const [who, setWho] = useState("");
@@ -128,6 +135,7 @@ export function ColivingDetailLeadQuiz({
     setDone(false);
     setSubmitting(false);
     setSubmitError(null);
+    setUnlockedContact(null);
     setRoom("");
     setWho("");
     setWhen("");
@@ -200,6 +208,10 @@ export function ColivingDetailLeadQuiz({
       });
 
       await submitUserEnquiry(body);
+
+      const findKey = spaceListingId?.trim() || space.slug?.trim() || "";
+      const contact = findKey ? await fetchPgOwnerContact(findKey) : null;
+      setUnlockedContact(contact);
       setDone(true);
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Could not submit right now. Please try again.");
@@ -217,6 +229,7 @@ export function ColivingDetailLeadQuiz({
     space.city,
     space.location,
     space.name,
+    space.slug,
     spaceListingId,
     submitting,
     when,
@@ -257,6 +270,9 @@ export function ColivingDetailLeadQuiz({
       onSubmit={() => void handleSubmit()}
       firstName={firstName}
       roomLabel={roomLabel}
+      ownerPhone={unlockedContact?.phone}
+      ownerName={unlockedContact?.name || ownerNameFallback}
+      propertyName={space.name}
     />
   );
 
@@ -308,24 +324,22 @@ export function ColivingDetailLeadQuiz({
             onClick={handleClose}
           >
             <motion.div
-              className="flex max-h-[min(100dvh,920px)] w-full flex-col overflow-hidden rounded-t-[1.35rem] border border-slate-200/80 bg-white shadow-[0_-12px_48px_rgba(15,23,42,0.18)]"
+              className="relative flex max-h-[min(100dvh,920px)] w-full flex-col overflow-hidden rounded-t-[1.35rem] border border-slate-200/80 bg-white shadow-[0_-12px_48px_rgba(15,23,42,0.18)]"
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex shrink-0 items-center justify-center pt-2.5">
-                <span className="h-1 w-10 rounded-full bg-slate-200" aria-hidden />
-              </div>
-              <div className="flex shrink-0 items-center justify-end px-3 pb-1 pt-0.5">
+              <div className="absolute inset-x-0 top-0 z-20 flex items-start justify-between px-3 pt-2.5">
+                <span className="mx-auto mt-0.5 h-1 w-10 rounded-full bg-slate-200" aria-hidden />
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50"
+                  className="absolute right-3 top-2.5 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200/80 bg-white/95 text-slate-700 shadow-sm backdrop-blur-sm transition hover:bg-white"
                   aria-label="Close"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
               <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-[max(1rem,env(safe-area-inset-bottom))]">
@@ -369,6 +383,9 @@ type QuizPanelBodyProps = {
   onSubmit: () => void;
   firstName: string;
   roomLabel: string;
+  ownerPhone?: string | null;
+  ownerName?: string | null;
+  propertyName?: string;
 };
 
 function QuizPanelBody({
@@ -401,10 +418,15 @@ function QuizPanelBody({
   onSubmit,
   firstName,
   roomLabel,
+  ownerPhone,
+  ownerName,
+  propertyName,
 }: QuizPanelBodyProps) {
+  const ownerPhoneTrimmed = ownerPhone?.trim() || "";
+
   return (
     <>
-      <div className="border-b border-slate-200/80 bg-gradient-to-b from-[color:var(--color-brand-soft)] to-white px-[18px] pb-3.5 pt-[18px] sm:px-[22px] sm:pb-4 sm:pt-5">
+      <div className="border-b border-slate-200/80 bg-gradient-to-b from-[color:var(--color-brand-soft)] to-white px-[18px] pb-3.5 pt-12 sm:px-[22px] sm:pb-4 lg:pt-5">
         <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-brand)]">
           Starting from
         </span>
@@ -630,7 +652,16 @@ function QuizPanelBody({
           </div>
         ) : null}
 
-        {done ? (
+        {done && ownerPhoneTrimmed ? (
+          <ColivingOwnerContactSuccess
+            firstName={firstName}
+            ownerName={ownerName ?? undefined}
+            ownerPhone={ownerPhoneTrimmed}
+            propertyName={propertyName}
+          />
+        ) : null}
+
+        {done && !ownerPhoneTrimmed ? (
           <div className="flex animate-[colivingQuizFade_.4s_ease] flex-col items-center gap-2.5 px-1 py-1.5 text-center">
             <div className="mb-1 grid h-[62px] w-[62px] place-items-center rounded-full bg-[color:var(--color-brand-soft)] text-[color:var(--color-brand)] animate-[colivingQuizPop_.5s_cubic-bezier(.2,1.4,.5,1)]">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">

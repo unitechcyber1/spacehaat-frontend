@@ -43,7 +43,12 @@ export function ColivingDetailPage({ response, similar }: ColivingDetailPageProp
         <Container className="max-w-[1280px]">
           <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-12">
             <ColivingDetailMain pg={pg} />
-            <ColivingDetailLeadQuiz space={space} spaceListingId={id} localityLabel={pg.locality} />
+            <ColivingDetailLeadQuiz
+              space={space}
+              spaceListingId={id}
+              localityLabel={pg.locality}
+              ownerNameFallback={pg.postedBy}
+            />
           </div>
         </Container>
 

@@ -1,5 +1,9 @@
 import { buildApiClientHeaders } from "@/services/api-client-headers";
-import { resolveApiBaseUrl, resolveListingApiTimeoutMs } from "@/services/env-config";
+import {
+  resolveApiBaseUrl,
+  resolveLeadsSubmitTimeoutMs,
+  resolveListingApiTimeoutMs,
+} from "@/services/env-config";
 
 const PATH = "/api/user/enquiry";
 
@@ -27,7 +31,8 @@ export async function postUpstreamUserEnquiry(
   }
 
   const url = `${base.replace(/\/$/, "")}${PATH}`;
-  const timeoutMs = resolveListingApiTimeoutMs();
+  // Prefer leads timeout, fall back to listing timeout (default 15s).
+  const timeoutMs = Math.max(resolveLeadsSubmitTimeoutMs(), resolveListingApiTimeoutMs(), 20000);
 
   const ac = new AbortController();
   const t = setTimeout(() => ac.abort(), timeoutMs);
@@ -43,13 +48,13 @@ export async function postUpstreamUserEnquiry(
     const data = (await res.json().catch(() => ({}))) as unknown;
     return { ok: res.ok, status: res.status, data };
   } catch (e) {
-    const message =
-      e instanceof Error
-        ? e.name === "AbortError"
-          ? "Request timed out"
-          : e.message
-        : "Network error";
-    return { ok: false, status: 502, data: { message } };
+    const timedOut = e instanceof Error && e.name === "AbortError";
+    const message = timedOut
+      ? `Enquiry timed out after ${timeoutMs}ms while calling ${url}. Is the backend running at API_BASE_URL?`
+      : e instanceof Error
+        ? `Could not reach enquiry API at ${url}: ${e.message}`
+        : `Could not reach enquiry API at ${url}`;
+    return { ok: false, status: timedOut ? 504 : 502, data: { message } };
   } finally {
     clearTimeout(t);
   }
