@@ -1340,19 +1340,24 @@ export const getCityPageData = cache(function getCityPageData(
     seoSection: buildSeoSection(vertical, cityName, citySpaces.length),
     faqs: buildFaqs(vertical, cityName),
     leadCta: {
-      title: "Need help finding the right space?",
+      title:
+        vertical === "virtual-office"
+          ? "Get a GST-ready address without the guesswork"
+          : vertical === "coliving"
+            ? "Move into a home that actually fits"
+            : "Get a shortlist built for your team",
       description:
         vertical === "virtual-office"
-          ? `Get help comparing trusted virtual office providers in ${cityName}.`
+          ? `Compare trusted virtual office providers in ${cityName} with clear documentation support. Tell us your need and we will recommend the right plan.`
           : vertical === "coliving"
-            ? `Get help comparing coliving and PG options with clearer pricing and move-in timelines in ${cityName}.`
-            : `Talk to our team and shortlist higher-fit workspace options in ${cityName}.`,
+            ? `Share your budget, room preference, and move-in date. SpaceHaat advisors shortlist verified coliving and PG options in ${cityName} you can visit with confidence.`
+            : `Share your team size, budget, and preferred areas. Our advisors compare verified coworking options in ${cityName} and send a clear shortlist you can act on.`,
       ctaLabel:
         vertical === "virtual-office"
-          ? "Get Virtual Office Consultation"
+          ? "Get my virtual office shortlist"
           : vertical === "coliving"
-            ? "Get Coliving Consultation"
-            : "Get Free Consultation",
+            ? "Get my free home shortlist"
+            : "Get my free shortlist",
     },
   };
 });
@@ -1685,20 +1690,22 @@ export function getLocationPageData(
     leadCta: {
       title:
         vertical === "coliving"
-          ? `Looking for the right coliving or PG in ${locationName}?`
-          : `Looking for the perfect workspace in ${locationName}?`,
+          ? `Ready to shortlist homes in ${locationName}?`
+          : vertical === "virtual-office"
+            ? `Need a virtual office near ${locationName}?`
+            : `Ready for a workspace that fits ${locationName}?`,
       description:
         vertical === "virtual-office"
-          ? `Get support to compare trusted virtual office providers in ${locationName}, ${city.name}.`
+          ? `Tell us your compliance need and we will shortlist trusted virtual office providers around ${locationName}, ${city.name}.`
           : vertical === "coliving"
-            ? `Tell us your budget and move-in date for a faster shortlist of coliving and PG options in ${locationName}, ${city.name}.`
-            : `Tell us your requirement and get a faster shortlist in ${locationName}, ${city.name}.`,
+            ? `Share your budget and move-in date. We will shortlist verified coliving and PG options around ${locationName}, ${city.name}.`
+            : `Skip endless listing tabs. Our team shortlists verified coworking options around ${locationName}, ${city.name}, matched to your budget and timeline.`,
       ctaLabel:
         vertical === "virtual-office"
-          ? "Get Virtual Office Consultation"
+          ? "Get my virtual office shortlist"
           : vertical === "coliving"
-            ? "Get Coliving Consultation"
-            : "Get Free Consultation",
+            ? "Get my free home shortlist"
+            : "Talk to an advisor, free",
     },
   };
 }
@@ -1787,20 +1794,22 @@ export function buildLocationPageDataFromSpaces(
     leadCta: {
       title:
         vertical === "coliving"
-          ? `Looking for the right coliving or PG in ${locationName}?`
-          : `Looking for the perfect workspace in ${locationName}?`,
+          ? `Ready to shortlist homes in ${locationName}?`
+          : vertical === "virtual-office"
+            ? `Need a virtual office near ${locationName}?`
+            : `Ready for a workspace that fits ${locationName}?`,
       description:
         vertical === "virtual-office"
-          ? `Get support to compare trusted virtual office providers in ${locationName}, ${city.name}.`
+          ? `Tell us your compliance need and we will shortlist trusted virtual office providers around ${locationName}, ${city.name}.`
           : vertical === "coliving"
-            ? `Tell us your budget and move-in date for a faster shortlist of coliving and PG options in ${locationName}, ${city.name}.`
-            : `Tell us your requirement and get a faster shortlist in ${locationName}, ${city.name}.`,
+            ? `Share your budget and move-in date. We will shortlist verified coliving and PG options around ${locationName}, ${city.name}.`
+            : `Skip endless listing tabs. Our team shortlists verified coworking options around ${locationName}, ${city.name}, matched to your budget and timeline.`,
       ctaLabel:
         vertical === "virtual-office"
-          ? "Get Virtual Office Consultation"
+          ? "Get my virtual office shortlist"
           : vertical === "coliving"
-            ? "Get Coliving Consultation"
-            : "Get Free Consultation",
+            ? "Get my free home shortlist"
+            : "Talk to an advisor, free",
     },
   };
 }
@@ -2028,7 +2037,7 @@ export function getVerticalLandingData(vertical: SpaceVertical): VerticalLanding
       vertical,
       hero: {
         eyebrow: "India's Trusted Virtual Office Provider",
-        title: "Virtual Office Address for GST Registration & Business Growth",
+        title: "Virtual Office in India",
         subtitle:
           "Get a GST-compliant virtual office address in top Indian cities with complete documentation support and fast setup.",
         ctaLabel: "Get Virtual Office",

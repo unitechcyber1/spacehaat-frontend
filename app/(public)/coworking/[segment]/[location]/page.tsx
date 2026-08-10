@@ -3,8 +3,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { buildMetadataWithCmsSeoFallback } from "@/lib/metadata-with-cms-seo";
+import { pathnameToSeoSlug } from "@/lib/pathname-to-seo-slug";
+import { seoFaqsOrFallback } from "@/lib/seo-page-faqs";
+import { seoPageTitleOrFallback } from "@/lib/seo-page-title";
 import { VerticalLocationPage } from "@/modules/location-pages/vertical-location-page";
 import { getVerticalLocationPageContent } from "@/services/coworking-api";
+import { getSeoBySlug } from "@/services/seo-content";
 import { toTitleCase } from "@/utils/format";
 
 export async function generateMetadata({
@@ -40,5 +44,15 @@ export default async function CoworkingLocationPage({
     notFound();
   }
 
-  return <VerticalLocationPage data={data} />;
+  const pathname = `/coworking/${segment}/${location}`;
+  const seo = await getSeoBySlug(pathnameToSeoSlug(pathname));
+  return (
+    <VerticalLocationPage
+      data={{
+        ...data,
+        title: seoPageTitleOrFallback(seo, data.title),
+        faqs: seoFaqsOrFallback(seo, data.faqs),
+      }}
+    />
+  );
 }

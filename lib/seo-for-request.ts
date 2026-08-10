@@ -3,7 +3,6 @@ import { headers } from "next/headers";
 import { getFallbackSeoContent } from "@/lib/seo-fallbacks";
 import { pathnameToSeoSlug } from "@/lib/pathname-to-seo-slug";
 import { getRequestPathnameForSeo } from "@/lib/resolve-request-pathname";
-import { isVerticalDetailPagePath } from "@/lib/vertical-detail-route";
 import { getSeoBySlug } from "@/services/seo-content";
 import type { SeoContent } from "@/types/seo.model";
 
@@ -27,14 +26,6 @@ export async function getResolvedSeoForRequest(): Promise<ResolvedSeo> {
   const slug = pathname
     ? pathnameToSeoSlug(pathname)
     : h.get("x-seo-slug")?.trim() || "generic";
-
-  if (isVerticalDetailPagePath(pathNorm)) {
-    return {
-      seo: getFallbackSeoContent(pathname, slug),
-      pathname: pathNorm,
-      fromApi: false,
-    };
-  }
 
   const fromApi = await getSeoBySlug(slug);
   if (fromApi) {

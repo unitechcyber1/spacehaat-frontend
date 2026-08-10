@@ -8,6 +8,10 @@ import { getVerticalCityPageContent } from "@/services/cities";
 import { loadCoworkingWorkspaceDetail, loadCoworkingWorkspacesList } from "@/services/coworking-api";
 import { resolveVerticalSegment } from "@/services/spaces";
 import { buildMetadataWithCmsSeoFallback } from "@/lib/metadata-with-cms-seo";
+import { pathnameToSeoSlug } from "@/lib/pathname-to-seo-slug";
+import { seoFaqsOrFallback } from "@/lib/seo-page-faqs";
+import { seoPageTitleOrFallback } from "@/lib/seo-page-title";
+import { getSeoBySlug } from "@/services/seo-content";
 import { formatCurrency, toTitleCase } from "@/utils/format";
 
 export async function generateMetadata({
@@ -52,7 +56,17 @@ export default async function CoworkingSegmentPage({
   if (result.type === "city") {
     const cityData = await getVerticalCityPageContent("coworking", segment);
     if (!cityData) notFound();
-    return <VerticalCityPage data={cityData} />;
+    const pathname = `/coworking/${cityData.city.slug}`;
+    const seo = await getSeoBySlug(pathnameToSeoSlug(pathname));
+    return (
+      <VerticalCityPage
+        data={{
+          ...cityData,
+          title: seoPageTitleOrFallback(seo, cityData.title),
+          faqs: seoFaqsOrFallback(seo, cityData.faqs),
+        }}
+      />
+    );
   }
 
   const workspace = await loadCoworkingWorkspaceDetail(result.space.slug);

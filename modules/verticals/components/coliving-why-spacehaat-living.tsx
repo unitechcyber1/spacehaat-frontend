@@ -56,7 +56,7 @@ export function ColivingWhySpacehaatLiving() {
             <h2 className="mt-4 max-w-[20ch] font-display text-3xl font-semibold leading-[1.08] tracking-[-0.035em] text-ink sm:mt-5 sm:max-w-none sm:text-4xl sm:leading-[1.06] lg:text-[2.5rem] lg:leading-[1.05] xl:text-[2.65rem]">
               The discovery standard,{" "}
               <span className="font-serif text-[1.06em] font-semibold italic text-[color:var(--color-accent)]">
-                now for where you live.
+                now for where you live
               </span>
             </h2>
           </div>

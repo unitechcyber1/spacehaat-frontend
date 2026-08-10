@@ -157,7 +157,7 @@ export function ColivingWhatsInside() {
               <span className="font-serif text-[1.05em] font-semibold italic text-[color:var(--color-accent)]">
                 yourself,
               </span>{" "}
-              already done.
+              already done
             </h2>
 
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted sm:mt-5 sm:text-lg">

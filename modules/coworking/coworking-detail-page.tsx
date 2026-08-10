@@ -79,13 +79,12 @@ export function CoworkingDetailPage({
       <Container className="max-w-[1280px]">
         <div className="grid items-start gap-10 pb-14 pt-8 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-12 lg:pb-[70px]">
           <main className="min-w-0">
+            <CoworkingDetailPricing workspace={workspace} />
+            <CoworkingDetailAmenities workspace={workspace} />
+            <CoworkingDetailAbout workspace={workspace} />
             <section id="overview" className="pt-2 sm:pt-[30px]">
               <CoworkingDetailHighlights workspace={workspace} />
             </section>
-
-            <CoworkingDetailAbout workspace={workspace} />
-            <CoworkingDetailAmenities workspace={workspace} />
-            <CoworkingDetailPricing workspace={workspace} />
             <CoworkingDetailLocation workspace={workspace} />
           </main>
 

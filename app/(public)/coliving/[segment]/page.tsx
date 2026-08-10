@@ -3,12 +3,16 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { buildMetadataWithCmsSeoFallback } from "@/lib/metadata-with-cms-seo";
+import { pathnameToSeoSlug } from "@/lib/pathname-to-seo-slug";
 import { buildPgColivingCityPageParams } from "@/lib/pg-list-priority";
 import { buildPgListParamsFromSearchParams } from "@/lib/pg-list-params";
+import { seoFaqsOrFallback } from "@/lib/seo-page-faqs";
+import { seoPageTitleOrFallback } from "@/lib/seo-page-title";
 import { ColivingCityPage } from "@/modules/coliving/coliving-city-page";
 import { ColivingDetailPage } from "@/modules/coliving/coliving-detail-page";
 import { getVerticalCityPageContent } from "@/services/cities";
 import { loadPgDetail, loadPgList } from "@/services/pg-api";
+import { getSeoBySlug } from "@/services/seo-content";
 import { toTitleCase } from "@/utils/format";
 
 type PageProps = {
@@ -58,10 +62,16 @@ export default async function ColivingSegmentPage({ params, searchParams }: Page
       buildPgListParamsFromSearchParams(sp),
     );
     const pgList = await loadPgList(listParams);
+    const pathname = `/coliving/${cityData.city.slug}`;
+    const seo = await getSeoBySlug(pathnameToSeoSlug(pathname));
 
     return (
       <ColivingCityPage
-        data={cityData}
+        data={{
+          ...cityData,
+          title: seoPageTitleOrFallback(seo, cityData.title),
+          faqs: seoFaqsOrFallback(seo, cityData.faqs),
+        }}
         pgList={pgList.data}
         pgTotal={pgList.totalRecords}
         pgPage={listParams.page ?? 1}

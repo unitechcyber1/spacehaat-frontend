@@ -41,6 +41,7 @@ export function normalizeSeoFromResponse(json: unknown): SeoContent | null {
   if (raw.status === false) return null;
 
   const title = firstNonEmptyString(raw, ["title", "page_title", "pageTitle"]);
+  const pageTitle = firstNonEmptyString(raw, ["page_title", "pageTitle"]);
   const description = firstNonEmptyString(raw, [
     "description",
     "metaDescription",
@@ -48,5 +49,10 @@ export function normalizeSeoFromResponse(json: unknown): SeoContent | null {
   ]);
   if (!title || !description) return null;
 
-  return { ...raw, title, description } as SeoContent;
+  return {
+    ...raw,
+    title,
+    description,
+    ...(pageTitle ? { page_title: pageTitle } : {}),
+  } as SeoContent;
 }

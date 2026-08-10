@@ -1,13 +1,5 @@
 /** Internal links and copy for the global footer (SEO + navigation). */
 
-export const footerAbout = {
-  title: "About SpaceHaat",
-  paragraphs: [
-    "SpaceHaat is India's premium workspace discovery platform built for professionals, startups, and enterprise teams who need more than just a desk. We curate verified coworking spaces, virtual offices, private office spaces, and coliving/PG homes across Gurugram, Noida, Delhi, Bangalore, Mumbai, Hyderabad, Pune, Chennai, and beyond.",
-    "Every listing is operator-verified. Pricing is real. And our expert team is available to shortlist, compare, and negotiate on your behalf at zero consultation cost.",
-  ],
-} as const;
-
 /** Bottom bar: keyword phrases split for semantic links (SEO signals). */
 export const footerBottomKeywordLinks = [
   { label: "Coworking Spaces in India", href: "/coworking" },
@@ -22,60 +14,53 @@ export const footerBottomKeywordLinks = [
 export const footerBottomTagline =
   "India's Premium Coworking & Office Space Discovery Platform";
 
-export const footerCoworkingByCity = [
-  { label: "Coworking Space in Gurugram", href: "/coworking/gurgaon" },
-  { label: "Coworking Space in Noida", href: "/coworking/noida" },
-  { label: "Coworking Space in Delhi", href: "/coworking/delhi" },
-  { label: "Coworking Space in Bangalore", href: "/coworking/bangalore" },
-  { label: "Coworking Space in Mumbai", href: "/coworking/mumbai" },
-  { label: "Coworking Space in Hyderabad", href: "/coworking/hyderabad" },
-  { label: "Coworking Space in Pune", href: "/coworking/pune" },
-  { label: "Coworking Space in Chennai", href: "/coworking/chennai" },
-  { label: "Coworking Space in Lucknow", href: "/coworking/lucknow" },
+/** Shared city set so every vertical column lists the same markets. */
+const footerCities = [
+  { name: "Gurgaon", slug: "gurgaon" },
+  { name: "Noida", slug: "noida" },
+  { name: "Delhi", slug: "delhi" },
+  { name: "Mumbai", slug: "mumbai" },
+  { name: "Pune", slug: "pune" },
+  { name: "Bangalore", slug: "bangalore" },
+  { name: "Hyderabad", slug: "hyderabad" },
+  { name: "Ahmedabad", slug: "ahmedabad" },
+  { name: "Jaipur", slug: "jaipur" },
+  { name: "Chennai", slug: "chennai" },
+  { name: "Lucknow", slug: "lucknow" },
+  { name: "Indore", slug: "indore" },
 ] as const;
 
-export const footerCoworkingGurugramAreas = [
-  { label: "Coworking Space in Cyber City", href: "/coworking/gurgaon/cyber-city" },
-  { label: "Coworking Space in Golf Course Road", href: "/coworking/gurgaon/golf-course-road" },
-  { label: "Coworking Space in Sohna Road", href: "/coworking/gurgaon/sohna-road" },
-  { label: "Coworking Space in Udyog Vihar", href: "/coworking/gurgaon/udyog-vihar" },
-  { label: "Coworking Space in MG Road", href: "/coworking/gurgaon/mg-road" },
-] as const;
+function cityLinks(
+  verticalPath: string,
+  labelFor: (cityName: string) => string,
+): { label: string; href: string }[] {
+  return footerCities.map((city) => ({
+    label: labelFor(city.name),
+    href: `/${verticalPath}/${city.slug}`,
+  }));
+}
 
-export const footerVirtualOffice = [
-  { label: "Virtual Office in Gurugram", href: "/virtual-office/gurgaon" },
-  { label: "Virtual Office in Noida", href: "/virtual-office/noida" },
-  { label: "Virtual Office in Bangalore", href: "/virtual-office/bangalore" },
-  { label: "Virtual Office in Mumbai", href: "/virtual-office/mumbai" },
-  { label: "Virtual Office in Delhi", href: "/virtual-office/delhi" },
-  { label: "Virtual Office for GST Registration", href: "/virtual-office" },
-] as const;
-
-export const footerOfficeSpace = [
-  { label: "Office Space for Rent in Gurugram", href: "/office-space/gurgaon" },
-  { label: "Managed Office Space in India", href: "/office-space" },
-  { label: "Private Office Space in Bangalore", href: "/office-space/bangalore" },
-  { label: "Office Space for Startups", href: "/office-space" },
-] as const;
-
-export const footerColiving = [
-  { label: "Coliving & PG in Gurugram", href: "/coliving/gurgaon" },
-  { label: "Coliving in Bangalore", href: "/coliving/bangalore" },
-  { label: "PG and Coliving in Mumbai", href: "/coliving/mumbai" },
-  { label: "Coliving rooms in Hyderabad", href: "/coliving/hyderabad" },
-] as const;
-
-export const footerMeetingRooms = [
-  { label: "Meeting Rooms in Gurugram", href: "/coworking/gurgaon" },
-  { label: "Meeting Rooms in Noida", href: "/coworking/noida" },
-] as const;
-
-export const footerCompany = [
-  { label: "About SpaceHaat", href: "/" },
-  { label: "List Your Space", href: "/list-your-space" },
-  { label: "Contact Us", href: "/#lead-form" },
-  { label: "SpaceHaat Select (Expert Consultation)", href: "/#lead-form" },
-  { label: "Trusted Operators", href: "/" },
+export const footerVerticalColumns = [
+  {
+    title: "Coworking",
+    ariaLabel: "Coworking spaces by city",
+    links: cityLinks("coworking", (city) => `Coworking Space in ${city}`),
+  },
+  {
+    title: "Virtual Office",
+    ariaLabel: "Virtual office by city",
+    links: cityLinks("virtual-office", (city) => `Virtual Office in ${city}`),
+  },
+  {
+    title: "Coliving & PG",
+    ariaLabel: "Coliving and PG by city",
+    links: cityLinks("coliving", (city) => `Coliving & PG in ${city}`),
+  },
+  {
+    title: "Office Space",
+    ariaLabel: "Office space by city",
+    links: cityLinks("office-space", (city) => `Office Space for Rent in ${city}`),
+  },
 ] as const;
 
 /** Kept for backwards compatibility / plain-text reuse. */

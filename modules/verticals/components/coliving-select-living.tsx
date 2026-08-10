@@ -127,7 +127,7 @@ export function ColivingSelectLiving() {
             <h2 className="mt-4 max-w-xl font-display text-3xl font-semibold leading-[1.08] tracking-[-0.035em] text-ink sm:mt-5 sm:text-4xl sm:leading-[1.06] lg:text-[2.4rem] lg:leading-[1.05]">
               A real human, on the phone,{" "}
               <span className="font-serif text-[1.06em] font-semibold italic text-[color:var(--color-accent)]">
-                helping you move.
+                helping you move
               </span>
             </h2>
 
