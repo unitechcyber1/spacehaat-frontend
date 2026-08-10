@@ -41,8 +41,8 @@ function parseRobots(robots: string | undefined): Metadata["robots"] {
 export function buildPageMetadataFromSeo(pathname: string, seo: SeoContent): Metadata {
   const canonical = resolveCanonicalUrl(pathname || "/", seo.url);
 
-  const baseTitle = (seo.page_title?.trim() || seo.title?.trim() || APP_NAME) as string;
-  const documentTitle = `${baseTitle} | ${APP_NAME}`;
+  // Use CMS `title` as the document title as-is (no brand suffix).
+  const documentTitle = (seo.title?.trim() || seo.page_title?.trim() || APP_NAME) as string;
 
   const kw = seo.keywords
     ?.split(",")

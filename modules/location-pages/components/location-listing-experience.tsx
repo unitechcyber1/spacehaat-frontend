@@ -4,8 +4,6 @@ import { CoworkingFilteredListing } from "@/modules/coworking/components/coworki
 import { Pagination } from "@/modules/city-pages/components/pagination";
 import type { LocationPageData } from "@/types";
 
-const EMPTY_LOCALITY_FALLBACK: Array<{ name: string; slug: string }> = [];
-
 type LocationListingExperienceProps = {
   data: LocationPageData;
 };
@@ -21,12 +19,7 @@ export function LocationListingExperience({ data }: LocationListingExperiencePro
         locationLabel={data.locationName}
         microLocationId={data.workspaceMicroLocationId}
         seedSpaces={data.spaces}
-        showPopularLocalities
-        popularLocalities={{
-          catalogCityId: data.catalogCityId,
-          citySlug: data.citySlug,
-          fallbackLocations: EMPTY_LOCALITY_FALLBACK,
-        }}
+        showPopularLocalities={false}
       />
     );
   }

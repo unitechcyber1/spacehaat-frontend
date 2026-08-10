@@ -14,12 +14,12 @@ export function buildMetadata(
   const url = resolveCanonicalUrl(pathname, null);
 
   return {
-    title,
+    title: { absolute: title },
     description,
     metadataBase: new URL(origin),
     alternates: { canonical: url },
     openGraph: {
-      title: `${title} | ${APP_NAME}`,
+      title,
       description,
       url,
       siteName: APP_NAME,
@@ -27,7 +27,7 @@ export function buildMetadata(
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | ${APP_NAME}`,
+      title,
       description,
     },
   };

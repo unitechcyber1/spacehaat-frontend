@@ -51,7 +51,7 @@ export function ColivingFindYourHomeCta() {
                 <span className="font-serif text-[1.06em] font-semibold italic text-[#e8d9c4]">
                   genuinely
                 </span>{" "}
-                want to come back to.
+                want to come back to
               </h2>
 
               <p className="mt-4 max-w-lg text-base leading-relaxed text-white/85 sm:mt-5 sm:text-lg">

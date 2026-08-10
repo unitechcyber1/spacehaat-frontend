@@ -31,6 +31,8 @@ export function OfficeSpaceCityPage({ data }: { data: CityPageData }) {
         title={data.leadCta.title}
         description={data.leadCta.description}
         ctaLabel={data.leadCta.ctaLabel}
+        citySlug={data.city.slug}
+        vertical={data.vertical}
       />
       <CityPageFaqSection pageTitle={data.title} faqs={data.faqs} />
     </>

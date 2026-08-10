@@ -1,11 +1,12 @@
 import Link from "next/link";
 
 import { Container } from "@/components/ui/container";
-import { CityPageLeadCtaBand } from "@/modules/city-pages/components/city-page-lead-cta-band";
 import { LeadCTA } from "@/modules/city-pages/components/lead-cta";
+import { PopularLocalitiesRail } from "@/modules/city-pages/components/popular-localities-rail";
 import { Breadcrumb } from "@/modules/location-pages/components/breadcrumb";
 import { FAQSection } from "@/modules/location-pages/components/faq-section";
 import { ColivingLocationListing } from "@/modules/coliving/components/coliving-location-listing";
+import { getCatalogCityIdBySlug } from "@/services/catalog-city-id";
 import type { PgDetail } from "@/types/pg.model";
 import type { LocationPageData } from "@/types";
 
@@ -18,9 +19,11 @@ export function ColivingLocationPage({
   pgList: PgDetail[];
   pgTotal: number;
 }) {
+  const catalogCityId = data.catalogCityId ?? getCatalogCityIdBySlug(data.citySlug) ?? "";
+
   return (
     <>
-      <section className="relative overflow-hidden pb-10 pt-10 sm:pb-14 sm:pt-14">
+      <section className="relative overflow-hidden pb-4 pt-10 sm:pb-6 sm:pt-14">
         <div className="absolute inset-x-0 top-0 -z-10 h-[24rem] bg-[radial-gradient(circle_at_top_left,rgba(48,88,215,0.08),transparent_30%),linear-gradient(180deg,#f9f8f5_0%,#ffffff_94%)]" />
         <Container>
           <Breadcrumb
@@ -38,6 +41,17 @@ export function ColivingLocationPage({
           <p className="mt-2 text-sm text-ink/80">
             {pgTotal} listing{pgTotal === 1 ? "" : "s"} in {data.locationName}
           </p>
+          {catalogCityId ? (
+            <div className="mt-5 w-full min-w-0 sm:mt-6">
+              <PopularLocalitiesRail
+                catalogCityId={catalogCityId}
+                citySlug={data.citySlug}
+                hrefPrefix="/coliving"
+                spaceType="coliving"
+                fallbackLocations={[]}
+              />
+            </div>
+          ) : null}
         </Container>
       </section>
 
@@ -64,15 +78,13 @@ export function ColivingLocationPage({
             title={data.leadCta.title}
             description={data.leadCta.description}
             ctaLabel={data.leadCta.ctaLabel}
+            citySlug={data.citySlug}
+            vertical={data.vertical}
+            microlocation={data.locationName}
           />
         </Container>
       </section>
 
-      <CityPageLeadCtaBand
-        title={`Need help choosing in ${data.locationName}?`}
-        description="Talk to our coliving experts for shortlists, visits, and move-in guidance."
-        ctaLabel={data.leadCta.ctaLabel}
-      />
       <FAQSection faqs={data.faqs} locationName={data.locationName} />
     </>
   );

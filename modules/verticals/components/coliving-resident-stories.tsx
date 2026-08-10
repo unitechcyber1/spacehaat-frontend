@@ -98,7 +98,7 @@ export function ColivingResidentStories() {
               <span className="font-serif text-[1.06em] font-semibold italic text-[color:var(--color-accent)]">
                 home,
               </span>{" "}
-              not just a room.
+              not just a room
             </h2>
           </div>
           <div className="flex min-w-0 lg:justify-end lg:pb-1">

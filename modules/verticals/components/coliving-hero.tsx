@@ -61,14 +61,13 @@ export function ColivingHero({ data }: ColivingHeroProps) {
                   <span className="font-serif text-[1.05em] font-semibold not-italic text-[color:var(--color-accent)]">
                     move in
                   </span>
-                  .
                 </span>
                 <span className="hidden lg:inline">
                   A home that{" "}
                   <span className="font-serif text-[1.12em] font-semibold not-italic text-[color:var(--color-accent)]">
                     feels
                   </span>{" "}
-                  like home, the day you move in.
+                  like home, the day you move in
                 </span>
               </h1>
             </FadeIn>
