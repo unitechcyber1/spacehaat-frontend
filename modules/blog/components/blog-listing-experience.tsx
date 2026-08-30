@@ -2,26 +2,31 @@
 
 import { useMemo, useState } from "react";
 
-import { listBlogPosts } from "@/lib/blog-data";
 import { BlogCard } from "@/modules/blog/components/blog-card";
 import { BlogFeaturedCard } from "@/modules/blog/components/blog-featured-card";
 import { BlogFilterTabs } from "@/modules/blog/components/blog-filter-tabs";
-import type { BlogVerticalFilter } from "@/types/blog";
+import type { BlogPost, BlogVerticalFilter } from "@/types/blog";
 
-export function BlogListingExperience() {
+export function BlogListingExperience({
+  posts,
+  featured,
+}: {
+  posts: BlogPost[];
+  featured: BlogPost | null;
+}) {
   const [filter, setFilter] = useState<BlogVerticalFilter>("all");
 
-  const posts = useMemo(() => listBlogPosts(filter), [filter]);
-  const featured = useMemo(
-    () => listBlogPosts("all").find((post) => post.featured) ?? listBlogPosts("all")[0],
-    [],
-  );
+  const filteredPosts = useMemo(() => {
+    if (filter === "all") return posts;
+    return posts.filter((post) => post.vertical === filter);
+  }, [filter, posts]);
+
   const gridPosts = useMemo(() => {
     if (filter === "all" && featured) {
-      return posts.filter((post) => post.slug !== featured.slug);
+      return filteredPosts.filter((post) => post.slug !== featured.slug);
     }
-    return posts;
-  }, [filter, featured, posts]);
+    return filteredPosts;
+  }, [featured, filter, filteredPosts]);
 
   return (
     <>

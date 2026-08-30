@@ -74,7 +74,7 @@ export function BlogDetailPage({
         </div>
 
         <div className="mt-10 sm:mt-12">
-          <BlogProse blocks={post.body} />
+          <BlogProse blocks={post.body} bodyHtml={post.bodyHtml} />
         </div>
 
         {post.tags.length > 0 ? (

@@ -7,8 +7,11 @@ export type BlogContentBlock =
   | { type: "ul"; items: string[] };
 
 export type BlogPost = {
+  id: string;
   slug: string;
   vertical: SpaceVertical;
+  /** Raw blog type from upstream API (for typed detail routes). */
+  apiType?: string;
   title: string;
   excerpt: string;
   coverImage: string;
@@ -19,7 +22,8 @@ export type BlogPost = {
   readMinutes: number;
   tags: string[];
   featured?: boolean;
-  body: BlogContentBlock[];
+  body?: BlogContentBlock[];
+  bodyHtml?: string;
 };
 
 export type BlogVerticalFilter = SpaceVertical | "all";
