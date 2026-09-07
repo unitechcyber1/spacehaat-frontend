@@ -2,6 +2,7 @@
 
 import { FormEvent, useMemo, useState } from "react";
 
+import { CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/lib/contact-data";
 import { buildUserEnquiryBody } from "@/lib/user-enquiry-payload";
 import { toPhone10 } from "@/lib/phone-norm";
 import type { VirtualOfficeCatalogCity } from "@/lib/virtual-office-city-catalog";
@@ -324,10 +325,10 @@ export function VoCityLeadWizard({
 
       <div className="border-t border-[#EAE7E0] bg-[#FCFBF8] px-5 py-3.5 text-center text-[13px] sm:px-[22px]">
         <a
-          href="https://wa.me/919876543210"
+          href={`https://wa.me/91${CONTACT_PHONE}`}
           className="inline-flex items-center gap-1 font-semibold text-emerald-600 hover:underline"
         >
-          💬 WhatsApp: +91 70173 33425
+          💬 WhatsApp: {CONTACT_PHONE_DISPLAY}
         </a>
         <p className="mt-1 text-xs text-muted">Free. Always.</p>
       </div>

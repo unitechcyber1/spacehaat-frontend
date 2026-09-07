@@ -1,7 +1,10 @@
 import { Container } from "@/components/ui/container";
 import { BlogListingExperience } from "@/modules/blog/components/blog-listing-experience";
+import { loadBlogIndexData } from "@/services/blog-api";
 
-export function BlogIndexPage() {
+export async function BlogIndexPage() {
+  const { posts, featured } = await loadBlogIndexData();
+
   return (
     <>
       <section className="relative overflow-hidden pb-6 pt-10 sm:pb-8 sm:pt-14">
@@ -22,7 +25,7 @@ export function BlogIndexPage() {
 
       <section className="pb-20 sm:pb-28">
         <Container className="max-w-[1100px]">
-          <BlogListingExperience />
+          <BlogListingExperience posts={posts} featured={featured} />
         </Container>
       </section>
     </>

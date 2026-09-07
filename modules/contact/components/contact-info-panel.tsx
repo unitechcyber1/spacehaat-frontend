@@ -14,6 +14,7 @@ import {
   CONTACT_EMAIL,
   CONTACT_EMAIL_HREF,
   CONTACT_HOURS,
+  CONTACT_OFFICE_ADDRESS,
   CONTACT_PHONE_DISPLAY,
   CONTACT_PHONE_HREF,
   CONTACT_SOCIAL_LINKS,
@@ -83,7 +84,13 @@ export function ContactInfoPanel() {
         {CONTACT_HOURS}
       </InfoCard>
 
-      <InfoCard icon={MapPin} title="Coverage">
+      <InfoCard icon={MapPin} title="Office address">
+        <address className="not-italic font-medium leading-relaxed text-ink">
+          {CONTACT_OFFICE_ADDRESS}
+        </address>
+      </InfoCard>
+
+      <InfoCard icon={Building2} title="Coverage">
         Pan-India — coworking, coliving, virtual office, and office space across major cities.
       </InfoCard>
 

@@ -8,6 +8,9 @@ export const CONTACT_EMAIL_HREF = `mailto:${CONTACT_EMAIL}`;
 
 export const CONTACT_HOURS = "Mon – Sat, 9:00 AM – 7:00 PM IST";
 
+export const CONTACT_OFFICE_ADDRESS =
+  "2nd Floor, G-135, Jain Colony, Sector 22, Rohini, Delhi, 110086";
+
 export const CONTACT_SOCIAL_LINKS = [
   {
     label: "Facebook",
