@@ -31,7 +31,7 @@ const toneMap = {
       "Enterprise-ready office inventory focused on this location.",
   },
   coliving: {
-    eyebrow: "Coliving & PG discovery",
+    eyebrow: "Coliving Space discovery",
     description: "Furnished rooms and meal-inclusive options curated for this locality.",
   },
 } as const;

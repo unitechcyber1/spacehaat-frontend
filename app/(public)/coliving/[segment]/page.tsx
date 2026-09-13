@@ -45,7 +45,7 @@ export async function generateMetadata({
   }
 
   return buildMetadataWithCmsSeoFallback(`/coliving/${segment}`, {
-    title: `${toTitleCase(segment)} | Coliving & PG`,
+    title: `${toTitleCase(segment)} | Coliving Space`,
     description: "Discover coliving homes and PG rooms across top cities in India.",
   });
 }

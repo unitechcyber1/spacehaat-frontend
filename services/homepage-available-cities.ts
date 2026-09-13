@@ -87,7 +87,7 @@ export function listHomepageCitiesFromAvailable(
       slug,
       image: colivingImage ?? (entry.image as string),
       tagline:
-        vertical === "coliving" ? "Coliving & PG homes" : "Premium workspace inventory",
+        vertical === "coliving" ? "Coliving Space homes" : "Premium workspace inventory",
       spaceCount: 0,
     });
 

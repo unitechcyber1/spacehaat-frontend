@@ -43,7 +43,7 @@ export function VoCityHero({ citySlug, cityDisplay, catalog, locationNames }: Vo
             {formatInrPrice(plans.businessAddress)}/month.
           </p>
 
-          <div className="mt-6 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-2">
+          <div className="mt-6 flex flex-wrap gap-2">
             <VoCheckPill>GST &amp; MCA Compliant</VoCheckPill>
             <VoCheckPill>Documents in 24–48 hrs</VoCheckPill>
             <VoCheckPill>High approval rate</VoCheckPill>

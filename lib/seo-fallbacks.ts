@@ -90,10 +90,10 @@ export function getFallbackSeoContent(pathname: string, slug: string): SeoConten
   }
   if (v === "coliving") {
     return {
-      title: `Coliving & PG across India | ${APP_NAME}`,
+      title: `Coliving Space across India | ${APP_NAME}`,
       description: coliving.description,
       path: p,
-      footer_title: `Coliving & PG on ${APP_NAME}`,
+      footer_title: `Coliving Space on ${APP_NAME}`,
       footer_description: `<p>${coliving.description} Compare furnished rooms, meal plans, and security before you shortlist a move-in date.</p>`,
     };
   }

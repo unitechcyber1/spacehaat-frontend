@@ -32,7 +32,7 @@ export const CONTACT_VERTICAL_OPTIONS: Array<{
   mxSpaceType: string;
 }> = [
   { value: "coworking", label: "Coworking space", mxSpaceType: "Web Coworking" },
-  { value: "coliving", label: "Coliving & PG", mxSpaceType: "Web Coliving" },
+  { value: "coliving", label: "Coliving Space", mxSpaceType: "Web Coliving" },
   { value: "virtual-office", label: "Virtual office", mxSpaceType: "Web Virtual Office" },
   { value: "office-space", label: "Office space", mxSpaceType: "Web Office Space" },
   { value: "general", label: "General enquiry", mxSpaceType: "Contact page enquiry" },

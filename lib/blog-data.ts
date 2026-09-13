@@ -2,7 +2,7 @@ import type { SpaceVertical } from "@/types";
 
 export const BLOG_VERTICAL_LABELS: Record<SpaceVertical, string> = {
   coworking: "Coworking",
-  coliving: "Coliving & PG",
+  coliving: "Coliving Space",
   "virtual-office": "Virtual Office",
   "office-space": "Office Space",
 };

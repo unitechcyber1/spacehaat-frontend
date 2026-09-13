@@ -205,7 +205,7 @@ export function ColivingListingCard({ pg, className }: ColivingListingCardProps)
         <p className="min-w-0 text-[0.9375rem] text-slate-950">
           {min > 0 ? (
             <>
-              <span className="font-semibold underline decoration-1 underline-offset-2">
+              <span className="font-semibold">
                 {formatCurrency(min)}
               </span>
               <span> per month</span>

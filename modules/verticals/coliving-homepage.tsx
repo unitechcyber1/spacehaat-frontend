@@ -30,14 +30,14 @@ export function ColivingHomepage({ data, featuredPgs = [] }: ColivingHomepagePro
       <ColivingHero data={data} />
 
       <SectionWrapper id="cities" className="pt-6 sm:pt-10">
-        <SectionHeading title="Top cities for coliving & PG" />
+        <SectionHeading title="Top cities for coliving space" />
         <CityRail cities={homepageCities} basePath="/coliving" />
       </SectionWrapper>
 
       <ColivingWhySpacehaatLiving />
 
       <SectionWrapper>
-        <SectionHeading title="Featured coliving & PG listings" />
+        <SectionHeading title="Featured coliving space listings" />
         {featuredPgs.length > 0 ? (
           <ColivingFeaturedRail listings={featuredPgs} />
         ) : (

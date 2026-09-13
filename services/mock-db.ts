@@ -1041,7 +1041,7 @@ function buildCityPageTitle(vertical: SpaceVertical, cityName: string) {
   }
 
   if (vertical === "coliving") {
-    return `Coliving & PG in ${cityName}`;
+    return `Coliving Space in ${cityName}`;
   }
 
   return `Office Spaces in ${cityName}`;
@@ -1097,7 +1097,7 @@ function buildSeoSection(vertical: SpaceVertical, cityName: string, totalSpaces:
 
   if (vertical === "coliving") {
     return {
-      title: `Best coliving & PG in ${cityName}`,
+      title: `Best coliving space in ${cityName}`,
       paragraphs: [
         `${cityName} has strong demand for coliving and PG inventory from students, early-career professionals, and remote workers who want furnished rooms without long furniture procurement cycles. The best coliving spaces in ${cityName} combine predictable monthly pricing, security, housekeeping, and meal options that reduce day-to-day operational friction compared with traditional rentals.`,
         `When people search for PG in ${cityName}, the decision is rarely only rent. House rules, meal quality, WiFi reliability, AC availability, visitor policy, and proximity to metro or office hubs all influence fit. Coliving adds a more hospitality-led layer: community programming, shared lounges, and clearer service standards. SpaceHaat helps visitors compare these dimensions with a more curated lens instead of noisy, inconsistent listings.`,
@@ -1376,7 +1376,7 @@ function buildLocationPageTitle(
   }
 
   if (vertical === "coliving") {
-    return `Coliving & PG in ${locationName}, ${cityName}`;
+    return `Coliving Space in ${locationName}, ${cityName}`;
   }
 
   return `Office Space in ${locationName}, ${cityName}`;
@@ -1488,7 +1488,7 @@ function buildLocationSeoSection(
 
   if (vertical === "coliving") {
     return {
-      title: `Best coliving & PG in ${locationName}, ${cityName}`,
+      title: `Best coliving space in ${locationName}, ${cityName}`,
       paragraphs: [
         `${locationName} is a practical micro-market in ${cityName} for renters who want furnished rooms, clearer monthly pricing, and faster move-in without coordinating furniture, utilities, and vendors independently. Coliving and PG operators in this pocket often compete on meal quality, security, WiFi reliability, and housekeeping discipline — details that matter more than a generic headline rent.`,
         `When comparing coliving in ${locationName}, it helps to validate lock-in, deposit structure, visitor policy, AC availability, and what is included in the monthly fee. PG seekers may prioritize meal frequency and curfew rules, while working professionals may prioritize quieter floors and private-room upgrades. SpaceHaat presents location-level inventory with filters that make these comparisons easier.`,
@@ -2092,8 +2092,8 @@ export function getVerticalLandingData(vertical: SpaceVertical): VerticalLanding
     return {
       vertical,
       hero: {
-        eyebrow: "Coliving & PG",
-        title: "Find Coliving & PG Rooms Across Top Indian Cities",
+        eyebrow: "Coliving Space",
+        title: "Find Coliving Space Across Top Indian Cities",
         subtitle:
           "Furnished rooms, meal-inclusive PG options, and managed coliving homes with clearer monthly pricing.",
         ctaLabel: "Explore Coliving",

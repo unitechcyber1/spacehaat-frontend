@@ -103,7 +103,7 @@ export function VoGhostButton({
 
 export function VoCheckPill({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-[#EAE7E0] bg-white px-3.5 py-2 text-xs font-medium text-[#333] sm:text-[13px]">
+    <span className="inline-flex max-w-full items-center gap-1.5 whitespace-normal rounded-full border border-[#EAE7E0] bg-white px-3.5 py-2 text-left text-xs font-medium text-[#333] sm:text-[13px]">
       <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full bg-emerald-500 text-[10px] font-bold text-white">
         ✓
       </span>

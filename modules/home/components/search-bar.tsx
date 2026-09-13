@@ -113,7 +113,7 @@ export function SearchBar({
     { id: "coworking", label: "Coworking Space" },
     { id: "office-space", label: "Office Space" },
     { id: "virtual-office", label: "Virtual Office" },
-    { id: "coliving", label: "Coliving & PG" },
+    { id: "coliving", label: "Coliving Space" },
   ] as const;
   const spaceNamesByType: Record<
     "coworking" | "office-space" | "virtual-office" | "coliving",
@@ -939,12 +939,12 @@ export function SearchBar({
                         <>
                           {pgHitsLoading ? (
                             <div className="rounded-xl px-3 py-5 text-sm text-slate-500">
-                              Loading coliving & PG…
+                              Loading coliving space…
                             </div>
                           ) : null}
                           {!pgHitsLoading && !resolvedLocationSlug.trim() ? (
                             <div className="rounded-xl border border-dashed border-slate-300 px-3 py-5 text-sm text-slate-500">
-                              Choose a city first to load coliving & PG listings.
+                              Choose a city first to load coliving space listings.
                             </div>
                           ) : null}
                           {!pgHitsLoading && resolvedLocationSlug.trim() && pgHits.length > 0 ? (

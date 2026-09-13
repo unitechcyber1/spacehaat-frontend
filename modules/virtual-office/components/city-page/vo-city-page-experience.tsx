@@ -32,8 +32,8 @@ export function VoCityPageExperience({ data, catalog, cityDisplay }: VoCityPageE
 
   return (
     <VoCityLeadProvider citySlug={data.city.slug} cityDisplay={cityDisplay} catalog={catalog}>
-      <div className="bg-[color:var(--color-page-bg)] pb-20 lg:pb-0">
-        <Container className="max-w-[1240px] pt-4 sm:pt-5 lg:pt-6">
+      <div className="min-w-0 overflow-x-hidden bg-[color:var(--color-page-bg)] pb-20 lg:pb-0">
+        <Container className="max-w-[1240px] min-w-0 pt-4 sm:pt-5 lg:pt-6">
           <VoCityBreadcrumb cityDisplay={cityDisplay} />
 
           <VoCityHero

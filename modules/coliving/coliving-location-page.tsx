@@ -32,7 +32,7 @@ export function ColivingLocationPage({
             locationName={data.locationName}
           />
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-brand)]">
-            Coliving & PG discovery
+            Coliving Space discovery
           </p>
           <h1 className="mt-4 max-w-5xl font-display text-4xl leading-[1.06] tracking-[-0.04em] text-ink sm:text-5xl">
             {data.title}
