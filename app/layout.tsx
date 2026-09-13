@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { GoogleTagManager } from "@next/third-parties/google";
 import { Inter } from "next/font/google";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 
 import "./globals.css";
 
+import { GtmPageView } from "@/components/analytics/gtm-page-view";
+import { GTM_ID, isGtmEnabled } from "@/lib/gtm";
 import { resolveAppUrl } from "@/services/env-config";
 import { APP_NAME } from "@/utils/constants";
 
@@ -41,7 +44,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.variable}>{children}</body>
+      {isGtmEnabled() ? <GoogleTagManager gtmId={GTM_ID} /> : null}
+      <body className={inter.variable}>
+        {isGtmEnabled() ? (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+              title="Google Tag Manager"
+            />
+          </noscript>
+        ) : null}
+        <Suspense fallback={null}>
+          <GtmPageView />
+        </Suspense>
+        {children}
+      </body>
     </html>
   );
 }

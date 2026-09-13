@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!page) {
     return buildMetadataWithCmsSeoFallback(`/coliving/${segment}/${location}`, {
-      title: `Coliving & PG in ${toTitleCase(location)}, ${toTitleCase(segment)}`,
+      title: `Coliving Space in ${toTitleCase(location)}, ${toTitleCase(segment)}`,
       description: "Discover coliving and PG options in this location.",
     });
   }

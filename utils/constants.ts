@@ -2,6 +2,22 @@ import { SpaceVertical } from "@/types";
 
 export const APP_NAME = "SpaceHaat";
 
+/** Markets listed under every vertical (header dropdown + footer columns). */
+export const siteCities: ReadonlyArray<{ name: string; slug: string }> = [
+  { name: "Gurgaon", slug: "gurgaon" },
+  { name: "Noida", slug: "noida" },
+  { name: "Delhi", slug: "delhi" },
+  { name: "Mumbai", slug: "mumbai" },
+  { name: "Pune", slug: "pune" },
+  { name: "Bangalore", slug: "bangalore" },
+  { name: "Hyderabad", slug: "hyderabad" },
+  { name: "Ahmedabad", slug: "ahmedabad" },
+  { name: "Jaipur", slug: "jaipur" },
+  { name: "Chennai", slug: "chennai" },
+  { name: "Lucknow", slug: "lucknow" },
+  { name: "Indore", slug: "indore" },
+];
+
 export const verticals: Array<{
   key: SpaceVertical;
   label: string;
@@ -28,7 +44,7 @@ export const verticals: Array<{
   },
   {
     key: "coliving",
-    label: "Coliving & PG",
+    label: "Coliving Space",
     href: "/coliving",
     description: "Furnished coliving rooms and PG options near campuses and business hubs.",
   },

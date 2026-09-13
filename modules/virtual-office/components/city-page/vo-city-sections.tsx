@@ -61,7 +61,7 @@ export function VoCityExplainerSection() {
               className="rounded-[14px] border border-[#EAE7E0] bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(20,20,20,0.06)]"
             >
               <h3 className="text-[17px] font-semibold text-ink">
-                <span className="mr-1 font-bold text-[color:var(--color-brand)]">Not</span>
+                <span className="mr-0.5 font-bold text-[color:var(--color-brand)]">Not </span>
                 {item.title.replace(/^Not /, "")}
               </h3>
               <p className="mt-1.5 text-sm leading-relaxed text-[#555]">{item.body}</p>

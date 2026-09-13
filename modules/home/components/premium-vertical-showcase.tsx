@@ -72,7 +72,7 @@ const VERTICALS: {
   },
   {
     id: "coliving",
-    title: "Coliving & PG",
+    title: "Coliving Space",
     description: "Furnished rooms and managed stays for students and professionals.",
     href: "/coliving",
     imageSrc:

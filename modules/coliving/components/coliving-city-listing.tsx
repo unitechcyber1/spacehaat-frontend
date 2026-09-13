@@ -133,12 +133,6 @@ export function ColivingCityListing({
         localitySuggestions={localitySuggestions}
       />
 
-      {totalPages > 1 ? (
-        <p className="text-right text-sm text-muted">
-          Page {page} of {totalPages}
-        </p>
-      ) : null}
-
       {error ? (
         <div className="rounded-2xl border border-red-200/80 bg-red-50 px-5 py-4 text-sm text-red-800">
           <p>{error}</p>

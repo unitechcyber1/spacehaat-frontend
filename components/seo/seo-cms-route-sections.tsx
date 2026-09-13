@@ -7,8 +7,6 @@ import { Footer } from "@/components/layout/footer";
 import { FooterMarketingSection } from "@/components/layout/footer-marketing-section";
 import { SeoFaqsSection } from "@/components/seo/seo-faqs-section";
 import { SeoFooterContentSection } from "@/components/seo/seo-footer-content-section";
-import { SeoStructuredData } from "@/components/seo/seo-structured-data";
-import { resolveCanonicalUrl } from "@/lib/canonical-url";
 import { getFallbackSeoContent } from "@/lib/seo-fallbacks";
 import { pathnameToSeoSlug } from "@/lib/pathname-to-seo-slug";
 import { normalizeSeoFromResponse } from "@/lib/seo-normalize";
@@ -48,7 +46,7 @@ async function fetchSeoForSlug(slug: string, pathname: string): Promise<SeoConte
 }
 
 /**
- * CMS footer/FAQ/JSON-LD keyed off the **client** pathname so soft navigations
+ * CMS footer/FAQ keyed off the **client** pathname so soft navigations
  * do not need a full `router.refresh()` (which doubled every page transition).
  */
 export function SeoCmsRouteSections() {
@@ -89,11 +87,9 @@ export function SeoCmsRouteSections() {
     );
   }
 
-  const pageUrl = resolveCanonicalUrl(pathname, seo?.url);
   const hasFaqs = Boolean(seo?.faqs?.length);
   const showBelowFooterFaqs =
     hasFaqs && seo && !isCoworkingOrColivingCityOrLocalityPath(pathSeg);
-  const hasJsonLd = Boolean(seo?.script?.trim() || hasFaqs);
 
   return (
     <>
@@ -103,9 +99,6 @@ export function SeoCmsRouteSections() {
       <Footer />
       <FooterMarketingSection />
       {showBelowFooterFaqs ? <SeoFaqsSection faqs={seo.faqs} /> : null}
-      {hasJsonLd && seo ? (
-        <SeoStructuredData scriptJson={seo.script} faqs={seo.faqs} pageUrl={pageUrl} />
-      ) : null}
     </>
   );
 }

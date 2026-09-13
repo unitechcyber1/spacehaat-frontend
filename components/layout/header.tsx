@@ -9,11 +9,11 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ContactFormModal } from "@/components/contact/contact-form-modal";
+import { HeaderVerticalNav } from "@/components/layout/header-vertical-nav";
 import { MobileMenuDrawer } from "@/components/layout/mobile-menu-drawer";
 import { SearchBar } from "@/modules/home/components/search-bar";
 import { SearchOption } from "@/types";
 import { cn } from "@/utils/cn";
-import { verticals } from "@/utils/constants";
 
 const headerSearchLocations: SearchOption[] = [
   { label: "Delhi", value: "delhi" },
@@ -103,7 +103,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full overflow-visible transition-[height,background-color,border-color,box-shadow] duration-300",
+        "fixed inset-x-0 top-0 z-50 overflow-visible transition-[height,background-color,border-color,box-shadow] duration-300",
         shouldExpandHeader ? "h-[18rem]" : "h-20",
         useSolidHeader
           ? "border-b border-slate-200/80 bg-white/92 backdrop-blur-xl"
@@ -124,7 +124,7 @@ export function Header() {
         >
           <nav
             className={cn(
-              "flex items-center justify-center gap-7 transition-all duration-300",
+              "flex items-center justify-center gap-4 transition-all duration-300",
               isHomepage
                 ? isScrolled
                   ? "pointer-events-none hidden -translate-y-2 opacity-0"
@@ -133,20 +133,7 @@ export function Header() {
               "text-sm",
             )}
           >
-            {verticals.map((vertical) => (
-              <Link
-                key={vertical.key}
-                href={vertical.href}
-                className={cn(
-                  "text-sm font-medium transition",
-                  useSolidHeader
-                    ? "text-muted hover:text-ink"
-                    : "text-[#e8dcc8]/90 hover:text-[#faf6ee]",
-                )}
-              >
-                {vertical.label}
-              </Link>
-            ))}
+            <HeaderVerticalNav useSolidHeader={useSolidHeader} pathname={pathname ?? "/"} />
           </nav>
 
           <div

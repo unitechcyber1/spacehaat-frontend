@@ -24,7 +24,7 @@ export const verticalConfig: Record<
     href: "/office-space",
   },
   coliving: {
-    label: "Coliving & PG",
+    label: "Coliving Space",
     description: "Furnished rooms, PGs, and coliving homes with clear monthly pricing.",
     href: "/coliving",
   },

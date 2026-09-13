@@ -6,7 +6,7 @@ import { cn } from "@/utils/cn";
 const FILTERS: { id: BlogVerticalFilter; label: string }[] = [
   { id: "all", label: "All insights" },
   { id: "coworking", label: "Coworking" },
-  { id: "coliving", label: "Coliving & PG" },
+  { id: "coliving", label: "Coliving Space" },
   { id: "virtual-office", label: "Virtual Office" },
   { id: "office-space", label: "Office Space" },
 ];

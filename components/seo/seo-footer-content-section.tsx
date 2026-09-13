@@ -1,6 +1,6 @@
 import { Container } from "@/components/ui/container";
 import { cn } from "@/utils/cn";
-import { looksLikeEditorHtml, sanitizeCmsHtml } from "@/lib/cms-html";
+import { looksLikeEditorHtml, prepareCmsFooterHtml } from "@/lib/cms-html";
 
 const editorProse = cn(
   "cms-footer-prose text-sm leading-relaxed text-ink/85 sm:text-base",
@@ -8,7 +8,7 @@ const editorProse = cn(
   "[&_h1]:mb-3 [&_h1]:mt-0 [&_h1]:font-display [&_h1]:text-2xl [&_h1]:font-semibold",
   "[&_h2]:mb-2 [&_h2]:mt-6 [&_h2]:font-display [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:first:mt-0",
   "[&_h3]:mb-2 [&_h3]:mt-4 [&_h3]:text-lg [&_h3]:font-semibold",
-  "[&_a]:font-medium [&_a]:text-[color:var(--color-brand)] [&_a]:underline-offset-2 [&_a]:transition hover:[&_a]:underline",
+  "[&_a]:font-medium [&_a]:!text-[#4caf50] [&_a]:underline-offset-2 [&_a]:transition hover:[&_a]:underline hover:[&_a]:!text-[#4caf50]",
   "[&_ul]:my-3 [&_ul]:ml-5 [&_ul]:list-disc [&_ul]:text-ink/85",
   "[&_ol]:my-3 [&_ol]:ml-5 [&_ol]:list-decimal",
   "[&_li]:my-1",
@@ -17,8 +17,10 @@ const editorProse = cn(
   "[&_blockquote]:my-4 [&_blockquote]:border-l-4 [&_blockquote]:border-slate-200 [&_blockquote]:pl-4 [&_blockquote]:text-ink/75 [&_blockquote]:italic",
   "[&_img]:my-3 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg",
   "[&_hr]:my-6 [&_hr]:border-slate-200",
-  "[&_table]:my-4 [&_table]:w-full [&_table]:border-collapse [&_table]:text-left [&_th]:border [&_th]:border-slate-200 [&_th]:px-3 [&_th]:py-2 [&_th]:font-semibold",
-  "[&_td]:border [&_td]:border-slate-200 [&_td]:px-3 [&_td]:py-2",
+  "[&_table]:my-4 [&_table]:w-full [&_table]:min-w-0 [&_table]:max-w-full [&_table]:border-collapse [&_table]:text-left [&_table]:text-sm",
+  "[&_th]:border [&_th]:border-slate-200 [&_th]:px-3 [&_th]:py-2 [&_th]:font-semibold [&_th]:whitespace-normal",
+  "[&_td]:border [&_td]:border-slate-200 [&_td]:px-3 [&_td]:py-2 [&_td]:whitespace-normal",
+  "[&_colgroup]:min-w-0",
 );
 
 type Props = {
@@ -37,7 +39,7 @@ export function SeoFooterContentSection({ title, description }: Props) {
   if (!t && !d) return null;
 
   const hasHtml = d.length > 0 && looksLikeEditorHtml(d);
-  const safeHtml = hasHtml ? sanitizeCmsHtml(d) : "";
+  const safeHtml = hasHtml ? prepareCmsFooterHtml(d) : "";
   const plainForFallback = d.length > 0 && !hasHtml ? d : "";
 
   return (
@@ -53,11 +55,13 @@ export function SeoFooterContentSection({ title, description }: Props) {
         ) : null}
         {d ? (
           hasHtml ? (
-            <div
-              className={cn(t ? "mt-5" : "mt-0", editorProse)}
-              // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{ __html: safeHtml }}
-            />
+            <div className={cn(t ? "mt-5" : "mt-0", "max-w-full overflow-x-auto")}>
+              <div
+                className={cn("min-w-0", editorProse)}
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: safeHtml }}
+              />
+            </div>
           ) : (
             <p
               className={cn(
